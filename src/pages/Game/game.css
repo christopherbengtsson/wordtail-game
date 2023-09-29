@@ -1,0 +1,18 @@
+@keyframes zoominZoomOut {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.zoomInZoomOut {
+  animation-name: zoominZoomOut;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+}
