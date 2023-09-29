@@ -1,10 +1,10 @@
+import { useEffect } from 'react';
 import { Layout } from 'antd';
 import { observer } from 'mobx-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { useMainStore } from '../../stores/MainStoreContext';
+import { useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
-import { useEffect } from 'react';
 
 const { Content } = Layout;
 
@@ -12,9 +12,9 @@ export const Game = observer(function Game() {
   const { gameId } = useParams();
   const navigate = useNavigate();
 
-  const store = useMainStore();
+  const { gameStore } = useMainStore();
 
-  let game = store.games?.find((game) => game.id === gameId);
+  let game = gameStore.games?.find((game) => game.id === gameId);
 
   useEffect(() => {
     if (!game) {

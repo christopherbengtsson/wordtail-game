@@ -1,6 +1,6 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button } from 'antd';
-import { useMainStore } from '../../stores/MainStoreContext';
+import { useMainStore } from '../../stores';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { styled } from 'styled-components';
@@ -11,7 +11,7 @@ export type Credentials = {
 };
 
 export function Authentication() {
-  const store = useMainStore();
+  const { authStore } = useMainStore();
   const navigate = useNavigate();
 
   const [doRegister, setDoRegister] = useState(false);
@@ -19,7 +19,13 @@ export function Authentication() {
 
   const onFinish = async ({ email, password }: Credentials) => {
     setLoading(true);
-    await store.loginOrRegister({ email, password, doRegister });
+
+    if (doRegister) {
+      await authStore.signUp({ email, password });
+    } else {
+      await authStore.signIn({ email, password });
+    }
+
     setLoading(false);
     navigate('/');
   };

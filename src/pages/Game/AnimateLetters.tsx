@@ -1,5 +1,5 @@
-import { ZoomInZoomOut } from '../../components';
 import { useEffect, useState } from 'react';
+import { ZoomInZoomOut } from '../../components';
 
 export function AnimateLetters({ letters }: { letters: string[] }) {
   const [letterIndex, setLetterIndex] = useState(0);

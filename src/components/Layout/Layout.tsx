@@ -3,12 +3,13 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { Layout as AntdLayout, Menu, MenuProps } from 'antd';
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import { styled } from 'styled-components';
-import { useMainStore } from '../../stores/MainStoreContext';
+import { useMainStore } from '../../stores';
 
 const { Header, Content } = AntdLayout;
 
 export function Layout() {
-  const store = useMainStore();
+  // TODO: Should maybe not use mainstore hook?
+  const { authStore } = useMainStore();
   const { pathname } = useLocation();
 
   const [current, setCurrent] = useState(
@@ -23,12 +24,12 @@ export function Layout() {
         icon: <HomeOutlined />,
       },
       {
-        label: <Link to={`/profiles/:${store.userId}`}>Profile</Link>,
+        label: <Link to={`/profiles/:${authStore.userId}`}>Profile</Link>,
         key: 'profiles',
         icon: <UserOutlined />,
       },
     ],
-    [store.userId],
+    [authStore.userId],
   );
 
   const handleNavigation = ({ key }: { key: string }) => {

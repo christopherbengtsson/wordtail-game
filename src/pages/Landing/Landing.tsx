@@ -1,5 +1,5 @@
 import { Avatar, Button, Card, List } from 'antd';
-import { useMainStore } from '../../stores/MainStoreContext';
+import { useMainStore } from '../../stores';
 import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
@@ -8,16 +8,16 @@ import { styled } from 'styled-components';
 const { Meta } = Card;
 
 export const Landing = observer(function Landing() {
-  const store = useMainStore();
+  const { gameStore } = useMainStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    store.fetchGames();
-  }, [store]);
+    gameStore.fetchGames();
+  }, [gameStore]);
 
   const handleCreateNewGame = () => {
     // TODO: Mock for now, just to test stored procedure
-    store.createGame({
+    gameStore.createGame({
       name: 'Hard Coded Game',
       players: ['b10489e7-30c8-4982-b307-3ea6af96454e'],
     });
@@ -55,7 +55,7 @@ export const Landing = observer(function Landing() {
         CREATE NEW GAME
       </Button>
       <List
-        dataSource={store.games ?? []}
+        dataSource={gameStore.games ?? []}
         renderItem={(game) => (
           <List.Item
             onClick={() => {
