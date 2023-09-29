@@ -8,7 +8,7 @@ import { styled } from 'styled-components';
 const { Meta } = Card;
 
 export const Landing = observer(function Landing() {
-  const { gameStore } = useMainStore();
+  const { gameStore, authStore } = useMainStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const Landing = observer(function Landing() {
 
   const handleCardSubtitle = (game: object) => {
     if (game.status === 'active') {
-      if (game.currentTurnProfileId === store.userId) {
+      if (game.currentTurnProfileId === authStore.userId) {
         return 'Your turn';
       }
       return `Waiting for ${game.currentTurnUsername ?? 'next player'}`;
@@ -38,7 +38,7 @@ export const Landing = observer(function Landing() {
 
   const handleGoToGame = (game: object) => {
     const gameIsActive = game.status === 'active';
-    const isUsersTurn = game.currentTurnProfileId === store.userId;
+    const isUsersTurn = game.currentTurnProfileId === authStore.userId;
 
     if (!isUsersTurn || !gameIsActive) {
       // Go to game stats

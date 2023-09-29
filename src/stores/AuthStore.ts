@@ -24,7 +24,9 @@ export class AuthStore {
     }
 
     if (data?.session) {
-      this.session = data.session;
+      runInAction(() => {
+        this.session = data.session;
+      });
     }
 
     this.authService.onAuthStateChange((session) => {
