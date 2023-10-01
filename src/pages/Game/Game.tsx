@@ -5,19 +5,23 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
+import { useQuery } from '@tanstack/react-query';
 
 const { Content } = Layout;
 
 export const Game = observer(function Game() {
   const { gameId } = useParams();
   const navigate = useNavigate();
-
   const { gameStore } = useMainStore();
 
-  let game = gameStore.games?.find((game) => game.id === gameId);
+  const { data: response } = useQuery({
+    queryKey: ['games', gameId],
+    queryFn: () => gameStore.getGameById(gameId!),
+    enabled: !!gameId,
+  });
 
   useEffect(() => {
-    if (!game) {
+    if (!gameId) {
       navigate('/');
     }
   }, []);
@@ -25,7 +29,9 @@ export const Game = observer(function Game() {
   return (
     <Layout>
       <StyledContent>
-        {game?.lettersSoFar && <AnimateLetters letters={game?.lettersSoFar} />}
+        {response?.lettersSoFar && (
+          <AnimateLetters letters={response?.lettersSoFar} />
+        )}
       </StyledContent>
     </Layout>
   );

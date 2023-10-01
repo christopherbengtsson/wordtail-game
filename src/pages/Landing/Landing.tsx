@@ -1,23 +1,33 @@
 import { Avatar, Button, Card, List } from 'antd';
 import { useMainStore } from '../../stores';
-import { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const { Meta } = Card;
 
 export const Landing = observer(function Landing() {
   const { gameStore, authStore } = useMainStore();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    gameStore.fetchGames();
-  }, [gameStore]);
+  const { data: response } = useQuery({
+    queryKey: ['games'],
+    queryFn: () => gameStore.fetchGames(),
+  });
+
+  const createGameMutation = useMutation({
+    mutationFn: (params: { name: string; players: string[] }) =>
+      gameStore.createGame(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['games'] });
+    },
+  });
 
   const handleCreateNewGame = () => {
     // TODO: Mock for now, just to test stored procedure
-    gameStore.createGame({
+    createGameMutation.mutate({
       name: 'Hard Coded Game',
       players: ['b10489e7-30c8-4982-b307-3ea6af96454e'],
     });
@@ -51,11 +61,16 @@ export const Landing = observer(function Landing() {
 
   return (
     <>
-      <Button type="primary" onClick={handleCreateNewGame}>
+      <Button
+        type="primary"
+        onClick={handleCreateNewGame}
+        disabled={createGameMutation.isLoading}
+        loading={createGameMutation.isLoading}
+      >
         CREATE NEW GAME
       </Button>
       <List
-        dataSource={gameStore.games ?? []}
+        dataSource={response?.data ?? []}
         renderItem={(game) => (
           <List.Item
             onClick={() => {

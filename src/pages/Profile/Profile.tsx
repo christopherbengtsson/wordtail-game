@@ -1,18 +1,18 @@
 import { observer } from 'mobx-react';
 import { useMainStore } from '../../stores';
+import { useMutation } from '@tanstack/react-query';
 
 export const Profile = observer(function Profile() {
   const { authStore } = useMainStore();
-
-  if (!authStore.isLoggedIn) {
-    throw new Error('No session in SupaStore!');
-  }
+  const signOutMutation = useMutation({
+    mutationFn: () => authStore.signOut(),
+  });
 
   return (
     <>
       <button
         onClick={() => {
-          authStore.signOut();
+          signOutMutation.mutate();
         }}
       >
         Sign out

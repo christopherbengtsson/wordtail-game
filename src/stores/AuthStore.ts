@@ -1,6 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Session, User as SupabaseUser } from '@supabase/supabase-js';
+import {
+  AuthResponse,
+  Session,
+  User as SupabaseUser,
+} from '@supabase/supabase-js';
 import { AuthService } from '../services';
+import { Credentials } from '../pages';
 
 export class AuthStore {
   private authService: AuthService;
@@ -12,7 +17,6 @@ export class AuthStore {
     makeAutoObservable(this);
     this.authService = authService;
 
-    // Set up any initial state or reactions if necessary
     this.init();
   }
 
@@ -44,32 +48,23 @@ export class AuthStore {
     return !!this.userId;
   }
 
-  async signUp({ email, password }: { email: string; password: string }) {
-    try {
-      await this.authService.signUp(email, password);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  }
+  async signIn(creds: Credentials) {
+    const res = await this.authService.signIn(creds);
+    this.setAuthSession(res);
 
-  async signIn({ email, password }: { email: string; password: string }) {
-    try {
-      await this.authService.signIn(email, password);
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return res;
   }
+  async signUp(creds: Credentials) {
+    const res = await this.authService.signUp(creds);
+    this.setAuthSession(res);
 
+    return res;
+  }
   async signOut() {
-    try {
-      await this.authService.signOut();
-      this.user = null;
-      this.session = null;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    this.authService.signOut();
+  }
+
+  private setAuthSession(res: AuthResponse) {
+    this.session = res.data?.session;
   }
 }

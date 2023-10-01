@@ -1,9 +1,10 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Form, Input, Button } from 'antd';
-import { useMainStore } from '../../stores';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { styled } from 'styled-components';
+import { useMutation } from '@tanstack/react-query';
+import { useMainStore } from '../../stores';
 
 export type Credentials = {
   email: string;
@@ -15,19 +16,27 @@ export function Authentication() {
   const navigate = useNavigate();
 
   const [doRegister, setDoRegister] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const onFinish = async ({ email, password }: Credentials) => {
-    setLoading(true);
+  const signInMutation = useMutation({
+    mutationFn: (creds: Credentials) => authStore.signIn(creds),
+    onSuccess: () => {
+      navigate('/');
+    },
+  });
 
+  const signUpMutation = useMutation({
+    mutationFn: (creds: Credentials) => authStore.signUp(creds),
+    onSuccess: () => {
+      navigate('/');
+    },
+  });
+
+  const onFinish = async (creds: Credentials) => {
     if (doRegister) {
-      await authStore.signUp({ email, password });
+      signUpMutation.mutate(creds);
     } else {
-      await authStore.signIn({ email, password });
+      signInMutation.mutate(creds);
     }
-
-    setLoading(false);
-    navigate('/');
   };
 
   return (
@@ -36,7 +45,7 @@ export function Authentication() {
         name="auth_form"
         initialValues={{ remember: true }}
         onFinish={onFinish}
-        disabled={loading}
+        disabled={signInMutation.isLoading || signUpMutation.isLoading}
       >
         <Form.Item
           name="email"

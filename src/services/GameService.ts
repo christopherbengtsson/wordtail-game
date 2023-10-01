@@ -11,42 +11,23 @@ export class GameService {
     this.authStore = authStore;
   }
 
-  // Fetch all games for a user
-  async fetchGames(): Promise<any[]> {
-    // consider replacing 'any' with a game type if available
-    const { data, error } = await this.client.rpc('get_user_games', {
+  async fetchGames() {
+    return this.client.rpc('get_user_games', {
       p_user_id: this.authStore.userId,
     });
-
-    if (error) {
-      console.error('Failed to fetch games:', error);
-      throw new Error(error.message);
-    }
-
-    return data;
   }
 
-  // Create a new game
-  async createGame({
-    name,
-    players,
-  }: {
-    name: string;
-    players: string[];
-  }): Promise<string> {
-    // consider changing return type based on what the RPC returns
-    const { data, error } = await this.client.rpc('create_new_game', {
-      // Your parameter naming may vary, adjust as necessary
-      p_game_name: name,
-      p_players: players,
-      // Possibly the creator ID if necessary
+  async getGameById(id: string) {
+    return this.client.rpc('get_game_by_id', {
+      p_game_id: id,
     });
+  }
 
-    if (error) {
-      console.error('Failed to create a new game:', error);
-      throw new Error(error.message);
-    }
-
-    return data;
+  async createGame({ name, players }: { name: string; players: string[] }) {
+    return this.client.rpc('create_new_game', {
+      p_creator_id: this.authStore.userId,
+      p_game_name: name,
+      p_player_ids: players,
+    });
   }
 }
