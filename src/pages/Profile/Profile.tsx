@@ -19,6 +19,7 @@ export const Profile = observer(function Profile() {
       </button>
       <h2>Hello {authStore.user?.username ?? 'Anonymous user'}</h2>
       <h4>{authStore.userId}</h4>
+      <h4>{authStore.user?.email}</h4>
     </>
   );
 });

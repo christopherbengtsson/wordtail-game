@@ -36,6 +36,7 @@ export class AuthStore {
     this.authService.onAuthStateChange((session) => {
       runInAction(() => {
         this.session = session;
+        this.user = session?.user ?? null;
       });
     });
   }

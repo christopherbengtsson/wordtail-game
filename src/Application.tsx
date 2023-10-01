@@ -13,7 +13,7 @@ export function Application() {
   return (
     /**TODO: Add ErrorBoundary */
     <QueryClientProvider client={client}>
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ReactQueryDevtools initialIsOpen={false} />
       <MainStoreProvider store={store}>
         <BrowserRouter>
           <Routes />

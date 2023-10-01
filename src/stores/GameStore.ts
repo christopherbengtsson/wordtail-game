@@ -3,9 +3,6 @@ import { GameService } from '../services';
 
 // TODO: Create types
 export class GameStore {
-  games: any[] = [];
-  currentGame: any | null = null;
-
   private gameService: GameService;
 
   constructor(gameService: GameService) {
@@ -22,7 +19,11 @@ export class GameStore {
     return this.gameService.getGameById(id);
   }
 
-  async createGame({ name, players }: { name: string; players: string[] }) {
-    return this.gameService.createGame({ name, players });
+  async createGame(params: { name: string; players: string[] }) {
+    return this.gameService.createGame(params);
+  }
+
+  async handleGameInvitation(params: { gameId: string; accept: boolean }) {
+    return this.gameService.handleGameInvitation(params);
   }
 }

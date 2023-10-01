@@ -25,11 +25,19 @@ export const Landing = observer(function Landing() {
     },
   });
 
+  const handleInvitationMutation = useMutation({
+    mutationFn: (params: { gameId: string; accept: boolean }) =>
+      gameStore.handleGameInvitation(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['games'] });
+    },
+  });
+
   const handleCreateNewGame = () => {
     // TODO: Mock for now, just to test stored procedure
     createGameMutation.mutate({
       name: 'Hard Coded Game',
-      players: ['b10489e7-30c8-4982-b307-3ea6af96454e'],
+      players: ['33da3a39-80e5-4dff-a8e2-d95a3cb768e7'],
     });
   };
 
@@ -41,6 +49,8 @@ export const Landing = observer(function Landing() {
       return `Waiting for ${game.currentTurnUsername ?? 'next player'}`;
     } else if (game.status === 'pending') {
       return 'Waiting for players to accept';
+    } else if (game.status === 'abandoned') {
+      return 'Not enough users accepted';
     }
 
     return `${game.winnerUsername ?? 'Anonymous'} won`;
@@ -77,7 +87,41 @@ export const Landing = observer(function Landing() {
               handleGoToGame(game);
             }}
           >
-            <StyledCard hoverable>
+            <StyledCard
+              hoverable
+              title={
+                game.waitingForUsers?.includes(authStore.userId) &&
+                'New invitation!'
+              }
+              extra={
+                game.waitingForUsers?.includes(authStore.userId) && (
+                  <>
+                    <Button
+                      type="primary"
+                      onClick={() =>
+                        handleInvitationMutation.mutate({
+                          gameId: game.id,
+                          accept: true,
+                        })
+                      }
+                    >
+                      Accept
+                    </Button>
+                    <Button
+                      type="link"
+                      onClick={() =>
+                        handleInvitationMutation.mutate({
+                          gameId: game.id,
+                          accept: false,
+                        })
+                      }
+                    >
+                      Decline
+                    </Button>
+                  </>
+                )
+              }
+            >
               <Meta
                 avatar={
                   <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />

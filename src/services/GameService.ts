@@ -30,4 +30,24 @@ export class GameService {
       p_player_ids: players,
     });
   }
+
+  async handleGameInvitation({
+    gameId,
+    accept,
+  }: {
+    gameId: string;
+    accept: boolean;
+  }) {
+    if (accept) {
+      return this.client.rpc('accept_game_invitation', {
+        p_game_id: gameId,
+        p_user_id: this.authStore.userId,
+      });
+    }
+
+    return this.client.rpc('decline_game_invitation', {
+      p_game_id: gameId,
+      p_user_id: this.authStore.userId,
+    });
+  }
 }

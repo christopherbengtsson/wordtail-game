@@ -8,33 +8,33 @@ RETURNS TABLE (
     "currentTurnUsername" TEXT,
     "winnerProfileId" UUID,
     "winnerUsername" TEXT,
-    "lettersSoFar" TEXT[]
+    "waitingForUsers" UUID[]
 ) AS $$
 BEGIN
     RETURN QUERY
     SELECT 
-        g.id,                            -- "id" UUID
-        g.name,                          -- "name" TEXT
-        g.status,                        -- status game_status
-        MAX(rm.created_at),              -- "updatedAt" TIMESTAMP WITH TIME ZONE
-        CASE                             -- "currentTurnProfileId" UUID
+        g.id,
+        g.name,
+        g.status,
+        MAX(rm.created_at),
+        CASE
             WHEN g.status = 'active' THEN p.id
             ELSE NULL
         END,
-        CASE                             -- "currentTurnUsername" TEXT
+        CASE
             WHEN g.status = 'active' THEN p.username
             ELSE NULL
         END,
-        CASE                             -- "winnerProfileId" UUID
+        CASE
             WHEN g.status = 'finished' THEN pw.id
             ELSE NULL
         END,
-        CASE                             -- "winnerUsername" TEXT
+        CASE
             WHEN g.status = 'finished' THEN pw.username
             ELSE NULL
         END,
-        CASE
-            WHEN g.status = 'active' THEN ARRAY_AGG(rm.letter::text ORDER BY rm.created_at)
+        CASE 
+            WHEN g.status = 'pending' THEN ARRAY(SELECT user_id FROM game_players WHERE game_id = g.id AND invitation_status = 'pending')
             ELSE NULL
         END
     FROM games g
@@ -42,7 +42,7 @@ BEGIN
     LEFT JOIN game_rounds gr ON gr.game_id = g.id AND gr.status = 'active'
     LEFT JOIN profiles p ON p.id = gr.current_player_id
     LEFT JOIN profiles pw ON pw.id = g.winner_id
-    LEFT JOIN round_moves rm ON rm.game_round_id = gr.id AND rm.type = 'add_letter'
+    LEFT JOIN round_moves rm ON rm.game_round_id = gr.id
     WHERE gp.user_id = get_user_games.p_user_id
     GROUP BY g.id, g.name, g.status, p.id, p.username, pw.id, pw.username;
 END;
