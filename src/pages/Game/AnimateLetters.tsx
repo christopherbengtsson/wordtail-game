@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ZoomInZoomOut } from '../../components';
 
-export function AnimateLetters({ letters }: { letters: string[] }) {
+export function AnimateLetters({
+  letters,
+  animationDuration,
+}: {
+  letters: string[];
+  animationDuration: number;
+}) {
   const [letterIndex, setLetterIndex] = useState(0);
   const [doAnimate, setDoAnimate] = useState(true);
 
@@ -25,6 +31,7 @@ export function AnimateLetters({ letters }: { letters: string[] }) {
     <ZoomInZoomOut
       text={letters[letterIndex]}
       iterationCount={letters.length + 1}
+      duration={animationDuration}
     />
   );
 }

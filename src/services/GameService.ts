@@ -28,9 +28,11 @@ export class GameService {
   }
 
   async getGameById(id: string): Promise<PostgrestSingleResponse<ActiveGame>> {
-    return this.client.rpc('get_game_by_id', {
-      p_game_id: id,
-    });
+    return this.client
+      .rpc('get_game_by_id', {
+        p_game_id: id,
+      })
+      .single();
   }
 
   async createGame({

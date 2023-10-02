@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { styled } from 'styled-components';
 
 export function ZoomInZoomOut({
@@ -10,9 +9,6 @@ export function ZoomInZoomOut({
   iterationCount: number;
   duration?: number;
 }) {
-  useEffect(() => {
-    console.log(text);
-  }, [text]);
   return (
     <StyledH1
       $iteration={iterationCount}
@@ -24,7 +20,10 @@ export function ZoomInZoomOut({
   );
 }
 
-const StyledH1 = styled.h1<{ $iteration: number; $duration?: number }>`
+const StyledH1 = styled.h1<{
+  $iteration: number;
+  $duration?: number;
+}>`
   @keyframes zoomInZoomOut {
     0%,
     100% {
@@ -39,8 +38,9 @@ const StyledH1 = styled.h1<{ $iteration: number; $duration?: number }>`
   }
 
   opacity: 0;
+  font-size: 10rem;
 
   animation-name: zoomInZoomOut;
-  animation-duration: ${(p) => p.$duration ?? 1}s;
+  animation-duration: ${(p) => p.$duration ?? 1000}ms;
   animation-iteration-count: ${(p) => p.$iteration};
 `;
