@@ -6,12 +6,14 @@ import type { AuthStore } from '../stores';
 import { supabaseClientInstance } from '.';
 import { Database } from './IDatabase';
 
-export type GameList =
+export type TGameList =
   Database['public']['Functions']['get_user_games']['Returns'];
-export type GameListItem = GameList[0];
+export type TGameListItem = TGameList[0];
 
 export type ActiveGame =
   Database['public']['Functions']['get_game_by_id']['Returns'][0];
+
+export type TGameStatus = Database['public']['Enums']['game_status'];
 export class GameService {
   private client: SupabaseClient;
   private authStore: AuthStore;
@@ -21,7 +23,7 @@ export class GameService {
     this.authStore = authStore;
   }
 
-  async fetchGames(): Promise<PostgrestSingleResponse<GameList>> {
+  async fetchGames(): Promise<PostgrestSingleResponse<TGameList>> {
     return this.client.rpc('get_user_games', {
       p_user_id: this.authStore.userId,
     });

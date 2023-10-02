@@ -4,6 +4,7 @@ import { Layout as AntdLayout, Menu, MenuProps } from 'antd';
 import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
+import { AppModals } from '../../modals';
 
 const { Header, Content } = AntdLayout;
 
@@ -59,6 +60,7 @@ export function Layout() {
       </Header>
       <StyledContent>
         <Outlet />
+        <AppModals />
       </StyledContent>
     </AntdLayout>
   );
