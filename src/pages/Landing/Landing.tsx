@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { GameListItem } from '../../services';
 
 const { Meta } = Card;
 
@@ -41,7 +42,7 @@ export const Landing = observer(function Landing() {
     });
   };
 
-  const handleCardSubtitle = (game: object) => {
+  const handleCardSubtitle = (game: GameListItem) => {
     if (game.status === 'active') {
       if (game.currentTurnProfileId === authStore.userId) {
         return 'Your turn';
@@ -56,7 +57,7 @@ export const Landing = observer(function Landing() {
     return `${game.winnerUsername ?? 'Anonymous'} won`;
   };
 
-  const handleGoToGame = (game: object) => {
+  const handleGoToGame = (game: GameListItem) => {
     const gameIsActive = game.status === 'active';
     const isUsersTurn = game.currentTurnProfileId === authStore.userId;
 
@@ -81,7 +82,7 @@ export const Landing = observer(function Landing() {
       </Button>
       <List
         dataSource={response?.data ?? []}
-        renderItem={(game) => (
+        renderItem={(game: GameListItem) => (
           <List.Item
             onClick={() => {
               handleGoToGame(game);
@@ -90,11 +91,11 @@ export const Landing = observer(function Landing() {
             <StyledCard
               hoverable
               title={
-                game.waitingForUsers?.includes(authStore.userId) &&
+                game.waitingForUsers?.includes(authStore?.userId ?? '') &&
                 'New invitation!'
               }
               extra={
-                game.waitingForUsers?.includes(authStore.userId) && (
+                game.waitingForUsers?.includes(authStore?.userId ?? '') && (
                   <>
                     <Button
                       type="primary"

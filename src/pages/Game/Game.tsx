@@ -29,8 +29,8 @@ export const Game = observer(function Game() {
   return (
     <Layout>
       <StyledContent>
-        {response?.lettersSoFar && (
-          <AnimateLetters letters={response?.lettersSoFar} />
+        {response?.data?.lettersSoFar && (
+          <AnimateLetters letters={response.data.lettersSoFar} />
         )}
       </StyledContent>
     </Layout>
