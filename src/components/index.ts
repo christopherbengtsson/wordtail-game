@@ -1,4 +1,8 @@
+export * from './theme';
+
 export * from './Layout';
 export * from './ZoomInZoomOut';
 export * from './GameListItem';
 export * from './ErrorBoundary';
+export * from './Button';
+export * from './Input';

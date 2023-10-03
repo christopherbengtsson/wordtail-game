@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react';
 import { useMainStore } from '../../stores';
 import { useMutation } from '@tanstack/react-query';
+import { Button } from '../../components';
 
 export const Profile = observer(function Profile() {
   const { authStore } = useMainStore();
@@ -10,13 +11,13 @@ export const Profile = observer(function Profile() {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => {
           signOutMutation.mutate();
         }}
       >
         Sign out
-      </button>
+      </Button>
       <h4>{authStore.userId}</h4>
       <h4>{authStore.user?.email}</h4>
     </>

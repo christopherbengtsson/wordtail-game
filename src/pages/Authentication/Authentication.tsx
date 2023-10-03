@@ -1,21 +1,51 @@
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Form, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
+import { Formik, Field, Form, FormikHelpers } from 'formik';
+import * as Yup from 'yup';
+import { CustomInputComponent } from './CustomInput';
+import { Button, MOBILE_SCREEN_WIDTH } from '../../components';
+
+const yupEmailValidator = Yup.string()
+  .email('Invalid email')
+  .required('Email required');
+const yupPasswordValidator = Yup.string().required('Password required');
+const yupConfirmPasswordValidator = Yup.string()
+  .oneOf([Yup.ref('password')], "Passwords don't match")
+  .required('Password required');
 
 export type Credentials = {
   email: string;
   password: string;
 };
 
+interface IValues {
+  email: '';
+  password: '';
+  confirmPassword: '';
+}
+
 export function Authentication() {
   const { authStore } = useMainStore();
   const navigate = useNavigate();
-
   const [doRegister, setDoRegister] = useState(false);
+
+  const ValidationSchema = useMemo(() => {
+    if (doRegister) {
+      return Yup.object().shape({
+        email: yupEmailValidator,
+        password: yupPasswordValidator,
+        confirmPassword: yupConfirmPasswordValidator,
+      });
+    }
+
+    return Yup.object().shape({
+      email: yupEmailValidator,
+      password: yupPasswordValidator,
+    });
+  }, [doRegister]);
 
   const signInMutation = useMutation({
     mutationFn: (creds: Credentials) => authStore.signIn(creds),
@@ -31,92 +61,144 @@ export function Authentication() {
     },
   });
 
-  const onFinish = async (creds: Credentials) => {
+  const onSubmit = async (
+    { email, password }: IValues,
+    { setSubmitting }: FormikHelpers<IValues>,
+  ) => {
     if (doRegister) {
-      signUpMutation.mutate(creds);
+      signUpMutation.mutate({ email, password });
     } else {
-      signInMutation.mutate(creds);
+      signInMutation.mutate({ email, password });
     }
+
+    setSubmitting(false);
   };
 
   return (
-    <FormContainer>
-      <Form
-        name="auth_form"
-        initialValues={{ remember: true }}
-        onFinish={onFinish}
-        disabled={signInMutation.isLoading || signUpMutation.isLoading}
-      >
-        <Form.Item
-          name="email"
-          rules={[{ required: true, message: 'Please enter your email' }]}
-        >
-          <Input
-            prefix={<UserOutlined />}
-            type="email"
-            size="large"
-            placeholder="Email"
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: 'Please enter your password' }]}
-        >
-          <Input.Password
-            prefix={<LockOutlined />}
-            size="large"
-            placeholder="Password"
-          />
-        </Form.Item>
-
-        {doRegister && (
-          <Form.Item
-            name="password_confirm"
-            rules={[
-              { required: true, message: 'Please confirm your password' },
-            ]}
+    <Container>
+      <FormContainer>
+        <Frame>
+          <Formik
+            validationSchema={ValidationSchema}
+            initialValues={{
+              email: '',
+              password: '',
+              confirmPassword: '',
+            }}
+            onSubmit={onSubmit}
+            validateOnChange={false}
+            validateOnBlur={false}
           >
-            <Input.Password
-              prefix={<LockOutlined />}
-              size="large"
-              placeholder="Confirm password"
-            />
-          </Form.Item>
-        )}
+            <StyledForm>
+              <Field
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email"
+                component={CustomInputComponent}
+              />
 
-        <Form.Item>
-          <ButtonContainer>
-            <Button type="primary" htmlType="submit" size="large">
-              {!doRegister ? 'Login' : 'Register'}
-            </Button>
+              <Field
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Password"
+                component={CustomInputComponent}
+              />
 
-            <Button type="link" onClick={() => setDoRegister(!doRegister)}>
-              {!doRegister
-                ? "I don't have an account!"
-                : 'I already have an account!'}
-            </Button>
-          </ButtonContainer>
-        </Form.Item>
-      </Form>
-    </FormContainer>
+              {doRegister && (
+                <Field
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirm password"
+                  component={CustomInputComponent}
+                />
+              )}
+
+              <Button type="submit">Submit</Button>
+            </StyledForm>
+          </Formik>
+
+          <TextButton onClick={() => setDoRegister(!doRegister)}>
+            {!doRegister
+              ? "I don't have an account"
+              : 'I already have an account'}
+          </TextButton>
+        </Frame>
+      </FormContainer>
+    </Container>
   );
 }
 
-const FormContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const Container = styled.div`
   height: 100vh;
   width: 100vw;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 
   form {
-    min-width: 350px;
+    width: 100%;
+  }
+
+  ${(p) => p.theme.screens.large} {
+    form {
+      min-width: 316px;
+    }
   }
 `;
 
-const ButtonContainer = styled.div`
+const Frame = styled.div`
+  padding: ${(p) => p.theme.spacing.m};
+  width: 90%;
+  border-color: rgb(223, 223, 223) rgb(10, 10, 10) rgb(10, 10, 10)
+    rgb(223, 223, 223);
+  box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 10px 0px,
+    rgb(254, 254, 254) 1px 1px 0px 1px inset,
+    rgb(132, 133, 132) -1px -1px 0px 1px inset;
+
+  ${(p) => p.theme.screens.large} {
+    padding: ${(p) => p.theme.spacing.xxl};
+    width: initial;
+  }
+`;
+
+const StyledForm = styled(Form)`
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 8px;
+
+  .customFormikInput {
+    width: 100%;
+  }
+
+  button {
+    align-self: flex-end;
+  }
+
+  p {
+    align-self: flex-start;
+  }
+`;
+
+const TextButton = styled.button`
+  color: ${(p) => p.theme.colors.lightBlue};
+  background: none;
+  border: none;
+
+  text-decoration: underline;
+
+  &:hover {
+    cursor: pointer;
+    color: grey;
+  }
 `;

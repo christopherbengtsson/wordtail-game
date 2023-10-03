@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Button, Form, Input, Layout } from 'antd';
 import { observer } from 'mobx-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
 import { useQuery } from '@tanstack/react-query';
-
-const { Content } = Layout;
+import { Button, Input } from '../../components';
 
 const ANIMATION_DURATION = 1000;
 
@@ -17,6 +15,7 @@ export const Game = observer(function Game() {
   const { gameStore } = useMainStore();
 
   const [animating, setAnimating] = useState(true);
+  const [newLetter, setNewLetter] = useState('');
 
   const { data: response } = useQuery({
     queryKey: ['games', gameId],
@@ -54,32 +53,29 @@ export const Game = observer(function Game() {
   };
 
   return (
-    <Layout>
-      <StyledContent>
-        {letters?.length && animating ? (
-          <AnimateLetters
-            letters={letters}
-            animationDuration={ANIMATION_DURATION}
+    <StyledContainer>
+      {letters?.length && animating ? (
+        <AnimateLetters
+          letters={letters}
+          animationDuration={ANIMATION_DURATION}
+        />
+      ) : (
+        <StyledForm>
+          <StyledInput
+            maxLength={1}
+            value={newLetter}
+            onChange={(ev) => {
+              setNewLetter((ev?.target?.value ?? '').toUpperCase());
+            }}
           />
-        ) : (
-          <StyledForm name="game_form" onFinish={onFinish}>
-            <Form.Item name="newLetter">
-              <StyledInput maxLength={1} />
-            </Form.Item>
-
-            <Form.Item>
-              <Button type="primary" htmlType="submit" size="large">
-                Place letter
-              </Button>
-            </Form.Item>
-          </StyledForm>
-        )}
-      </StyledContent>
-    </Layout>
+          <Button onClick={() => onFinish('')}>Place letter</Button>
+        </StyledForm>
+      )}
+    </StyledContainer>
   );
 });
 
-const StyledContent = styled(Content)`
+const StyledContainer = styled.div`
   height: 100vh;
   width: 100vw;
 
@@ -88,11 +84,12 @@ const StyledContent = styled(Content)`
   align-items: center;
 `;
 
-const StyledForm = styled(Form)`
+const StyledForm = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: ${(p) => p.theme.spacing.m};
 `;
 
 const StyledInput = styled(Input)`

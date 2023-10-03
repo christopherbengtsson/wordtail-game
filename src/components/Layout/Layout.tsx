@@ -1,45 +1,14 @@
-import { useMemo, useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Layout as AntdLayout, Menu, MenuProps } from 'antd';
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
+import { Link, Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AppModals } from '../../modals';
 
-const { Header, Content } = AntdLayout;
-
 export function Layout() {
   // TODO: Should maybe not use mainstore hook?
   const { authStore } = useMainStore();
-  const { pathname } = useLocation();
-
-  const [current, setCurrent] = useState(
-    pathname.includes('home') ? '' : pathname.replace('/', ''),
-  );
-
-  const menuItems: MenuProps['items'] = useMemo(
-    () => [
-      {
-        label: <Link to="/">Home</Link>,
-        key: 'home',
-        icon: <HomeOutlined />,
-      },
-      {
-        label: <Link to={`/profiles/:${authStore.userId}`}>Profile</Link>,
-        key: 'profiles',
-        icon: <UserOutlined />,
-      },
-    ],
-    [authStore.userId],
-  );
-
-  const handleNavigation = ({ key }: { key: string }) => {
-    setCurrent(key);
-  };
-
   return (
-    <AntdLayout>
-      <Header
+    <div>
+      <StyledHeader
         style={{
           position: 'sticky',
           top: 0,
@@ -49,23 +18,35 @@ export function Layout() {
           alignItems: 'center',
         }}
       >
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['home']}
-          selectedKeys={[current]}
-          items={menuItems}
-          onClick={handleNavigation}
-        />
-      </Header>
+        <StyledNav>
+          <Anchor to="/">Home</Anchor>
+          <Anchor to={`/profiles/:${authStore.userId}`}>Profile</Anchor>
+        </StyledNav>
+      </StyledHeader>
+
       <StyledContent>
         <Outlet />
         <AppModals />
       </StyledContent>
-    </AntdLayout>
+    </div>
   );
 }
 
-const StyledContent = styled(Content)`
+const StyledHeader = styled.header`
+  background-color: ${(p) => p.theme.colors.primary};
+  padding: ${(p) => p.theme.spacing.m} ${(p) => p.theme.spacing.l};
+`;
+
+const StyledNav = styled.nav`
+  display: flex;
+  gap: ${(p) => p.theme.spacing.s};
+`;
+
+const Anchor = styled(Link)`
+  color: ${(p) => p.theme.colors.highlight};
+`;
+
+const StyledContent = styled.div`
   padding: 16px 24px;
+  max-width: 600px;
 `;

@@ -1,10 +1,10 @@
-import { Button, List } from 'antd';
 import { useMainStore } from '../../stores';
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TGameListItem } from '../../services';
-import { GameListItem } from '../../components';
+import { Button, GameListItem, PrimaryButton } from '../../components';
+import { styled } from 'styled-components';
 
 export const Landing = observer(function Landing() {
   const { gameStore, authStore, modalStore } = useMainStore();
@@ -57,33 +57,32 @@ export const Landing = observer(function Landing() {
   };
 
   return (
-    <>
-      <Button
-        type="primary"
+    <Container>
+      <PrimaryButton
         onClick={handleCreateNewGame}
         disabled={createGameMutation.isLoading}
-        loading={createGameMutation.isLoading}
       >
         CREATE NEW GAME
-      </Button>
+      </PrimaryButton>
 
-      <List
-        dataSource={response?.data ?? []}
-        locale={{
-          emptyText: 'You have no games',
-        }}
-        renderItem={(game: TGameListItem) => (
-          <List.Item>
-            <GameListItem
-              key={game.id}
-              game={game}
-              userId={authStore.userId ?? ''}
-              handleGameInvitation={handleInvitationMutation}
-              handleOnClick={handleGoToGame}
-            />
-          </List.Item>
-        )}
-      />
-    </>
+      <List>
+        {(response?.data ?? []).map((game) => (
+          <GameListItem
+            key={game.id}
+            game={game}
+            userId={authStore.userId ?? ''}
+            handleGameInvitation={handleInvitationMutation}
+            handleOnClick={handleGoToGame}
+          />
+        ))}
+      </List>
+    </Container>
   );
 });
+
+const Container = styled.div`
+  display: grid;
+  gap: ${(p) => p.theme.spacing.m};
+`;
+
+const List = styled.div``;

@@ -1,8 +1,36 @@
-import { Avatar, Button, Card } from 'antd';
 import { styled } from 'styled-components';
 import type { TGameListItem, TGameStatus } from '../../services';
 import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
+
+function InviteButtons(game: TGameListItem, userId: string) {
+  return (
+    game.waitingForUsers?.includes(userId) && (
+      <>
+        <button
+          onClick={() =>
+            handleGameInvitation.mutate({
+              gameId: game.id,
+              accept: true,
+            })
+          }
+        >
+          Accept
+        </button>
+        <button
+          onClick={() =>
+            handleGameInvitation.mutate({
+              gameId: game.id,
+              accept: false,
+            })
+          }
+        >
+          Decline
+        </button>
+      </>
+    )
+  );
+}
 
 const handleCardSubtitle = (game: TGameListItem, userId: string) => {
   if (game.status === 'active') {
@@ -38,50 +66,81 @@ export function GameListItem({
   >;
 }) {
   return (
-    <StyledCard
-      hoverable
-      title={game.waitingForUsers?.includes(userId) && 'New invitation!'}
-      onClick={() => handleOnClick(game)}
-      extra={
-        game.waitingForUsers?.includes(userId) && (
-          <>
-            <Button
-              type="primary"
-              onClick={() =>
-                handleGameInvitation.mutate({
-                  gameId: game.id,
-                  accept: true,
-                })
-              }
-            >
-              Accept
-            </Button>
-            <Button
-              type="link"
-              onClick={() =>
-                handleGameInvitation.mutate({
-                  gameId: game.id,
-                  accept: false,
-                })
-              }
-            >
-              Decline
-            </Button>
-          </>
-        )
-      }
+    <StyledDivContainer
+      status={game.status}
     >
-      <Card.Meta
-        avatar={
-          <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
-        }
-        title={game.name ?? 'Nameless game'}
-        description={handleCardSubtitle(game, userId)}
+      <OnClickListener
+        role="button"
+        tabIndex={0}
+        onClick={() => handleOnClick(game)}
       />
-    </StyledCard>
+
+      <h2>{game.name ?? 'Nameless game'}</h2>
+      <h4>{game.waitingForUsers?.includes(userId) && 'New invitation!'}</h4>
+      <StyledImg src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
+      <h6>{handleCardSubtitle(game, userId)}</h6>
+      <p>{game.updatedAt}</p>
+    </StyledDivContainer>
   );
 }
 
-const StyledCard = styled(Card)`
+const StyledDivContainer = styled.div<{ status: TGameStatus }>`
+  position: relative;
   width: 100%;
+
+  padding: 8px 16px;
+
+  ${(p) => {
+    const status = p.status;
+
+    switch (status) {
+      case 'active':
+        return {
+          background: p.theme.colors.secondary,
+          color: p.theme.colors.highlight,
+        };
+
+      case 'pending':
+      case 'abandoned':
+      case 'finished':
+        return {
+          background: p.theme.colors.gray,
+          color: p.theme.colors.textColor,
+        };
+    }
+  }}
+
+  margin-bottom: 24px;
+
+  :hover {
+    cursor: pointer;
+  }
+
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(254, 254, 254) rgb(132, 133, 132) rgb(132, 133, 132)
+    rgb(254, 254, 254);
+
+  &:focus,
+  &:active {
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
+      rgb(132, 133, 132);
+  }
+`;
+
+const OnClickListener = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+`;
+
+const StyledImg = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 `;
