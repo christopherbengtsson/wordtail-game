@@ -62,6 +62,7 @@ export const Game = observer(function Game() {
       ) : (
         <StyledForm>
           <StyledInput
+            autoFocus
             maxLength={1}
             value={newLetter}
             onChange={(ev) => {

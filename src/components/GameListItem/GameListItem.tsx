@@ -49,8 +49,8 @@ const handleCardSubtitle = (game: TGameListItem, userId: string) => {
 export function GameListItem({
   game,
   userId,
-  handleGameInvitation,
   handleOnClick,
+  handleGameInvitation,
 }: {
   game: TGameListItem;
   userId: string;
@@ -65,16 +65,22 @@ export function GameListItem({
     unknown
   >;
 }) {
+  const onKeyDown = (event: React.KeyboardEvent, game: TGameListItem) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleOnClick(game);
+    }
+  };
+
   return (
     <StyledDivContainer
+      id={game.id}
       status={game.status}
+      role="button"
+      tabIndex={0}
+      onClick={() => handleOnClick(game)}
+      onKeyDown={(ev) => onKeyDown(ev, game)}
     >
-      <OnClickListener
-        role="button"
-        tabIndex={0}
-        onClick={() => handleOnClick(game)}
-      />
-
       <h2>{game.name ?? 'Nameless game'}</h2>
       <h4>{game.waitingForUsers?.includes(userId) && 'New invitation!'}</h4>
       <StyledImg src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
@@ -112,14 +118,18 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
 
   margin-bottom: 24px;
 
-  :hover {
-    cursor: pointer;
-  }
-
   border-style: solid;
   border-width: 2px;
   border-color: rgb(254, 254, 254) rgb(132, 133, 132) rgb(132, 133, 132)
     rgb(254, 254, 254);
+
+  &:hover {
+    cursor: pointer;
+
+    > * {
+      text-decoration: underline;
+    }
+  }
 
   &:focus,
   &:active {
@@ -128,15 +138,6 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
     border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
       rgb(132, 133, 132);
   }
-`;
-
-const OnClickListener = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
 `;
 
 const StyledImg = styled.img`
