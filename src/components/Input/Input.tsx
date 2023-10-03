@@ -1,12 +1,17 @@
+import { InputHTMLAttributes, forwardRef } from 'react';
 import { styled } from 'styled-components';
 
-export function Input(props) {
-  return (
-    <Container>
-      <StyledInput {...props} />
-    </Container>
-  );
-}
+export interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {}
+
+export const Input = forwardRef<HTMLInputElement, TextFieldProps>(
+  function Input(props, ref) {
+    return (
+      <Container>
+        <StyledInput {...props} ref={ref} />
+      </Container>
+    );
+  },
+);
 const Container = styled.div`
   position: relative;
   box-sizing: border-box;

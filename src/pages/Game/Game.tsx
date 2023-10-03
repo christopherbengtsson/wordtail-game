@@ -44,8 +44,8 @@ export const Game = observer(function Game() {
     return () => clearTimeout(timeout);
   }, [letters?.length]);
 
-  const onFinish = (letter: string) => {
-    if (!letter.length) {
+  const onFinish = () => {
+    if (!newLetter.length) {
       // TODO: Confirm give up
     }
 
@@ -65,10 +65,10 @@ export const Game = observer(function Game() {
             maxLength={1}
             value={newLetter}
             onChange={(ev) => {
-              setNewLetter((ev?.target?.value ?? '').toUpperCase());
+              setNewLetter(ev.target.value.toUpperCase());
             }}
           />
-          <Button onClick={() => onFinish('')}>Place letter</Button>
+          <Button onClick={() => onFinish()}>Place letter</Button>
         </StyledForm>
       )}
     </StyledContainer>

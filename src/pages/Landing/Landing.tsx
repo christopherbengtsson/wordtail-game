@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TGameListItem } from '../../services';
-import { Button, GameListItem, PrimaryButton } from '../../components';
+import { GameListItem, PrimaryButton } from '../../components';
 import { styled } from 'styled-components';
 
 export const Landing = observer(function Landing() {

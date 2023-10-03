@@ -6,7 +6,7 @@ import { useMainStore } from '../../stores';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { CustomInputComponent } from './CustomInput';
-import { Button, MOBILE_SCREEN_WIDTH } from '../../components';
+import { Button } from '../../components';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
