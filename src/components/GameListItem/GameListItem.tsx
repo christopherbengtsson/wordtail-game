@@ -4,6 +4,7 @@ import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { formatDistanceToNow } from 'date-fns';
 import { Caption, PrimaryTitleWrapper, Subtitle } from '..';
+import { getUniqueUserAvatar } from '../../utils';
 
 function InviteButtons(game: TGameListItem, userId: string) {
   return (
@@ -93,7 +94,7 @@ export function GameListItem({
     >
       <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
 
-      <StyledImg src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
+      <StyledImg src={getUniqueUserAvatar(game.currentTurnProfileId)} />
       <Subtitle>{handleCardSubtitle(game, userId)}</Subtitle>
       <Caption>
         last updated {formatDistanceToNow(new Date(game.updatedAt))} ago

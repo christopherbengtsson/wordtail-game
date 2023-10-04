@@ -1,9 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import {
-  AuthResponse,
-  Session,
-  User as SupabaseUser,
-} from '@supabase/supabase-js';
+import { Session, User as SupabaseUser } from '@supabase/supabase-js';
 import { AuthService } from '../services';
 import { Credentials } from '../pages';
 
@@ -53,10 +49,7 @@ export class AuthStore {
     return await this.authService.signIn(creds);
   }
   async signUp(creds: Credentials) {
-    const res = await this.authService.signUp(creds);
-    // TODO: Fix avatar?
-
-    return res;
+    return await this.authService.signUp(creds);
   }
   async signOut() {
     this.authService.signOut();
