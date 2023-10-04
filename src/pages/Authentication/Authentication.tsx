@@ -6,7 +6,7 @@ import { useMainStore } from '../../stores';
 import { Formik, Field, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { CustomInputComponent } from './CustomInput';
-import { Button } from '../../components';
+import { Button, Headline } from '../../components';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
@@ -77,6 +77,7 @@ export function Authentication() {
   return (
     <Container>
       <FormContainer>
+        <Headline>Wordtail</Headline>
         <Frame>
           <Formik
             validationSchema={ValidationSchema}
@@ -141,6 +142,7 @@ const FormContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: ${(p) => p.theme.spacing.l};
   width: 100%;
   height: 100%;
 

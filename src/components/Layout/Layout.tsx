@@ -7,7 +7,7 @@ export function Layout() {
   // TODO: Should maybe not use mainstore hook?
   const { authStore } = useMainStore();
   return (
-    <div>
+    <>
       <StyledHeader
         style={{
           position: 'sticky',
@@ -28,7 +28,7 @@ export function Layout() {
         <Outlet />
         <AppModals />
       </StyledContent>
-    </div>
+    </>
   );
 }
 

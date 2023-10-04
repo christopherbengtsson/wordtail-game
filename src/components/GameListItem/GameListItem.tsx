@@ -2,6 +2,8 @@ import { styled } from 'styled-components';
 import type { TGameListItem, TGameStatus } from '../../services';
 import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
+import { formatDistanceToNow } from 'date-fns';
+import { Caption, PrimaryTitleWrapper, Subtitle } from '..';
 
 function InviteButtons(game: TGameListItem, userId: string) {
   return (
@@ -31,6 +33,14 @@ function InviteButtons(game: TGameListItem, userId: string) {
     )
   );
 }
+
+const getCardTitle = (game: TGameListItem, userId: string) => {
+  if (game.status === 'pending' && game.waitingForUsers.includes(userId)) {
+    return 'New invitation!';
+  }
+
+  return game.name;
+};
 
 const handleCardSubtitle = (game: TGameListItem, userId: string) => {
   if (game.status === 'active') {
@@ -81,11 +91,13 @@ export function GameListItem({
       onClick={() => handleOnClick(game)}
       onKeyDown={(ev) => onKeyDown(ev, game)}
     >
-      <h2>{game.name ?? 'Nameless game'}</h2>
-      <h4>{game.waitingForUsers?.includes(userId) && 'New invitation!'}</h4>
+      <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
+
       <StyledImg src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
-      <h6>{handleCardSubtitle(game, userId)}</h6>
-      <p>{game.updatedAt}</p>
+      <Subtitle>{handleCardSubtitle(game, userId)}</Subtitle>
+      <Caption>
+        last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
+      </Caption>
     </StyledDivContainer>
   );
 }
@@ -93,7 +105,9 @@ export function GameListItem({
 const StyledDivContainer = styled.div<{ status: TGameStatus }>`
   position: relative;
   width: 100%;
-
+  display: flex;
+  flex-direction: column;
+  gap: ${(p) => p.theme.spacing.xs};
   padding: 8px 16px;
 
   ${(p) => {
