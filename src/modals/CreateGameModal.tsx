@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react';
 import { useMainStore } from '../stores';
-import { Button, Modal, StyledForm } from '../components';
+import { Button, Modal, StyledForm, FormInput } from '../components';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { CustomInputComponent } from '../pages/Authentication/CustomInput';
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required('Required field'),
@@ -13,10 +12,15 @@ const ValidationSchema = Yup.object().shape({
     .nullable(),
 });
 
+const initialFormValues = {
+  name: '',
+  players: [],
+};
 export const CreateGameModal = observer(function CreateGameModal() {
   const { modalStore } = useMainStore();
 
-  const handleOk = () => {
+  const onSubmit = (formValues: typeof initialFormValues) => {
+    console.log(formValues);
     closeModal();
   };
 
@@ -34,11 +38,8 @@ export const CreateGameModal = observer(function CreateGameModal() {
     >
       <Formik
         validationSchema={ValidationSchema}
-        initialValues={{
-          name: '',
-          players: [],
-        }}
-        onSubmit={(values) => console.log(values)}
+        initialValues={initialFormValues}
+        onSubmit={onSubmit}
         validateOnChange={false}
         validateOnBlur={false}
       >
@@ -48,7 +49,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
             name="name"
             type="text"
             placeholder="Game name"
-            component={CustomInputComponent}
+            component={FormInput}
           />
 
           <Field
@@ -56,7 +57,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
             name="players"
             type="text"
             placeholder="Players"
-            component={CustomInputComponent}
+            component={FormInput}
           />
 
           <Button type="submit">Submit</Button>

@@ -5,8 +5,12 @@ import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
 import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { CustomInputComponent } from './CustomInput';
-import { Button, Headline, StyledForm } from '../../components';
+import {
+  Button,
+  Headline,
+  StyledForm,
+  FormInput,
+} from '../../components';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
@@ -96,7 +100,7 @@ export function Authentication() {
                 name="email"
                 type="email"
                 placeholder="Email"
-                component={CustomInputComponent}
+                component={FormInput}
               />
 
               <Field
@@ -104,7 +108,7 @@ export function Authentication() {
                 name="password"
                 type="password"
                 placeholder="Password"
-                component={CustomInputComponent}
+                component={FormInput}
               />
 
               {doRegister && (
@@ -113,7 +117,7 @@ export function Authentication() {
                   name="confirmPassword"
                   type="password"
                   placeholder="Confirm password"
-                  component={CustomInputComponent}
+                  component={FormInput}
                 />
               )}
 
