@@ -1,64 +1,67 @@
-import { Form, Input, Modal, Select } from 'antd';
 import { observer } from 'mobx-react';
 import { useMainStore } from '../stores';
+import { Button, Modal, StyledForm } from '../components';
+import { Formik, Field } from 'formik';
+import * as Yup from 'yup';
+import { CustomInputComponent } from '../pages/Authentication/CustomInput';
+
+const ValidationSchema = Yup.object().shape({
+  name: Yup.string().required('Required field'),
+  players: Yup.array()
+    .min(1, 'Add atleast one player')
+    .required('Add atleast one player')
+    .nullable(),
+});
 
 export const CreateGameModal = observer(function CreateGameModal() {
   const { modalStore } = useMainStore();
-  const [form] = Form.useForm();
 
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        // TODO: Mutate
-        console.log(values);
-        closeModal();
-      })
-      .catch((info) => {
-        console.warn('Validate Failed:', info);
-      });
+    closeModal();
   };
 
   const closeModal = () => {
     modalStore.setCreateGameModalVisible(false);
-    form.resetFields();
   };
 
   return (
     <Modal
-      open={modalStore.createGameModalVisible}
-      okText="Create game"
-      onOk={handleOk}
-      onCancel={closeModal}
-      cancelText="Cancel"
-      //   confirmLoading={confirmLoading}
       title="Create new game"
+      open={modalStore.createGameModalVisible}
+      onRequestClose={closeModal}
+      onClose={closeModal}
+      showCloseButton
     >
-      <Form
-        name="create_game_form"
-        form={form}
-        preserve={false}
-        onFinish={handleOk}
+      <Formik
+        validationSchema={ValidationSchema}
+        initialValues={{
+          name: '',
+          players: [],
+        }}
+        onSubmit={(values) => console.log(values)}
+        validateOnChange={false}
+        validateOnBlur={false}
       >
-        <Form.Item
-          name="name"
-          rules={[{ required: true, message: 'Please enter a name' }]}
-        >
-          <Input type="text" size="large" placeholder="Game name" />
-        </Form.Item>
+        <StyledForm>
+          <Field
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Game name"
+            component={CustomInputComponent}
+          />
 
-        <Form.Item
-          name="players"
-          rules={[
-            {
-              required: true,
-              message: 'You need to invite atleast one player',
-            },
-          ]}
-        >
-          <Select size="large" placeholder="Add players" />
-        </Form.Item>
-      </Form>
+          <Field
+            id="players"
+            name="players"
+            type="text"
+            placeholder="Players"
+            component={CustomInputComponent}
+          />
+
+          <Button type="submit">Submit</Button>
+        </StyledForm>
+      </Formik>
     </Modal>
   );
 });

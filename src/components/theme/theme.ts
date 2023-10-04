@@ -1,4 +1,4 @@
-import { MOBILE_SCREEN_WIDTH } from './Constants';
+import { MOBILE_SCREEN_WIDTH, zIndexes } from './Constants';
 import { fontFamilies, spacing } from './designTokens';
 
 export const theme = {
@@ -38,6 +38,7 @@ export const theme = {
     small: `@media only screen and (max-width: ${MOBILE_SCREEN_WIDTH}px)`,
     large: `@media only screen and (min-width: ${MOBILE_SCREEN_WIDTH}.001px)`,
   },
+  zIndexes,
 };
 
 export type ITheme = typeof theme;

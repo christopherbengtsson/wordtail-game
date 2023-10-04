@@ -1,1 +1,3 @@
 - Notifications
+- Edge function (?) to generate avatar on signup
+- Return current player avatar on games

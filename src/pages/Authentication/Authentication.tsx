@@ -3,10 +3,10 @@ import { useMemo, useState } from 'react';
 import { styled } from 'styled-components';
 import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
-import { Formik, Field, Form, FormikHelpers } from 'formik';
+import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { CustomInputComponent } from './CustomInput';
-import { Button, Headline } from '../../components';
+import { Button, Headline, StyledForm } from '../../components';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
@@ -169,26 +169,6 @@ const Frame = styled.div`
   ${(p) => p.theme.screens.large} {
     padding: ${(p) => p.theme.spacing.xxl};
     width: initial;
-  }
-`;
-
-const StyledForm = styled(Form)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 8px;
-
-  .customFormikInput {
-    width: 100%;
-  }
-
-  button {
-    align-self: flex-end;
-  }
-
-  p {
-    align-self: flex-start;
   }
 `;
 
