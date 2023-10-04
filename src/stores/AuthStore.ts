@@ -50,22 +50,15 @@ export class AuthStore {
   }
 
   async signIn(creds: Credentials) {
-    const res = await this.authService.signIn(creds);
-    this.setAuthSession(res);
-
-    return res;
+    return await this.authService.signIn(creds);
   }
   async signUp(creds: Credentials) {
     const res = await this.authService.signUp(creds);
-    this.setAuthSession(res);
+    // TODO: Fix avatar?
 
     return res;
   }
   async signOut() {
     this.authService.signOut();
-  }
-
-  private setAuthSession(res: AuthResponse) {
-    this.session = res.data?.session;
   }
 }
