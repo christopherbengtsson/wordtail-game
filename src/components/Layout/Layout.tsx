@@ -47,6 +47,10 @@ const Anchor = styled(Link)`
 `;
 
 const StyledContent = styled.main`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+
   padding: 16px 24px;
   max-width: 600px;
 `;

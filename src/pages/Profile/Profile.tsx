@@ -31,6 +31,10 @@ export const Profile = observer(function Profile() {
       >
         Sign out
       </Button>
+
+      <Body>{authStore.userId}</Body>
+      <Body>{authStore.user?.email}</Body>
+
       <Headline>Headline</Headline>
       <br />
       <PrimaryTitleWrapper>PrimaryTitleWrapper</PrimaryTitleWrapper>
