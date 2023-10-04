@@ -52,6 +52,7 @@ export const Game = observer(function Game() {
     // TODO: Send letter to db
   };
 
+  // TODO: Don't show input if there's no response yet
   return (
     <StyledContainer>
       {letters?.length && animating ? (

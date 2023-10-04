@@ -123,6 +123,16 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
   border-color: rgb(254, 254, 254) rgb(132, 133, 132) rgb(132, 133, 132)
     rgb(254, 254, 254);
 
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+  }
+
   &:hover {
     cursor: pointer;
 
@@ -131,12 +141,18 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
     }
   }
 
-  &:focus,
   &:active {
     border-style: solid;
     border-width: 2px;
     border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
       rgb(132, 133, 132);
+  }
+
+  &:focus {
+    &:after {
+      outline: rgb(10, 10, 10) dotted 2px;
+      outline-offset: -4px;
+    }
   }
 `;
 
