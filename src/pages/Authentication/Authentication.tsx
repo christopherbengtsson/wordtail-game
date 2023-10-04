@@ -157,7 +157,7 @@ const FormContainer = styled.div`
 
 const Frame = styled.div`
   padding: ${(p) => p.theme.spacing.m};
-  width: 90%;
+  width: 95%;
   border-color: rgb(223, 223, 223) rgb(10, 10, 10) rgb(10, 10, 10)
     rgb(223, 223, 223);
   box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 10px 0px,

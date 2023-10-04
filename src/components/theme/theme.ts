@@ -1,4 +1,5 @@
 import { MOBILE_SCREEN_WIDTH } from './Constants';
+import { fontFamilies, spacing } from './designTokens';
 
 export const theme = {
   colors: {
@@ -18,17 +19,12 @@ export const theme = {
     shadowDark: '#848586',
   },
   fonts: {
-    primary: 'w95fa',
-    sizes: {
-      small: '0.75rem', // Equivalent to 12px for a base of 16px
-      medium: '0.875rem', // Equivalent to 14px for a base of 16px
-      large: '1rem', // Equivalent to 16px for a base of 16px
-    },
+    ...fontFamilies,
   },
   sizes: {
     windowBorder: '2px',
     borderRadius: '4px',
-    buttonHeight: '40px',
+    buttonHeight: '48px',
     borderWidth: '2px',
     buttonPadding: '10px',
   },
@@ -37,16 +33,7 @@ export const theme = {
     tablet: '768px',
     desktop: '1024px',
   },
-  spacing: {
-    tiny: '4px',
-    xs: '8px',
-    s: '16px',
-    m: '24px',
-    l: '32px',
-    xl: '40px',
-    xxl: '48px',
-    xxxl: '56px',
-  },
+  spacing,
   screens: {
     small: `@media only screen and (max-width: ${MOBILE_SCREEN_WIDTH}px)`,
     large: `@media only screen and (min-width: ${MOBILE_SCREEN_WIDTH}.001px)`,

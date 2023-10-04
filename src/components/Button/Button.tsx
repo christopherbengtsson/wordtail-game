@@ -4,7 +4,7 @@ const baseButtonStyles = css`
   height: ${(p) => p.theme.sizes.buttonHeight};
   width: auto;
   padding: 0 ${(p) => p.theme.spacing.l};
-  font-size: ${(p) => p.theme.fonts.sizes.large};
+  font: inherit;
   box-sizing: border-box;
   background: ${(p) => p.theme.colors.background};
   color: ${(p) => p.theme.colors.textColor};
@@ -14,7 +14,6 @@ const baseButtonStyles = css`
   align-items: center;
   justify-content: center;
   user-select: none;
-  font-family: inherit;
 
   :disabled {
     cursor: not-allowed;
@@ -86,7 +85,7 @@ export const Button = styled.button`
 export const PrimaryButton = styled.button`
   ${baseButtonStyles}
   ${pressingEffect}
-  
+
   &:before {
     left: 2px;
     top: 2px;

@@ -6,3 +6,4 @@ export * from './GameListItem';
 export * from './ErrorBoundary';
 export * from './Button';
 export * from './Input';
+export * from './Typography';

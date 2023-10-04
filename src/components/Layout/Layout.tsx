@@ -46,7 +46,7 @@ const Anchor = styled(Link)`
   color: ${(p) => p.theme.colors.highlight};
 `;
 
-const StyledContent = styled.div`
+const StyledContent = styled.main`
   padding: 16px 24px;
   max-width: 600px;
 `;

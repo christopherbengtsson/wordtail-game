@@ -1,12 +1,17 @@
 @font-face {
-  font-family: 'w95fa';
-  src: url('../../assets/fonts/w95fa/w95fa.woff2') format('woff2');
+  font-family: 'MS Sans Serif';
+  src: url('../../assets/fonts/MSSansSerif/MSSansSerif.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'MS Sans Serif Bold';
+  src: url('../../assets/fonts/MSSansSerif/MSSansSerif_Bold.woff2')
+    format('woff2');
 }
 
 html {
   height: 100%;
   overflow-x: hidden;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 body {
@@ -14,7 +19,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  font-family: 'w95fa';
+  font-family: 'MS Sans Serif', 'Courier New', Courier, monospace;
   -webkit-tap-highlight-color: transparent;
 }
 body {

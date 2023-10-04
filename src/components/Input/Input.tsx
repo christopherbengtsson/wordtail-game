@@ -52,9 +52,7 @@ const StyledInput = styled.input`
   outline: none;
   border: none;
   background: none;
-  font-size: 1rem;
   min-height: ${(p) => p.theme.sizes.buttonHeight};
-  font-family: inherit;
   color: rgb(10, 10, 10);
   padding: 0px 8px;
 `;
