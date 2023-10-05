@@ -5,58 +5,9 @@ import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { formatDistanceToNow } from 'date-fns';
 import { Avatar, Caption, PrimaryTitleWrapper, Subtitle } from '..';
 import { getUniqueUserAvatar } from '../../utils';
+import { InviteContent } from './InviteContent';
+import { getCardTitle, getCardSubtitle } from './utils';
 
-function InviteButtons(game: TGameListItem, userId: string) {
-  return (
-    game.waitingForUsers?.includes(userId) && (
-      <>
-        <button
-          onClick={() =>
-            handleGameInvitation.mutate({
-              gameId: game.id,
-              accept: true,
-            })
-          }
-        >
-          Accept
-        </button>
-        <button
-          onClick={() =>
-            handleGameInvitation.mutate({
-              gameId: game.id,
-              accept: false,
-            })
-          }
-        >
-          Decline
-        </button>
-      </>
-    )
-  );
-}
-
-const getCardTitle = (game: TGameListItem, userId: string) => {
-  if (game.status === 'pending' && game.waitingForUsers.includes(userId)) {
-    return 'New invitation!';
-  }
-
-  return game.name;
-};
-
-const handleCardSubtitle = (game: TGameListItem, userId: string) => {
-  if (game.status === 'active') {
-    if (game.currentTurnProfileId === userId) {
-      return 'Your turn';
-    }
-    return `Waiting for ${game.currentTurnUsername ?? 'next player'}`;
-  } else if (game.status === 'pending') {
-    return 'Waiting for players to accept';
-  } else if (game.status === 'abandoned') {
-    return 'Not enough users accepted';
-  }
-
-  return `${game.winnerUsername ?? 'Anonymous'} won`;
-};
 export function GameListItem({
   game,
   userId,
@@ -83,19 +34,32 @@ export function GameListItem({
     }
   };
 
+  const handleInvite = (accept: boolean) => {
+    handleGameInvitation.mutate({ accept, gameId: game.id });
+  };
+
   return (
     <StyledDivContainer
       id={game.id}
       status={game.status}
       role="button"
       tabIndex={0}
-      onClick={() => handleOnClick(game)}
+      onClick={() => game.status !== 'pending' && handleOnClick(game)}
       onKeyDown={(ev) => onKeyDown(ev, game)}
     >
       <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
 
-      <Avatar lazyLoad src={getUniqueUserAvatar(game.currentTurnProfileId)} />
-      <Subtitle>{handleCardSubtitle(game, userId)}</Subtitle>
+      {game.status === 'pending' ? (
+        <InviteContent onClick={handleInvite} game={game} userId={userId} />
+      ) : (
+        <>
+          <Avatar
+            lazyLoad
+            src={getUniqueUserAvatar(game.currentTurnProfileId)}
+          />
+          <Subtitle>{getCardSubtitle(game, userId)}</Subtitle>
+        </>
+      )}
       <Caption>
         last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
       </Caption>
@@ -109,7 +73,7 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
   display: flex;
   flex-direction: column;
   gap: ${(p) => p.theme.spacing.xs};
-  padding: 8px 16px;
+  padding: ${(p) => p.theme.spacing.s} ${(p) => p.theme.spacing.m};
 
   ${(p) => {
     const status = p.status;
@@ -131,7 +95,7 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
     }
   }}
 
-  margin-bottom: 24px;
+  margin-bottom: ${(p) => p.theme.spacing.m};
 
   border-style: solid;
   border-width: 2px;
@@ -148,31 +112,28 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
     width: 100%;
   }
 
-  &:hover {
-    cursor: pointer;
-
-    > * {
-      text-decoration: underline;
+  ${(p) =>
+    p.status !== 'pending' &&
+    ` 
+    &:hover {
+      cursor: pointer;
+  
+      > * {
+        text-decoration: underline;
+      }
     }
-  }
+    
+    &:active {
+      border-style: solid;
+      border-width: 2px;
+      border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
+        rgb(132, 133, 132);
+    }
 
-  &:active {
-    border-style: solid;
-    border-width: 2px;
-    border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
-      rgb(132, 133, 132);
-  }
-
-  &:focus {
+    &:focus {
     &:after {
       outline: rgb(10, 10, 10) dotted 2px;
       outline-offset: -4px;
     }
-  }
-`;
-
-const StyledImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
+  }`}
 `;
