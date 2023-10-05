@@ -2,6 +2,7 @@ import { Link, Outlet } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AppModals } from '../../modals';
+import { ScrollView } from '..';
 
 export function Layout() {
   // TODO: Should maybe not use mainstore hook?
@@ -25,7 +26,10 @@ export function Layout() {
       </StyledHeader>
 
       <StyledContent>
-        <Outlet />
+        <ScrollView>
+          <Outlet />
+        </ScrollView>
+
         <AppModals />
       </StyledContent>
     </>
@@ -51,6 +55,10 @@ const StyledContent = styled.main`
   flex-direction: column;
   flex: 1 1 auto;
 
-  padding: 16px 24px;
+  overflow: hidden;
   max-width: 600px;
+
+  ${(p) => p.theme.screens.large} {
+    padding: ${(p) => p.theme.spacing.m};
+  }
 `;

@@ -9,3 +9,4 @@ export * from './Input';
 export * from './Typography';
 export * from './Modal';
 export * from './Form';
+export * from './containers';
