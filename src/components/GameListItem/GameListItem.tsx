@@ -94,7 +94,12 @@ export function GameListItem({
     >
       <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
 
-      <StyledImg src={getUniqueUserAvatar(game.currentTurnProfileId)} />
+      <StyledImg
+        loading="lazy"
+        width={50}
+        height={50}
+        src={getUniqueUserAvatar(game.currentTurnProfileId)}
+      />
       <Subtitle>{handleCardSubtitle(game, userId)}</Subtitle>
       <Caption>
         last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
