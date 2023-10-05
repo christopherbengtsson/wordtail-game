@@ -6,13 +6,13 @@ import {
   StyleSheetManager,
   ThemeProvider as StyledThemeProvider,
 } from 'styled-components';
-import { theme } from './theme';
+import { colors, theme } from './theme';
 import { createCssVarsFromPalette } from './createCssVarsFromPalette';
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useLayoutEffect(() => {
     // Add palette as css variables
-    const css = createCssVarsFromPalette(theme.colors);
+    const css = createCssVarsFromPalette(colors);
     const style = document.createElement('style');
     style.dataset.name = 'palette';
     document.head.append(style);

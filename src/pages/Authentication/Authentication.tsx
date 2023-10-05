@@ -5,12 +5,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
 import { Formik, Field, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import {
-  Button,
-  Headline,
-  StyledForm,
-  FormInput,
-} from '../../components';
+import { Button, Headline, StyledForm, FormInput } from '../../components';
+import { Frame } from 'react95';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
@@ -82,7 +78,7 @@ export function Authentication() {
     <Container>
       <FormContainer>
         <Headline>Wordtail</Headline>
-        <Frame>
+        <StyledFrame variant="outside">
           <Formik
             validationSchema={ValidationSchema}
             initialValues={{
@@ -121,7 +117,9 @@ export function Authentication() {
                 />
               )}
 
-              <Button type="submit">Submit</Button>
+              <Button type="submit" size="lg">
+                Submit
+              </Button>
             </StyledForm>
           </Formik>
 
@@ -130,7 +128,7 @@ export function Authentication() {
               ? "I don't have an account"
               : 'I already have an account'}
           </TextButton>
-        </Frame>
+        </StyledFrame>
       </FormContainer>
     </Container>
   );
@@ -139,6 +137,16 @@ export function Authentication() {
 const Container = styled.div`
   height: 100vh;
   width: 100vw;
+`;
+
+const StyledFrame = styled(Frame)`
+  width: 95%;
+  padding: ${(p) => p.theme.spacing.m};
+
+  ${(p) => p.theme.screens.large} {
+    padding: ${(p) => p.theme.spacing.xxl};
+    width: initial;
+  }
 `;
 
 const FormContainer = styled.div`
@@ -161,23 +169,8 @@ const FormContainer = styled.div`
   }
 `;
 
-const Frame = styled.div`
-  padding: ${(p) => p.theme.spacing.m};
-  width: 95%;
-  border-color: rgb(223, 223, 223) rgb(10, 10, 10) rgb(10, 10, 10)
-    rgb(223, 223, 223);
-  box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 10px 0px,
-    rgb(254, 254, 254) 1px 1px 0px 1px inset,
-    rgb(132, 133, 132) -1px -1px 0px 1px inset;
-
-  ${(p) => p.theme.screens.large} {
-    padding: ${(p) => p.theme.spacing.xxl};
-    width: initial;
-  }
-`;
-
 const TextButton = styled.button`
-  color: ${(p) => p.theme.colors.lightBlue};
+  color: blue;
   background: none;
   border: none;
 

@@ -37,7 +37,7 @@ export function Layout() {
 }
 
 const StyledHeader = styled.header`
-  background-color: ${(p) => p.theme.colors.primary};
+  background-color: ${(p) => p.theme.headerBackground};
   padding: ${(p) => p.theme.spacing.m} ${(p) => p.theme.spacing.l};
 `;
 
@@ -47,7 +47,7 @@ const StyledNav = styled.nav`
 `;
 
 const Anchor = styled(Link)`
-  color: ${(p) => p.theme.colors.highlight};
+  color: ${(p) => p.theme.materialTextInvert};
 `;
 
 const StyledContent = styled.main`

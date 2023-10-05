@@ -1,15 +1,15 @@
 import ReactModal from 'react-modal';
 import {
   ANIMATION_TIME,
-  LayoutIdMap,
   ModalSize,
   StyledModalContent,
-  StyledModalHeaderContainer,
   StyledModalInnerContent,
   StyledOverlay,
 } from './styles';
 import { useStateIfMounted } from '../../hooks';
-import { SecondaryTitleWrapper } from '..';
+import { BodyAsTitleWrapper, Button } from '..';
+import { Window, WindowContent, WindowHeader } from 'react95';
+import { styled } from 'styled-components';
 
 export interface ModalProps {
   title: string;
@@ -34,9 +34,6 @@ export function Modal({
   open,
   size = 'large',
   children,
-  showCloseButton,
-  closeButtonLabel = 'Close',
-  onClose,
   onRequestClose,
   contentLabel,
   aria,
@@ -85,35 +82,56 @@ export function Modal({
         <StyledOverlay {...props}>{contentElement}</StyledOverlay>
       )}
     >
-      {showCloseButton && onClose && (
-        <ModalHeaderContainer
-          title={title}
-          onClose={onClose}
-          closeButtonLabel={closeButtonLabel}
-        />
-      )}
-      <StyledModalInnerContent>{children}</StyledModalInnerContent>
+      <ModalWrapper>
+        <ModalHader>
+          <BodyAsTitleWrapper autoFocus>{title}</BodyAsTitleWrapper>
+          <Button onClick={onRequestClose}>
+            <CloseIcon />
+          </Button>
+        </ModalHader>
+        <WindowContent>
+          <StyledModalInnerContent>{children}</StyledModalInnerContent>
+        </WindowContent>
+      </ModalWrapper>
     </ReactModal>
   );
 }
 
-function ModalHeaderContainer({
-  title,
-  onClose,
-  closeButtonLabel,
-}: {
-  title: string;
-  onClose: () => void;
-  closeButtonLabel: string;
-}) {
-  return (
-    <>
-      <StyledModalHeaderContainer id={LayoutIdMap.modalHeaderContainer}>
-        <SecondaryTitleWrapper>{title}</SecondaryTitleWrapper>
-        <button name="close" onClick={onClose}>
-          {closeButtonLabel}
-        </button>
-      </StyledModalHeaderContainer>
-    </>
-  );
-}
+const ModalWrapper = styled(Window)`
+  width: 100%;
+`;
+const ModalHader = styled(WindowHeader)`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: ${(p) => p.theme.spacing.xxl};
+`;
+
+const CloseIcon = styled.span`
+  display: inline-block;
+  width: ${(p) => p.theme.spacing.s};
+  height: ${(p) => p.theme.spacing.s};
+  margin-left: -1px;
+  margin-top: -1px;
+  transform: rotateZ(45deg);
+  position: relative;
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    background: ${({ theme }) => theme.materialText};
+  }
+  &:before {
+    height: 100%;
+    width: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &:after {
+    height: 3px;
+    width: 100%;
+    left: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+`;

@@ -70,7 +70,9 @@ export const Game = observer(function Game() {
               setNewLetter(ev.target.value.toUpperCase());
             }}
           />
-          <Button onClick={() => onFinish()}>Place letter</Button>
+          <Button primary size="lg" onClick={() => onFinish()}>
+            Place letter
+          </Button>
         </StyledForm>
       )}
     </StyledContainer>
@@ -95,8 +97,10 @@ const StyledForm = styled.div`
 `;
 
 const StyledInput = styled(Input)`
-  width: 100px;
-  height: 100px;
-  text-align: center;
-  font-size: 4rem;
+  input {
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    font-size: 4rem;
+  }
 `;

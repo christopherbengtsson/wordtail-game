@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TGameListItem } from '../../services';
-import { GameListItem, PrimaryButton } from '../../components';
+import { Button, GameListItem } from '../../components';
 import { styled } from 'styled-components';
 
 export const Landing = observer(function Landing() {
@@ -58,12 +58,14 @@ export const Landing = observer(function Landing() {
 
   return (
     <Container>
-      <PrimaryButton
+      <Button
+        primary
+        size="lg"
         onClick={handleCreateNewGame}
         disabled={createGameMutation.isLoading}
       >
         CREATE NEW GAME
-      </PrimaryButton>
+      </Button>
 
       <List>
         {(response?.data ?? []).map((game) => (

@@ -23,8 +23,8 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 body {
-  background-color: var(--gray);
-  color: var(--black);
+  background-color: var(--material);
+  color: var(--materialText);
 }
 
 #root,

@@ -1,23 +1,12 @@
 import { MOBILE_SCREEN_WIDTH, zIndexes } from './Constants';
 import { fontFamilies, spacing } from './designTokens';
 
+import original from 'react95/dist/themes/original';
+
+export const colors = original;
+
 export const theme = {
-  colors: {
-    primary: '#000080', // Primary blue
-    lightBlue: 'rgb(16, 52, 166)',
-    secondary: '#008080', // Secondary teal
-    gray: '#C0C0C0', // Gray
-    lightGray: '#F0F0F0', // Light Gray
-    darkGray: '#808080', // Dark Gray
-    highlight: '#FEFEFE', // White
-    lowlight: '#0A0A0A', // Black
-    error: '#FF0000', // Error Red
-    background: '#C6C6C6',
-    textColor: '#0A0A0A',
-    textColorDisabled: 'rgb(132, 133, 132)',
-    shadowLight: '#DFDFDF',
-    shadowDark: '#848586',
-  },
+  ...colors,
   fonts: {
     ...fontFamilies,
   },

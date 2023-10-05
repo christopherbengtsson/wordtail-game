@@ -81,16 +81,16 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
     switch (status) {
       case 'active':
         return {
-          background: p.theme.colors.secondary,
-          color: p.theme.colors.highlight,
+          background: p.theme.desktopBackground,
+          color: p.theme.materialText,
         };
 
       case 'pending':
       case 'abandoned':
       case 'finished':
         return {
-          background: p.theme.colors.gray,
-          color: p.theme.colors.textColor,
+          background: p.theme.material,
+          color: p.theme.materialText,
         };
     }
   }}

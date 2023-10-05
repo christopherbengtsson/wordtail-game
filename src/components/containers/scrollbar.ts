@@ -50,11 +50,11 @@ const scrollbarButtons = css`
 
   &::-webkit-scrollbar-button:vertical:decrement {
     background-image: ${({ theme }) =>
-      createTriangleSVG(theme.colors.lowlight, 180)};
+      createTriangleSVG(theme.borderDarkest, 180)};
   }
   &::-webkit-scrollbar-button:vertical:increment {
     background-image: ${({ theme }) =>
-      createTriangleSVG(theme.colors.lowlight, 0)};
+      createTriangleSVG(theme.borderDarkest, 0)};
   }
 `;
 
