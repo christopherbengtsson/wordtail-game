@@ -3,7 +3,7 @@ import type { TGameListItem, TGameStatus } from '../../services';
 import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { formatDistanceToNow } from 'date-fns';
-import { Caption, PrimaryTitleWrapper, Subtitle } from '..';
+import { Avatar, Caption, PrimaryTitleWrapper, Subtitle } from '..';
 import { getUniqueUserAvatar } from '../../utils';
 
 function InviteButtons(game: TGameListItem, userId: string) {
@@ -94,12 +94,7 @@ export function GameListItem({
     >
       <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
 
-      <StyledImg
-        loading="lazy"
-        width={50}
-        height={50}
-        src={getUniqueUserAvatar(game.currentTurnProfileId)}
-      />
+      <Avatar lazyLoad src={getUniqueUserAvatar(game.currentTurnProfileId)} />
       <Subtitle>{handleCardSubtitle(game, userId)}</Subtitle>
       <Caption>
         last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
