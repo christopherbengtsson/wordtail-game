@@ -34,7 +34,7 @@ export function Select<
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          height: '100%',
+          height: '40px',
           width: 'auto',
           padding: '0px 10px',
           fontSize: '1rem',
@@ -98,7 +98,7 @@ export function Select<
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          height: '100%',
+          height: '40px',
           width: 'auto',
           padding: '0px 10px',
           fontSize: '1rem',
@@ -146,7 +146,7 @@ export function Select<
         control: (base, state) => {
           const styles: CSSObjectWithLabel = {
             ...base,
-            height: theme.sizes.buttonHeight,
+            minHeight: theme.sizes.buttonHeight,
             display: 'flex',
             color: 'rgb(10, 10, 10)',
             fontSize: '1rem',
