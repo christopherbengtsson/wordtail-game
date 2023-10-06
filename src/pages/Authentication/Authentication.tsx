@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { styled } from 'styled-components';
 import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
@@ -32,20 +32,16 @@ export function Authentication() {
   const navigate = useNavigate();
   const [doRegister, setDoRegister] = useState(false);
 
-  const ValidationSchema = useMemo(() => {
-    if (doRegister) {
-      return Yup.object().shape({
+  const ValidationSchema = doRegister
+    ? Yup.object().shape({
         email: yupEmailValidator,
         password: yupPasswordValidator,
         confirmPassword: yupConfirmPasswordValidator,
+      })
+    : Yup.object().shape({
+        email: yupEmailValidator,
+        password: yupPasswordValidator,
       });
-    }
-
-    return Yup.object().shape({
-      email: yupEmailValidator,
-      password: yupPasswordValidator,
-    });
-  }, [doRegister]);
 
   const signInMutation = useMutation({
     mutationFn: (creds: Credentials) => authStore.signIn(creds),

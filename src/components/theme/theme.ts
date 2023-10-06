@@ -3,7 +3,7 @@ import { fontFamilies, spacing } from './designTokens';
 
 // import original from 'react95/dist/themes/original';
 // import original from 'react95/dist/themes/tokyoDark';
-import original from 'react95/dist/themes/vistaesqueMidnight';
+import original from 'react95/dist/themes/millenium';
 
 export const colors = {
   ...original,

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, unstable_usePrompt } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
@@ -10,6 +10,11 @@ import { Button, Input } from '../../components';
 const ANIMATION_DURATION = 1000;
 
 export const Game = observer(function Game() {
+  unstable_usePrompt({
+    when: true,
+    message: 'TODO: unstable_useBlocker with custom dialog?',
+  });
+
   const { gameId } = useParams();
   const navigate = useNavigate();
   const { gameStore } = useMainStore();
@@ -63,6 +68,7 @@ export const Game = observer(function Game() {
       ) : (
         <StyledForm>
           <StyledInput
+            className="letterInput"
             autoFocus
             maxLength={1}
             value={newLetter}
@@ -92,13 +98,16 @@ const StyledForm = styled.div`
   justify-content: center;
   align-items: center;
   gap: ${(p) => p.theme.spacing.m};
-`;
 
-const StyledInput = styled(Input)`
-  input {
-    width: 100px;
+  & .letterInput {
     height: 100px;
-    text-align: center;
-    font-size: 4rem;
+    input {
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      font-size: 4rem;
+    }
   }
 `;
+
+const StyledInput = styled(Input)``;
