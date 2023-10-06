@@ -4,11 +4,7 @@ import ReactSelect, {
   Props,
 } from 'react-select';
 import { useTheme } from 'styled-components';
-import {
-  commonBoxShadow,
-  createBorderStyles,
-  insetShadow,
-} from '../shared/common';
+import { commonBoxShadow, insetShadow } from '../shared/common';
 
 export function Select<
   Option,
