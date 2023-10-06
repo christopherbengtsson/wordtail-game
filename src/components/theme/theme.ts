@@ -3,14 +3,15 @@ import { fontFamilies, spacing } from './designTokens';
 
 import original from 'react95/dist/themes/original';
 
-export const colors = original;
-const addedColors = {
+export const colors = {
+  ...original,
   materialTextPlaceholder: '#757575',
+  error: '#B00000',
 };
+export type IColors = typeof colors;
 
 export const theme = {
   ...colors,
-  ...addedColors,
   fonts: {
     ...fontFamilies,
   },

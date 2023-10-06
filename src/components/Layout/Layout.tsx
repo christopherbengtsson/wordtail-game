@@ -4,6 +4,8 @@ import { useMainStore } from '../../stores';
 import { AppModals } from '../../modals';
 import { HEADER_HEIGHT, ScrollView } from '..';
 import { MainContentContainer, MainWrapper } from './LayoutStyles';
+import { createBorderStyles } from '../shared/common';
+import { CommonThemeProps } from 'react95/dist/types';
 
 export function Layout() {
   const { authStore } = useMainStore();
@@ -38,7 +40,7 @@ export function Layout() {
   );
 }
 
-const RelativeContainer = styled.div`
+const RelativeContainer = styled.div<CommonThemeProps>`
   flex: 1 1 auto;
   position: relative;
   overflow: hidden;
@@ -46,13 +48,7 @@ const RelativeContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  border-style: solid;
-  border-width: 2px;
-  border-color: rgb(223, 223, 223) rgb(10, 10, 10) rgb(10, 10, 10)
-    rgb(223, 223, 223);
-  box-shadow: rgba(0, 0, 0, 0.35) 4px 4px 10px 0px,
-    rgb(254, 254, 254) 1px 1px 0px 1px inset,
-    rgb(132, 133, 132) -1px -1px 0px 1px inset;
+  ${createBorderStyles({ style: 'window' })}
 `;
 
 const StyledHeader = styled.header`

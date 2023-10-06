@@ -1,5 +1,6 @@
 import { Input } from '..';
 import type { FieldProps } from 'formik';
+import { ErrorLabel } from './ErrorLabel';
 
 export function FormInput({
   field, // { name, value, onChange, onBlur }
@@ -10,7 +11,7 @@ export function FormInput({
     <div className="customFormikInput">
       <Input {...field} {...props} />
       {touched[field.name] && errors[field.name] && (
-        <p className="error">{`${errors[field.name]}`}</p>
+        <ErrorLabel value={errors[field.name]} />
       )}
     </div>
   );

@@ -7,6 +7,8 @@ import { Avatar, Caption, PrimaryTitleWrapper, Subtitle } from '..';
 import { getUniqueUserAvatar } from '../../utils';
 import { InviteContent } from './InviteContent';
 import { getCardTitle, getCardSubtitle } from './utils';
+import { createBorderStyles, focusOutline } from '../shared/common';
+import { CommonThemeProps } from 'react95/dist/types';
 
 export function GameListItem({
   game,
@@ -67,7 +69,9 @@ export function GameListItem({
   );
 }
 
-const StyledDivContainer = styled.div<{ status: TGameStatus }>`
+const StyledDivContainer = styled.div<
+  CommonThemeProps & { status: TGameStatus }
+>`
   position: relative;
   width: 100%;
   display: flex;
@@ -97,12 +101,7 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
 
   margin-bottom: ${(p) => p.theme.spacing.m};
 
-  border-style: solid;
-  border-width: 2px;
-  border-color: rgb(254, 254, 254) rgb(10, 10, 10) rgb(10, 10, 10)
-    rgb(254, 254, 254);
-  box-shadow: rgb(223, 223, 223) 1px 1px 0px 1px inset,
-    rgb(132, 133, 132) -1px -1px 0px 1px inset;
+  ${createBorderStyles({ style: 'button' })}
 
   &:after {
     content: '';
@@ -114,28 +113,26 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
     width: 100%;
   }
 
-  ${(p) =>
-    p.status !== 'pending' &&
-    ` 
-    &:hover {
+  &:active {
+    ${(p) =>
+      p.status !== 'pending' && createBorderStyles({ style: 'buttonPressed' })}
+  }
+
+  &:focus {
+    &:after {
+      ${(p) =>
+        p.status !== 'pending' && focusOutline}
+    }
+  }
+
+  &:hover {
+    ${(p) =>
+      p.status !== 'pending' &&
+      `
       cursor: pointer;
-  
+
       > * {
         text-decoration: underline;
       }
-    }
-    
-    &:active {
-      border-style: solid;
-      border-width: 2px;
-      border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
-        rgb(132, 133, 132);
-    }
-
-    &:focus {
-    &:after {
-      outline: rgb(10, 10, 10) dotted 2px;
-      outline-offset: -4px;
-    }
-  }`}
+    `}
 `;

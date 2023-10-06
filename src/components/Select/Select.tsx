@@ -4,6 +4,11 @@ import ReactSelect, {
   Props,
 } from 'react-select';
 import { useTheme } from 'styled-components';
+import {
+  commonBoxShadow,
+  createBorderStyles,
+  insetShadow,
+} from '../shared/common';
 
 export function Select<
   Option,
@@ -19,6 +24,7 @@ export function Select<
       menuPlacement="auto"
       className="react-select-container"
       classNamePrefix="react-select"
+      closeMenuOnSelect={!props.isMulti}
       styles={{
         placeholder: (base) => ({
           ...base,
@@ -27,8 +33,8 @@ export function Select<
         dropdownIndicator: (base) => ({
           ...base,
           boxSizing: 'border-box',
-          background: 'rgb(198, 198, 198)',
-          color: 'rgb(10, 10, 10)',
+          background: theme.material,
+          color: theme.materialText,
           border: 'none',
           position: 'relative',
           display: 'inline-flex',
@@ -172,7 +178,7 @@ export function Select<
               borderColor:
                 'rgb(10, 10, 10) rgb(223, 223, 223) rgb(223, 223, 223) rgb(10, 10, 10)',
               pointerEvents: 'none',
-              boxShadow: 'rgba(0, 0, 0, 0.2) 2px 2px 3px inset',
+              boxShadow: insetShadow,
             },
           };
 
@@ -199,7 +205,7 @@ export function Select<
           ...base,
           background: 'white',
           border: '2px solid rgb(10, 10, 10)',
-          boxShadow: 'rgba(0, 0, 0, 0.35) 4px 4px 10px 0px',
+          boxShadow: commonBoxShadow,
           padding: '2px',
         }),
         option: (base, state) => {
