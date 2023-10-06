@@ -62,7 +62,7 @@ export function useSelectStyles<
           boxShadow: `${theme.borderDark} 1px 1px 0px 1px inset, ${theme.borderLightest} -1px -1px 0px 1px inset`,
         },
         ':after': {
-          outline: `${theme.borderDarkest} dotted 2px`,
+          outline: `${theme.materialText} dotted 2px`,
           outlineOffset: '-8px',
         },
       },

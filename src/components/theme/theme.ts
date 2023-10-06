@@ -1,7 +1,9 @@
 import { MOBILE_SCREEN_WIDTH, zIndexes } from './Constants';
 import { fontFamilies, spacing } from './designTokens';
 
-import original from 'react95/dist/themes/original';
+// import original from 'react95/dist/themes/original';
+// import original from 'react95/dist/themes/tokyoDark';
+import original from 'react95/dist/themes/vistaesqueMidnight';
 
 export const colors = {
   ...original,

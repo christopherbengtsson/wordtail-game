@@ -165,7 +165,7 @@ const FormContainer = styled.div`
 `;
 
 const TextButton = styled.button`
-  color: blue;
+  color: ${(p) => p.theme.anchor};
   background: none;
   border: none;
 
@@ -173,6 +173,6 @@ const TextButton = styled.button`
 
   &:hover {
     cursor: pointer;
-    color: grey;
+    color: ${(p) => p.theme.anchorVisited};
   }
 `;

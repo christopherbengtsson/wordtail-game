@@ -52,7 +52,7 @@ const RelativeContainer = styled.div<CommonThemeProps>`
 `;
 
 const StyledHeader = styled.header`
-  background-color: ${(p) => p.theme.headerBackground};
+  background: ${(p) => p.theme.headerBackground};
   padding: ${(p) => p.theme.spacing.m};
   height: ${HEADER_HEIGHT}px;
   position: relative;
@@ -67,5 +67,5 @@ const StyledNav = styled.nav`
 `;
 
 const Anchor = styled(Link)`
-  color: ${(p) => p.theme.materialTextInvert};
+  color: ${(p) => p.theme.headerText};
 `;
