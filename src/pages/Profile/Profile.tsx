@@ -11,6 +11,7 @@ import {
   BodyAsTitleWrapper,
   Subtitle,
   Body,
+  BodyBold,
   SmallBody,
   Caption,
   Tiny,
@@ -50,6 +51,8 @@ export const Profile = observer(function Profile() {
       <BodyAsTitleWrapper>BodyAsTitleWrapper</BodyAsTitleWrapper>
       <br />
       <Subtitle>Subtitle</Subtitle>
+      <br />
+      <BodyBold>BodyBold</BodyBold>
       <br />
       <Body>Body</Body>
       <br />

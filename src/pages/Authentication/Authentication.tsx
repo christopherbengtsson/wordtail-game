@@ -20,10 +20,7 @@ export type Credentials = {
   email: string;
   password: string;
 };
-
-interface IValues {
-  email: '';
-  password: '';
+export interface FormValues extends Credentials {
   confirmPassword: '';
 }
 
@@ -58,8 +55,8 @@ export function Authentication() {
   });
 
   const onSubmit = async (
-    { email, password }: IValues,
-    { setSubmitting }: FormikHelpers<IValues>,
+    { email, password }: FormValues,
+    { setSubmitting }: FormikHelpers<FormValues>,
   ) => {
     if (doRegister) {
       signUpMutation.mutate({ email, password });

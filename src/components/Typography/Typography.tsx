@@ -1,12 +1,10 @@
 import styled from 'styled-components';
-import { ITheme } from '../theme/theme';
+import { IColors } from '../theme/theme';
 import { fontFamilies } from '../theme/designTokens';
 import { useAutoFocus } from '../../hooks';
 
-export type TextColorThemeKey = keyof ITheme['colors']['textColor'];
-
 export interface TypographyProps {
-  color?: TextColorThemeKey;
+  color?: keyof IColors;
 }
 
 export interface TypographyMappedProps extends TypographyProps {
@@ -26,7 +24,7 @@ const MainHeadline = styled.h1<TypographyMappedProps>((p) => {
     fontSize: headline.size,
     fontWeight: headline.weight,
     lineHeight: headline.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
     overflowWrap: 'break-word',
     outline: 'none',
   };
@@ -51,7 +49,7 @@ const PrimaryTitle = styled.h1<TypographyMappedProps & { large?: boolean }>(
       fontSize: title.size,
       fontWeight: title.weight,
       lineHeight: title.lineHeight,
-      color: p.color ? p.theme.text.color[p.color] : 'inherit',
+      color: p.color ? p.theme[p.color] : 'inherit',
       overflowWrap: 'break-word',
       outline: 'none',
     };
@@ -81,7 +79,7 @@ export const SecondaryTitle = styled.h2<TypographyMappedProps>((p) => {
     fontSize: title.size,
     fontWeight: title.weight,
     lineHeight: title.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
     overflowWrap: 'break-word',
     outline: 'none',
   };
@@ -102,14 +100,14 @@ export function SecondaryTitleWrapper({
 }
 
 export const BodyAsTitle = styled.h2<TypographyMappedProps>((p) => {
-  const body = fontFamilies.body;
+  const body = fontFamilies.bodyBold;
 
   return {
     fontFamily: body.family,
     fontSize: body.size,
     fontWeight: body.weight,
     lineHeight: body.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
     overflowWrap: 'break-word',
     hyphens: 'auto',
   };
@@ -137,9 +135,20 @@ export const Subtitle = styled.h2<TypographyMappedProps>((p) => {
     fontSize: title.size,
     fontWeight: title.weight,
     lineHeight: title.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
     overflowWrap: 'break-word',
     hyphens: 'auto',
+  };
+});
+
+export const BodyBold = styled.span<TypographyMappedProps>((p) => {
+  const title = fontFamilies.bodyBold;
+  return {
+    fontFamily: title.family,
+    fontSize: title.size,
+    fontWeight: title.weight,
+    lineHeight: title.lineHeight,
+    color: p.color ? p.theme[p.color] : 'inherit',
   };
 });
 
@@ -150,7 +159,7 @@ export const Body = styled.span<TypographyMappedProps>((p) => {
     fontSize: title.size,
     fontWeight: title.weight,
     lineHeight: title.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
   };
 });
 
@@ -161,7 +170,7 @@ export const SmallBody = styled.span<TypographyMappedProps>((p) => {
     fontSize: title.size,
     fontWeight: title.weight,
     lineHeight: title.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
   };
 });
 
@@ -172,7 +181,7 @@ export const Caption = styled.span<TypographyMappedProps>((p) => {
     fontSize: title.size,
     fontWeight: title.weight,
     lineHeight: title.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
   };
 });
 
@@ -183,6 +192,6 @@ export const Tiny = styled.span<TypographyMappedProps>((p) => {
     fontSize: title.size,
     fontWeight: title.weight,
     lineHeight: title.lineHeight,
-    color: p.color ? p.theme.text.color[p.color] : 'inherit',
+    color: p.color ? p.theme[p.color] : 'inherit',
   };
 });

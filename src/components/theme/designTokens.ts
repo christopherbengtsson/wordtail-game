@@ -34,6 +34,12 @@ export const fontFamilies = {
     size: '1.25rem',
     lineHeight: '1.5rem', // 24px
   },
+  bodyBold: {
+    family: 'MS Sans Serif Bold, Courier New, Courier, monospace',
+    weight: '400',
+    size: '1rem',
+    lineHeight: '1.5rem', // 24px
+  },
   body: {
     family: 'MS Sans Serif, Courier New, Courier, monospace',
     weight: '400',

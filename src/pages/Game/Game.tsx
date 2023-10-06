@@ -17,6 +17,7 @@ export const Game = observer(function Game() {
 
   const { gameId } = useParams();
   const navigate = useNavigate();
+
   const { gameStore } = useMainStore();
 
   const [animating, setAnimating] = useState(true);

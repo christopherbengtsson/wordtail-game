@@ -17,6 +17,7 @@ export const Routes = observer(function Routes() {
   const router = createBrowserRouter(
     createRoutesFromElements([
       <Route
+        key="authenticated"
         element={
           authStore.isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />
         }
@@ -28,11 +29,14 @@ export const Routes = observer(function Routes() {
         </Route>
       </Route>,
 
-      <Route element={!authStore.isLoggedIn ? <Outlet /> : <Navigate to="/" />}>
+      <Route
+        key="unauthenticated"
+        element={!authStore.isLoggedIn ? <Outlet /> : <Navigate to="/" />}
+      >
         <Route element={<Authentication />} path="/login" />
       </Route>,
 
-      <Route path="*" element={<div>TODO, 404</div>} />,
+      <Route key="404" path="*" element={<div>TODO, 404</div>} />,
     ]),
   );
 

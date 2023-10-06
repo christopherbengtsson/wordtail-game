@@ -22,7 +22,7 @@ export class NotificationService {
       console.error('Failed to fetch notifications:', error);
       throw new Error(error.message);
     }
-    return data!;
+    return data;
   }
 
   // Update the status of a notification
