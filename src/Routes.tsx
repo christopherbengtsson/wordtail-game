@@ -20,9 +20,8 @@ export const Routes = observer(function Routes() {
         <Route element={<Layout />}>
           <Route element={<Landing />} path="/" />
           <Route element={<Profile />} path="/profiles/:profileId" />
+          <Route element={<Game />} path="/games/:gameId" />
         </Route>
-
-        <Route element={<Game />} path="/games/:gameId" />
       </Route>
 
       <Route element={!authStore.isLoggedIn ? <Outlet /> : <Navigate to="/" />}>

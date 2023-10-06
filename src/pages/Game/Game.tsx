@@ -80,12 +80,10 @@ export const Game = observer(function Game() {
 });
 
 const StyledContainer = styled.div`
-  height: 100vh;
-  width: 100vw;
-
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 1 1 auto;
 `;
 
 const StyledForm = styled.div`

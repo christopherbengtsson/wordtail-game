@@ -2,11 +2,13 @@ import { styled } from 'styled-components';
 import { ScrollBar } from './scrollbar';
 
 export const ScrollView = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  padding: 4px;
-  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1 1 auto;
+
+  overflow-y: auto;
+  overflow-x: hidden;
 
   ${ScrollBar}
 `;

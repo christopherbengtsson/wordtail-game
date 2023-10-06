@@ -99,8 +99,10 @@ const StyledDivContainer = styled.div<{ status: TGameStatus }>`
 
   border-style: solid;
   border-width: 2px;
-  border-color: rgb(254, 254, 254) rgb(132, 133, 132) rgb(132, 133, 132)
+  border-color: rgb(254, 254, 254) rgb(10, 10, 10) rgb(10, 10, 10)
     rgb(254, 254, 254);
+  box-shadow: rgb(223, 223, 223) 1px 1px 0px 1px inset,
+    rgb(132, 133, 132) -1px -1px 0px 1px inset;
 
   &:after {
     content: '';

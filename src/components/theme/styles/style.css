@@ -23,21 +23,36 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 body {
-  background-color: var(--material);
+  background-color: var(--desktopBackground);
   color: var(--materialText);
 }
 
 #root,
 .ReactModal__Overlay {
-  height: 100%;
+  margin: 0 auto;
   width: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
+  justify-content: space-between;
+  position: absolute;
+  left: 0;
+  right: 0;
+  max-height: 636px;
+  min-height: 636px;
+  max-width: 924px;
+  overflow: hidden;
+  top: 24px;
 }
 
-.ReactModal__Overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Take up full height and width on mobile */
+@media only screen and (max-width: 430px) {
+  #root,
+  .ReactModal__Overlay {
+    top: 0;
+    width: auto;
+    height: 100%;
+    max-height: none;
+    min-height: 100%;
+  }
 }

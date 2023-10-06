@@ -75,69 +75,62 @@ export function Authentication() {
   };
 
   return (
-    <Container>
-      <FormContainer>
-        <Headline>Wordtail</Headline>
-        <StyledFrame variant="outside">
-          <Formik
-            validationSchema={ValidationSchema}
-            initialValues={{
-              email: '',
-              password: '',
-              confirmPassword: '',
-            }}
-            onSubmit={onSubmit}
-            validateOnChange={false}
-            validateOnBlur={false}
-          >
-            <StyledForm>
-              <Field
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Email"
-                component={FormInput}
-              />
+    <FormContainer>
+      <Headline>Wordtail</Headline>
+      <StyledFrame>
+        <Formik
+          validationSchema={ValidationSchema}
+          initialValues={{
+            email: '',
+            password: '',
+            confirmPassword: '',
+          }}
+          onSubmit={onSubmit}
+          validateOnChange={false}
+          validateOnBlur={false}
+        >
+          <StyledForm>
+            <Field
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              component={FormInput}
+            />
 
+            <Field
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Password"
+              component={FormInput}
+            />
+
+            {doRegister && (
               <Field
-                id="password"
-                name="password"
+                id="confirmPassword"
+                name="confirmPassword"
                 type="password"
-                placeholder="Password"
+                placeholder="Confirm password"
                 component={FormInput}
               />
+            )}
 
-              {doRegister && (
-                <Field
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirm password"
-                  component={FormInput}
-                />
-              )}
+            <Button type="submit" size="lg">
+              Submit
+            </Button>
+          </StyledForm>
+        </Formik>
 
-              <Button type="submit" size="lg">
-                Submit
-              </Button>
-            </StyledForm>
-          </Formik>
-
-          <TextButton onClick={() => setDoRegister(!doRegister)}>
-            {!doRegister
-              ? "I don't have an account"
-              : 'I already have an account'}
-          </TextButton>
-        </StyledFrame>
-      </FormContainer>
-    </Container>
+        <TextButton onClick={() => setDoRegister(!doRegister)}>
+          {!doRegister
+            ? "I don't have an account"
+            : 'I already have an account'}
+        </TextButton>
+      </StyledFrame>
+    </FormContainer>
   );
 }
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100vw;
-`;
 
 const StyledFrame = styled(Frame)`
   width: 95%;
@@ -150,6 +143,8 @@ const StyledFrame = styled(Frame)`
 `;
 
 const FormContainer = styled.div`
+  flex: 1 1 auto;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;

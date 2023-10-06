@@ -29,7 +29,7 @@ export const StyledModalContent = styled.div<{ size: ModalSize }>`
   width: 100%;
   max-height: 90vh;
   max-height: 90dvh;
-  overflow: hidden;
+  // overflow: hidden;
   display: flex;
   flex-direction: column;
 

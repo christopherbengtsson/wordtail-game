@@ -14,6 +14,7 @@ export const theme = {
     windowBorder: '2px',
     borderRadius: '4px',
     buttonHeight: '48px',
+    inputOuterHeight: '56px',
     borderWidth: '2px',
     buttonPadding: '10px',
   },
