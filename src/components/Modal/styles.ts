@@ -15,9 +15,11 @@ export const StyledOverlay = styled.div`
   &.overlay-after-open {
     background: rgba(46, 46, 50, 0.5);
     transition: background-color ${AnimationTime};
+    backdrop-filter: blur(2px);
   }
   &.overlay-before-close {
     background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: none;
   }
 `;
 
