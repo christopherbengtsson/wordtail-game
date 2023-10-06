@@ -16,14 +16,14 @@ const createTriangleSVG = (color: string, angle = 0) => {
 const scrollbarButtons = css`
   &::-webkit-scrollbar-button {
     box-sizing: border-box;
-    background: 0px 0px / 100% no-repeat rgb(198, 198, 198);
-    color: rgb(10, 10, 10);
+    background: 0px 0px / 100% no-repeat ${(p) => p.theme.material};
+    color: ${(p) => p.theme.borderDarkest};
     border-style: solid;
     border-width: 2px;
-    border-color: rgb(223, 223, 223) rgb(10, 10, 10) rgb(10, 10, 10)
-      rgb(223, 223, 223);
-    box-shadow: rgb(254, 254, 254) 1px 1px 0px 1px inset,
-      rgb(132, 133, 132) -1px -1px 0px 1px inset;
+    border-color:  ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderDarkest}
+       ${(p) => p.theme.borderLight};
+    box-shadow: ${(p) => p.theme.borderLightest} 1px 1px 0px 1px inset,
+      ${(p) => p.theme.borderDark} -1px -1px 0px 1px inset;
     display: block;
     outline-offset: -2px;
     height: 26px;
@@ -34,10 +34,10 @@ const scrollbarButtons = css`
     background-position: 0px 1px;
     border-style: solid;
     border-width: 2px;
-    border-color: rgb(10, 10, 10) rgb(223, 223, 223) rgb(223, 223, 223)
-      rgb(10, 10, 10);
-    box-shadow: rgb(132, 133, 132) 1px 1px 0px 1px inset,
-      rgb(254, 254, 254) -1px -1px 0px 1px inset;
+    border-color: ${(p) => p.theme.borderDarkest}  ${(p) => p.theme.borderLight}  ${(p) => p.theme.borderLight}
+      ${(p) => p.theme.borderDarkest};
+    box-shadow: ${(p) => p.theme.borderDark} 1px 1px 0px 1px inset,
+      ${(p) => p.theme.borderLightest} -1px -1px 0px 1px inset;
   }
 
   // To remove double in/decrement buttons
@@ -65,39 +65,39 @@ const scrollbar = css`
   }
 
   &::-webkit-scrollbar-corner {
-    background-color: rgb(198, 198, 198);
+    background-color: ${(p) => p.theme.material};
   }
 
   &::-webkit-scrollbar-thumb {
     box-sizing: border-box;
     display: inline-block;
-    background: rgb(198, 198, 198);
-    color: rgb(10, 10, 10);
+    background: ${(p) => p.theme.material};
+    color: ${(p) => p.theme.borderDarkest};
     border-style: solid;
     border-width: 2px;
-    border-color: rgb(223, 223, 223) rgb(10, 10, 10) rgb(10, 10, 10)
-      rgb(223, 223, 223);
-    box-shadow: rgb(254, 254, 254) 1px 1px 0px 1px inset,
-      rgb(132, 133, 132) -1px -1px 0px 1px inset;
+    border-color:  ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderDarkest}
+       ${(p) => p.theme.borderLight};
+    box-shadow: ${(p) => p.theme.borderLightest} 1px 1px 0px 1px inset,
+      ${(p) => p.theme.borderDark} -1px -1px 0px 1px inset;
     outline-offset: -2px;
   }
 
   &::-webkit-scrollbar-track {
     background-image: linear-gradient(
         45deg,
-        rgb(198, 198, 198) 25%,
+        ${(p) => p.theme.material} 25%,
         transparent 25%,
         transparent 75%,
-        rgb(198, 198, 198) 75%
+        ${(p) => p.theme.material} 75%
       ),
       linear-gradient(
         45deg,
-        rgb(198, 198, 198) 25%,
+        ${(p) => p.theme.material} 25%,
         transparent 25%,
         transparent 75%,
-        rgb(198, 198, 198) 75%
+        ${(p) => p.theme.material} 75%
       );
-    background-color: rgb(254, 254, 254);
+    background-color: ${(p) => p.theme.borderLightest};
     background-size: 4px 4px;
     background-position: 0px 0px, 2px 2px;
   }

@@ -23,9 +23,11 @@ const Wrapper = styled.div`
   overflow: hidden;
   border-width: 2px;
   border-style: solid;
-  border-color: rgb(132, 133, 132) rgb(254, 254, 254) rgb(254, 254, 254)
-    rgb(132, 133, 132);
-  background: rgb(198, 198, 198);
+  border-top-color: ${(p) => p.theme.borderDark};
+  border-right-color: ${(p) => p.theme.borderLightest};
+  border-bottom-color: ${(p) => p.theme.borderLightest};
+  border-left-color: ${(p) => p.theme.borderDark};
+  background: ${(p) => p.theme.material};
 `;
 const StyledImg = styled.img`
   display: block;
