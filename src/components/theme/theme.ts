@@ -4,9 +4,13 @@ import { fontFamilies, spacing } from './designTokens';
 import original from 'react95/dist/themes/original';
 
 export const colors = original;
+const addedColors = {
+  materialTextPlaceholder: '#757575',
+};
 
 export const theme = {
   ...colors,
+  ...addedColors,
   fonts: {
     ...fontFamilies,
   },

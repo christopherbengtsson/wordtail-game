@@ -11,3 +11,4 @@ export * from './Modal';
 export * from './Form';
 export * from './containers';
 export * from './Avatar';
+export * from './Select';

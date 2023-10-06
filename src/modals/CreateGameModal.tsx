@@ -1,20 +1,30 @@
 import { observer } from 'mobx-react';
 import { useMainStore } from '../stores';
-import { Button, Modal, StyledForm, FormInput } from '../components';
-import { Formik, Field, FieldArray } from 'formik';
+import {
+  Button,
+  Modal,
+  StyledForm,
+  FormInput,
+  FormSelect,
+} from '../components';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required('Required field'),
   players: Yup.array()
-    .min(1, 'Add atleast one player')
-    .required('Add atleast one player')
-    .nullable(),
+    .min(1, 'Pick at least 1 player')
+    .of(
+      Yup.object().shape({
+        value: Yup.string().required(),
+        label: Yup.string().required(),
+      }),
+    ),
 });
 
 const initialFormValues = {
   name: '',
-  players: ['jared', 'ian', 'brent'],
+  players: [],
 };
 export const CreateGameModal = observer(function CreateGameModal() {
   const { modalStore } = useMainStore();
@@ -43,53 +53,30 @@ export const CreateGameModal = observer(function CreateGameModal() {
         validateOnChange={false}
         validateOnBlur={false}
       >
-        {({ values }) => (
-          <StyledForm>
-            <Field
-              id="name"
-              name="name"
-              type="text"
-              placeholder="Game name"
-              component={FormInput}
-            />
+        <StyledForm>
+          <Field
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Game name..."
+            component={FormInput}
+          />
 
-            <FieldArray
-              name="players"
-              render={(arrayHelpers) => {
-                return values.players && values.players.length > 0 ? (
-                  values.players.map((player, index) => (
-                    <div key={index}>
-                      <Field
-                        name={`player.${index}`}
-                        placeholder="Add friend"
-                        component={({ field, form, ...props }) => {
-                          console.log(field);
-                          return <input {...field} {...props} />;
-                        }}
-                      />
-                      <Button
-                        type="button"
-                        onClick={() => arrayHelpers.remove(index)} // remove a friend from the list
-                      >
-                        Uninvite
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={() => arrayHelpers.insert(index, player)} // insert an empty string at a position
-                      >
-                        Invite
-                      </Button>
-                    </div>
-                  ))
-                ) : (
-                  <p>You need to add players to your friends list</p>
-                );
-              }}
-            />
+          <Field
+            id="players"
+            name="players"
+            component={FormSelect}
+            isMulti
+            placeholder="Players..."
+            options={[
+              { value: 'chocolate', label: 'Chocolate' },
+              { value: 'strawberry', label: 'Strawberry' },
+              { value: 'vanilla', label: 'Vanilla' },
+            ]}
+          />
 
-            <Button type="submit">Submit</Button>
-          </StyledForm>
-        )}
+          <Button type="submit">Submit</Button>
+        </StyledForm>
       </Formik>
     </Modal>
   );
