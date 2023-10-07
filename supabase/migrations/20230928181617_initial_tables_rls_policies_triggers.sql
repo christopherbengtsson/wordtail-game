@@ -4,61 +4,55 @@ CREATE TYPE player_status AS ENUM('active', 'out');
 CREATE TYPE move_type AS ENUM('add_letter', 'call_bluff', 'call_finished_word');
 CREATE TYPE friendship_status AS ENUM('ignored', 'accepted', 'pending');
 CREATE TYPE game_invitation_status AS ENUM('pending', 'accepted', 'declined');
-CREATE TYPE notification_type AS ENUM (
-    'game_invite',
-    'friend_request',
-    'game_move_turn'
-);
-
+CREATE TYPE notification_type AS ENUM ('game_invite', 'friend_request', 'game_move_turn');
 
 -- Create a table for public profiles
-create table profiles (
-  id uuid references auth.users on delete cascade not null primary key,
-  updated_at timestamp with time zone null default (now() at time zone 'utc'::text),
-  username text unique,
-  avatar_url text,
-
+CREATE TABLE profiles (
+  id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL PRIMARY KEY,
+  updated_at timestamp with time zone DEFAULT current_timestamp,
+  username text NOT NULL UNIQUE,
   constraint username_length check (char_length(username) >= 3)
 );
+
 -- Set up Row Level Security (RLS)
--- See https://supabase.com/docs/guides/auth/row-level-security for more details.
-alter table profiles
-  enable row level security;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
-create policy "Public profiles are viewable by everyone." on profiles
-  for select using (true);
+CREATE POLICY "Public profiles are viewable by everyone." ON profiles
+  FOR select USING (true);
 
-create policy "Users can insert their own profile." on profiles
-  for insert with check (auth.uid() = id);
+CREATE POLICY "Users can insert their own profile." ON profiles
+  FOR insert WITH CHECK (auth.uid() = id);
 
-create policy "Users can update own profile." on profiles
-  for update using (auth.uid() = id);
+CREATE POLICY "Users can update own profile." ON profiles
+  FOR update USING (auth.uid() = id);
 
 -- This trigger automatically creates a profile entry when a new user signs up via Supabase Auth.
--- See https://supabase.com/docs/guides/auth/managing-user-data#using-triggers for more details.
-create function public.handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (id, avatar_url)
-  values (new.id, new.raw_user_meta_data->>'avatar_url');
-  return new;
-end;
-$$ language plpgsql security definer;
-create trigger on_auth_user_created
-  after insert on auth.users
-  for each row execute procedure public.handle_new_user();
+CREATE FUNCTION public.handle_new_user()
+RETURNS trigger AS $$
+DECLARE 
+    base_username TEXT;
+    new_username TEXT;
+BEGIN
+    -- Cleanse the email by removing non-alphanumeric characters and truncating to a maximum length of 10
+    base_username := LEFT(regexp_replace(split_part(new.email, '@', 1), '[^a-zA-Z0-9]', '', 'g'), 10);
+    new_username := base_username;
 
--- Set up Storage!
-insert into storage.buckets (id, name)
-  values ('avatars', 'avatars');
+    -- Check if the base username exists
+    WHILE EXISTS(SELECT 1 FROM public.profiles WHERE username = new_username) LOOP
+        -- Append up to 5 characters from the UUID, while ensuring we don't exceed 15 characters in total
+        new_username := LEFT(base_username, 15 - LENGTH(substring(new.id FROM 1 FOR 5))) || substring(new.id FROM 1 FOR 5);
+    END LOOP;
 
--- Set up access controls for storage.
--- See https://supabase.com/docs/guides/storage#policy-examples for more details.
-create policy "Avatar images are publicly accessible." on storage.objects
-  for select using (bucket_id = 'avatars');
+    INSERT INTO public.profiles (id, username)
+    VALUES (new.id, new_username);
 
-create policy "Anyone can upload an avatar." on storage.objects
-  for insert with check (bucket_id = 'avatars');
+    RETURN new;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- Games Table
 CREATE TABLE games (
