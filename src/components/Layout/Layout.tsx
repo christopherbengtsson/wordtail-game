@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AppModals } from '../../modals';
@@ -9,6 +9,7 @@ import { CommonThemeProps } from 'react95/dist/types';
 
 export function Layout() {
   const { authStore } = useMainStore();
+  const { pathname } = useLocation();
 
   return (
     <RelativeContainer>
@@ -23,8 +24,15 @@ export function Layout() {
         }}
       >
         <StyledNav>
-          <Anchor to="/">Games</Anchor>
-          <Anchor to={`/profiles/:${authStore.userId}`}>Profile</Anchor>
+          <Anchor isActive={pathname === '/'} to="/">
+            Games
+          </Anchor>
+          <Anchor
+            isActive={pathname.includes('/profiles')}
+            to={`/profiles/:${authStore.userId}`}
+          >
+            Profile
+          </Anchor>
         </StyledNav>
       </StyledHeader>
 
@@ -66,6 +74,7 @@ const StyledNav = styled.nav`
   gap: ${(p) => p.theme.spacing.s};
 `;
 
-const Anchor = styled(Link)`
+const Anchor = styled(Link)<{ isActive: boolean }>`
   color: ${(p) => p.theme.headerText};
+  text-decoration: ${(p) => (p.isActive ? 'underline' : 'none')};
 `;
