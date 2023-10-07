@@ -16,7 +16,7 @@ export const InviteContent = ({
     <SpaceAroundContainer>
       {game.waitingForUsers.includes(userId) ? (
         <>
-          <Button onClick={() => onClick(true)}>Accept</Button>
+          <Button primary onClick={() => onClick(true)}>Accept</Button>
           <Button onClick={() => onClick(false)}>Decline</Button>
         </>
       ) : (
