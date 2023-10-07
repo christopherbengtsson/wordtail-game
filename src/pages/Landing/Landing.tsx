@@ -107,7 +107,7 @@ export const Landing = observer(function Landing() {
           )}
           {activeTab === 1 && (
             <List
-              emptyText="No new pending games"
+              emptyText="No pending games"
               items={gameStore.pendingGames}
               render={(game: TGameListItem) => (
                 <GameListItem

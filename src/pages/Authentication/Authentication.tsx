@@ -11,7 +11,9 @@ import { Frame } from 'react95';
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
   .required('Email required');
-const yupPasswordValidator = Yup.string().required('Password required');
+const yupPasswordValidator = Yup.string()
+  .min(6, 'Password must to be at least 6 characters')
+  .required('Password required');
 const yupConfirmPasswordValidator = Yup.string()
   .oneOf([Yup.ref('password')], "Passwords don't match")
   .required('Password required');
