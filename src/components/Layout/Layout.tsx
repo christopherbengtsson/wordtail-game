@@ -23,7 +23,7 @@ export function Layout() {
         }}
       >
         <StyledNav>
-          <Anchor to="/">Home</Anchor>
+          <Anchor to="/">Games</Anchor>
           <Anchor to={`/profiles/:${authStore.userId}`}>Profile</Anchor>
         </StyledNav>
       </StyledHeader>

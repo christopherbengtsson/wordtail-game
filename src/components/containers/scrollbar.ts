@@ -20,8 +20,8 @@ const scrollbarButtons = css`
     color: ${(p) => p.theme.borderDarkest};
     border-style: solid;
     border-width: 2px;
-    border-color:  ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderDarkest}
-       ${(p) => p.theme.borderLight};
+    border-color: ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest}
+      ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderLight};
     box-shadow: ${(p) => p.theme.borderLightest} 1px 1px 0px 1px inset,
       ${(p) => p.theme.borderDark} -1px -1px 0px 1px inset;
     display: block;
@@ -34,8 +34,8 @@ const scrollbarButtons = css`
     background-position: 0px 1px;
     border-style: solid;
     border-width: 2px;
-    border-color: ${(p) => p.theme.borderDarkest}  ${(p) => p.theme.borderLight}  ${(p) => p.theme.borderLight}
-      ${(p) => p.theme.borderDarkest};
+    border-color: ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderLight}
+      ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest};
     box-shadow: ${(p) => p.theme.borderDark} 1px 1px 0px 1px inset,
       ${(p) => p.theme.borderLightest} -1px -1px 0px 1px inset;
   }
@@ -59,9 +59,11 @@ const scrollbarButtons = css`
 `;
 
 const scrollbar = css`
+  --scrollbarWidth: 26px;
+
   &::-webkit-scrollbar {
-    width: 26px;
-    height: 26px;
+    width: var(--scrollbarWidth);
+    height: var(--scrollbarWidth);
   }
 
   &::-webkit-scrollbar-corner {
@@ -75,8 +77,8 @@ const scrollbar = css`
     color: ${(p) => p.theme.borderDarkest};
     border-style: solid;
     border-width: 2px;
-    border-color:  ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderDarkest}
-       ${(p) => p.theme.borderLight};
+    border-color: ${(p) => p.theme.borderLight} ${(p) => p.theme.borderDarkest}
+      ${(p) => p.theme.borderDarkest} ${(p) => p.theme.borderLight};
     box-shadow: ${(p) => p.theme.borderLightest} 1px 1px 0px 1px inset,
       ${(p) => p.theme.borderDark} -1px -1px 0px 1px inset;
     outline-offset: -2px;
@@ -103,7 +105,7 @@ const scrollbar = css`
   }
 `;
 
-export const ScrollBar = css`
+export const StyledScrollBar = css`
   ${scrollbarButtons}
   ${scrollbar}
 `;

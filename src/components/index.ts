@@ -12,3 +12,6 @@ export * from './Form';
 export * from './containers';
 export * from './Avatar';
 export * from './Select';
+export * from './Badge';
+export * from './List';
+export * from './Tabs';

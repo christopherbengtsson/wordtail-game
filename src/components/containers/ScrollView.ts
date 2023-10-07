@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { ScrollBar } from './scrollbar';
+import { StyledScrollBar } from './scrollbar';
 
 export const ScrollView = styled.div`
   display: flex;
@@ -7,8 +7,10 @@ export const ScrollView = styled.div`
   justify-content: space-between;
   flex: 1 1 auto;
 
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
 
-  ${ScrollBar}
+  // ${(p) => p.theme.screens.large} {
+    ${StyledScrollBar}
+  // }
 `;

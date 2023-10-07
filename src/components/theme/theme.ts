@@ -11,6 +11,8 @@ export const colors = {
   ...original,
   materialTextPlaceholder: '#757575',
   error: '#B00000',
+  white: '#fff',
+  black: '#000',
 };
 export type IColors = typeof colors;
 
