@@ -34,7 +34,6 @@ export class GameStore {
   }
 
   async fetchGames() {
-    console.log('Fetching games...');
     const response = await this.gameService.fetchGames();
     this.setGamesState(response.data as TGameList);
     return response;

@@ -1,3 +1,5 @@
+- Return createdAt on fetchGames
+
 - Notifications
 - Select application theme
 - Edge function (?) to generate avatar on signup?

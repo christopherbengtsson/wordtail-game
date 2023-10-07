@@ -10,6 +10,13 @@ import { observer } from 'mobx-react';
 import { useMainStore } from './stores';
 import { Authentication, Game, Landing, Profile } from './pages';
 import { Layout } from './components';
+import { LazyExoticComponent, Suspense, lazy } from 'react';
+import { isDev } from './Constants';
+
+let DevComponent: LazyExoticComponent<() => JSX.Element> | null = null;
+if (isDev) {
+  DevComponent = lazy(() => import('./pages/Dev'));
+}
 
 export const Routes = observer(function Routes() {
   const { authStore } = useMainStore();
@@ -26,6 +33,10 @@ export const Routes = observer(function Routes() {
           <Route element={<Landing />} path="/" />
           <Route element={<Profile />} path="/profiles/:profileId" />
           <Route element={<Game />} path="/games/:gameId" />
+
+          {isDev && DevComponent && (
+            <Route element={<DevComponent />} path="/dev" />
+          )}
         </Route>
       </Route>,
 
@@ -40,5 +51,9 @@ export const Routes = observer(function Routes() {
     ]),
   );
 
-  return <RouterProvider router={router} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
 });

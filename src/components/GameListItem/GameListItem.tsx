@@ -62,9 +62,11 @@ export function GameListItem({
           <Subtitle>{getCardSubtitle(game, userId)}</Subtitle>
         </>
       )}
-      <Caption>
-        last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
-      </Caption>
+      {game.updatedAt && (
+        <Caption>
+          last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
+        </Caption>
+      )}
     </StyledDivContainer>
   );
 }
@@ -120,8 +122,7 @@ const StyledDivContainer = styled.div<
 
   &:focus {
     &:after {
-      ${(p) =>
-        p.status !== 'pending' && focusOutline}
+      ${(p) => p.status !== 'pending' && focusOutline}
     }
   }
 

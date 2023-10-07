@@ -6,6 +6,7 @@ import { HEADER_HEIGHT, ScrollView } from '..';
 import { MainContentContainer, MainWrapper } from './LayoutStyles';
 import { createBorderStyles } from '../shared/common';
 import { CommonThemeProps } from 'react95/dist/types';
+import { isDev } from '../../Constants';
 
 export function Layout() {
   const { authStore } = useMainStore();
@@ -33,6 +34,11 @@ export function Layout() {
           >
             Profile
           </Anchor>
+          {isDev && (
+            <Anchor isActive={pathname === '/dev'} to="/dev">
+              Dev
+            </Anchor>
+          )}
         </StyledNav>
       </StyledHeader>
 
