@@ -17,6 +17,7 @@ export function Select<
       className="react-select-container"
       classNamePrefix="react-select"
       closeMenuOnSelect={!props.isMulti}
+      onInputChange={props.onInputChange}
       styles={styles}
     />
   );

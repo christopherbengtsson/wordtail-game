@@ -32,3 +32,4 @@ If you are developing a production application, we recommend updating the config
 
 Dev notes:
 create migration: npx supabase migration new create_get_games_by_user_id_function
+create initial db from UI: npx supabase db diff --use-migra initial_schema -f initial_schema

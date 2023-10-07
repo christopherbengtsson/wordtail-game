@@ -10,7 +10,7 @@ export type TGameList =
   Database['public']['Functions']['get_user_games']['Returns'];
 export type TGameListItem = TGameList[0];
 
-export type ActiveGame =
+export type TActiveGame =
   Database['public']['Functions']['get_game_by_id']['Returns'][0];
 
 export type TGameStatus = Database['public']['Enums']['game_status'];
@@ -29,7 +29,7 @@ export class GameService {
     });
   }
 
-  async getGameById(id: string): Promise<PostgrestSingleResponse<ActiveGame>> {
+  async getGameById(id: string): Promise<PostgrestSingleResponse<TActiveGame>> {
     return this.client
       .rpc('get_game_by_id', {
         p_game_id: id,

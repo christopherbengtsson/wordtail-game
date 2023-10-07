@@ -3,8 +3,8 @@
 -- Setting User IDs as Variables for Easier Reference
 DO $$ 
 DECLARE 
-    user1_id UUID := 'f47edffd-0e52-4611-a051-ef83ace139b1';
-    user2_id UUID := '28b3f8b0-3ad7-43d5-aed4-926c35a1e858';
+    user1_id UUID := 'f3f50e71-9633-42d4-8642-7e517cf7d035';
+    user2_id UUID := '30685d6b-bcfc-48a3-a8b3-2cfbfc96cd80';
     game1_id UUID := gen_random_uuid();
     game2_id UUID := gen_random_uuid();
     game3_id UUID := gen_random_uuid();

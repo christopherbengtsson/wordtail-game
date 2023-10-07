@@ -1,4 +1,5 @@
 - Return createdAt on fetchGames
+- Handle errors from react query
 
 - Notifications
 - Select application theme
