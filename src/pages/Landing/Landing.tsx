@@ -84,7 +84,7 @@ export const Landing = observer(function Landing() {
           handleTabChange={handleTabChange}
           tabs={[
             { label: 'Active' },
-            { label: 'Invites', badge: gameStore.invites.length },
+            { label: 'Pending', badge: gameStore.numberOfInvites },
             { label: 'History' },
           ]}
         />
@@ -107,8 +107,8 @@ export const Landing = observer(function Landing() {
           )}
           {activeTab === 1 && (
             <List
-              emptyText="No new invites"
-              items={gameStore.invites}
+              emptyText="No new pending games"
+              items={gameStore.pendingGames}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}
@@ -123,7 +123,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 2 && (
             <List
               emptyText="No game history"
-              items={gameStore.history}
+              items={gameStore.finishedGames}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}

@@ -1,30 +1,33 @@
 import { styled } from 'styled-components';
-import { TGameListItem } from '../../services';
 import { Button, Subtitle } from '..';
 import { getCardSubtitle } from './utils';
+import { TGameListItem } from '../../services';
 
-export const InviteContent = ({
-  game,
-  userId,
-  onClick,
-}: {
+export interface InviteActionsProps {
   game: TGameListItem;
   userId: string;
-  onClick: (p: boolean) => void;
-}) => {
+  handleInvite: (accept: boolean) => void;
+}
+export function InviteActions({
+  game,
+  userId,
+  handleInvite,
+}: InviteActionsProps) {
   return (
     <SpaceAroundContainer>
       {game.waitingForUsers.includes(userId) ? (
         <>
-          <Button primary onClick={() => onClick(true)}>Accept</Button>
-          <Button onClick={() => onClick(false)}>Decline</Button>
+          <Button primary onClick={() => handleInvite(true)}>
+            Accept
+          </Button>
+          <Button onClick={() => handleInvite(false)}>Decline</Button>
         </>
       ) : (
         <Subtitle>{getCardSubtitle(game, userId)}</Subtitle>
       )}
     </SpaceAroundContainer>
   );
-};
+}
 
 const SpaceAroundContainer = styled.div`
   display: flex;

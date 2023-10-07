@@ -2,20 +2,18 @@ import { styled } from 'styled-components';
 import type { TGameListItem, TGameStatus } from '../../services';
 import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
-import { formatDistanceToNow } from 'date-fns';
-import { Avatar, Caption, PrimaryTitleWrapper, Subtitle } from '..';
-import { getUniqueUserAvatar } from '../../utils';
-import { InviteContent } from './InviteContent';
-import { getCardTitle, getCardSubtitle } from './utils';
-import { createBorderStyles, focusOutline } from '../shared/common';
-import { CommonThemeProps } from 'react95/dist/types';
+import { PrimaryTitleWrapper } from '..';
+import { getCardTitle } from './utils';
+import {
+  createBorderStyles,
+  focusOutline,
+  CommonThemeProps,
+} from '../shared/common';
+import { CardContent } from './CardContent';
+import { InviteActions } from './InviteActions';
+import { CardFooter } from './CardFooter';
 
-export function GameListItem({
-  game,
-  userId,
-  handleOnClick,
-  handleGameInvitation,
-}: {
+export interface GameListItemProps {
   game: TGameListItem;
   userId: string;
   handleOnClick: (game: TGameListItem) => void;
@@ -28,7 +26,14 @@ export function GameListItem({
     },
     unknown
   >;
-}) {
+}
+
+export function GameListItem({
+  game,
+  userId,
+  handleOnClick,
+  handleGameInvitation,
+}: GameListItemProps) {
   const onKeyDown = (event: React.KeyboardEvent, game: TGameListItem) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
@@ -50,23 +55,15 @@ export function GameListItem({
       onKeyDown={(ev) => onKeyDown(ev, game)}
     >
       <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
-
-      {game.status === 'pending' ? (
-        <InviteContent onClick={handleInvite} game={game} userId={userId} />
-      ) : (
-        <>
-          <Avatar
-            lazyLoad
-            src={getUniqueUserAvatar(game.currentTurnProfileId)}
-          />
-          <Subtitle>{getCardSubtitle(game, userId)}</Subtitle>
-        </>
+      <CardContent game={game} userId={userId} />
+      {game.status === 'pending' && (
+        <InviteActions
+          game={game}
+          userId={userId}
+          handleInvite={handleInvite}
+        />
       )}
-      {game.updatedAt && (
-        <Caption>
-          last updated {formatDistanceToNow(new Date(game.updatedAt))} ago
-        </Caption>
-      )}
+      <CardFooter game={game} />
     </StyledDivContainer>
   );
 }
@@ -79,7 +76,7 @@ const StyledDivContainer = styled.div<
   display: flex;
   flex-direction: column;
   gap: ${(p) => p.theme.spacing.xs};
-  padding: ${(p) => p.theme.spacing.s} ${(p) => p.theme.spacing.m};
+  padding: ${(p) => p.theme.spacing.s};
 
   ${(p) => {
     const status = p.status;

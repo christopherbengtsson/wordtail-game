@@ -431,7 +431,10 @@ export interface Database {
           id: string;
           name: string;
           status: Database['public']['Enums']['game_status'];
+          createdAt: string;
           updatedAt: string;
+          creatorProfileId: string;
+          creatorUsername: string;
           currentTurnProfileId: string;
           currentTurnUsername: string;
           winnerProfileId: string;

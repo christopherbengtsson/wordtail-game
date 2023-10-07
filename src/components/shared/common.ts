@@ -1,7 +1,7 @@
 import { css } from 'styled-components';
 import { IColors, ITheme } from '..';
 
-type CommonThemeProps = {
+export type CommonThemeProps = {
   'data-testid'?: string;
   $disabled?: boolean;
   shadow?: boolean;

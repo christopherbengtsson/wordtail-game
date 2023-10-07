@@ -17,7 +17,6 @@ const Wrapper = styled.div`
   display: inline-block;
   box-sizing: border-box;
   object-fit: contain;
-  height: 50px;
   width: 50px;
   border-radius: 50%;
   overflow: hidden;
