@@ -132,7 +132,7 @@ export function useSelectStyles<
             ...styles,
             '& .react-select__value-container': {
               background: theme.hoverBackground,
-              color: theme.materialText,
+              color: theme.materialTextInvert,
               border: `2px dotted ${theme.focusSecondary}`,
             },
             '& .react-select__placeholder': {
