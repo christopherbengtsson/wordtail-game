@@ -15,27 +15,11 @@ export const Landing = observer(function Landing() {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const { data: response } = useQuery({
+  useQuery({
     queryKey: ['games'],
     queryFn: () => gameStore.fetchGames(),
     staleTime: 10 * 60 * 1000, // 10 minutes in milliseconds
   });
-
-  const activeGames = response?.data?.filter(
-    (game) =>
-      game.status === 'active' ||
-      (game.status === 'pending' &&
-        !game.waitingForUsers.includes(authStore.userId ?? '')),
-  );
-  const invites = response?.data?.filter(
-    (game) =>
-      game.status === 'pending' &&
-      game.waitingForUsers.includes(authStore.userId ?? ''),
-  );
-
-  const history = response?.data?.filter(
-    (game) => game.status === 'abandoned' || game.status === 'finished',
-  );
 
   const createGameMutation = useMutation({
     mutationFn: (params: { name: string; players: string[] }) =>
@@ -100,7 +84,7 @@ export const Landing = observer(function Landing() {
           handleTabChange={handleTabChange}
           tabs={[
             { label: 'Active' },
-            { label: 'Invites', badge: invites?.length },
+            { label: 'Invites', badge: gameStore.invites.length },
             { label: 'History' },
           ]}
         />
@@ -109,7 +93,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 0 && (
             <List
               emptyText="You have no active games, why not create one?"
-              items={activeGames}
+              items={gameStore.activeGames}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}
@@ -124,7 +108,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 1 && (
             <List
               emptyText="No new invites"
-              items={invites}
+              items={gameStore.invites}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}
@@ -139,7 +123,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 2 && (
             <List
               emptyText="No game history"
-              items={history}
+              items={gameStore.history}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}

@@ -13,7 +13,7 @@ export class MainStore {
     this.authStore = new AuthStore(authService);
 
     const gameService = new GameService(this.authStore);
-    this.gameStore = new GameStore(gameService);
+    this.gameStore = new GameStore(this.authStore, gameService);
 
     const notificationService = new NotificationService();
     this.notificationStore = new NotificationStore(notificationService);
