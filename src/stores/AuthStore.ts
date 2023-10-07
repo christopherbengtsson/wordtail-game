@@ -1,12 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Session, User as SupabaseUser } from '@supabase/supabase-js';
+import { Session } from '@supabase/supabase-js';
 import { AuthService } from '../services';
 import { Credentials } from '../pages';
 
 export class AuthStore {
   private authService: AuthService;
 
-  user: SupabaseUser | null = null;
   session: Session | null = null;
 
   constructor(authService: AuthService) {
@@ -32,17 +31,24 @@ export class AuthStore {
     this.authService.onAuthStateChange((session) => {
       runInAction(() => {
         this.session = session;
-        this.user = session?.user ?? null;
       });
     });
   }
 
-  get userId(): string | undefined {
-    return this.session?.user.id;
+  get user() {
+    if (!this.session?.user.id) {
+      throw new Error('No session, calling user');
+    }
+    return this.session?.user;
   }
-
+  get userId(): string {
+    if (!this.session?.user.id) {
+      throw new Error('No session, calling userId');
+    }
+    return this.session.user.id;
+  }
   get isLoggedIn(): boolean {
-    return !!this.userId;
+    return !!this.session?.user.id;
   }
 
   async signIn(creds: Credentials) {

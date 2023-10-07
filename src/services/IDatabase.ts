@@ -415,7 +415,7 @@ export interface Database {
       };
       get_user_friends: {
         Args: {
-          user_id: string;
+          p_user_id: string;
         };
         Returns: {
           friendId: string;

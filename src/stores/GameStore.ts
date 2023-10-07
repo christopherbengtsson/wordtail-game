@@ -22,7 +22,6 @@ export class GameStore {
     return this.games.filter(
       (game) =>
         game.status === 'pending' &&
-        this.authStore.userId &&
         game.waitingForUsers.includes(this.authStore.userId),
     );
   }
@@ -39,8 +38,10 @@ export class GameStore {
     return response;
   }
 
-  async getGameById(id: string) {
-    return this.gameService.getGameById(id);
+  async getGameById(id?: string) {
+    if (id) {
+      return this.gameService.getGameById(id);
+    }
   }
 
   async createGame(params: { name: string; players: string[] }) {

@@ -1,23 +1,13 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { supabaseClientInstance } from '.';
 
-export interface NotificationData {
-  id: string;
-  message: string;
-  seen: boolean;
-  createdAt: string;
-}
-
 export class NotificationService {
-  private client: SupabaseClient;
-
-  constructor() {
-    this.client = supabaseClientInstance;
-  }
+  constructor() {}
 
   // Fetch all notifications for the current user
-  async fetchNotifications(): Promise<NotificationData[]> {
-    const { data, error } = await this.client.from('notifications').select('*');
+  async fetchNotifications() {
+    const { data, error } = await supabaseClientInstance
+      .from('notifications')
+      .select('*');
     if (error) {
       console.error('Failed to fetch notifications:', error);
       throw new Error(error.message);
@@ -30,7 +20,7 @@ export class NotificationService {
     notificationId: string,
     seen: boolean,
   ): Promise<void> {
-    const { error } = await this.client
+    const { error } = await supabaseClientInstance
       .from('notifications')
       .update({ seen })
       .eq('id', notificationId);

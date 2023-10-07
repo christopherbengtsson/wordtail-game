@@ -98,7 +98,7 @@ export const Landing = observer(function Landing() {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  userId={authStore.userId ?? ''}
+                  userId={authStore.userId}
                   handleGameInvitation={handleInvitationMutation}
                   handleOnClick={handleGoToGame}
                 />
@@ -113,7 +113,7 @@ export const Landing = observer(function Landing() {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  userId={authStore.userId ?? ''}
+                  userId={authStore.userId}
                   handleGameInvitation={handleInvitationMutation}
                   handleOnClick={handleGoToGame}
                 />
@@ -128,7 +128,7 @@ export const Landing = observer(function Landing() {
                 <GameListItem
                   key={game.id}
                   game={game}
-                  userId={authStore.userId ?? ''}
+                  userId={authStore.userId}
                   handleGameInvitation={handleInvitationMutation}
                   handleOnClick={handleGoToGame}
                 />

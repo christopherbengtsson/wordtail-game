@@ -12,7 +12,6 @@ import * as Yup from 'yup';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getFriends, searchUser } from '../services';
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required('Required field'),
@@ -32,19 +31,19 @@ const initialFormValues = {
 };
 
 export const CreateGameModal = observer(function CreateGameModal() {
-  const { modalStore, authStore } = useMainStore();
+  const { modalStore, dbService } = useMainStore();
 
   const [searchTerm, setSearchTerm] = useState('');
 
   const friendResponse = useQuery({
     queryKey: ['friends'],
-    queryFn: () => getFriends(authStore.userId ?? ''),
+    queryFn: () => dbService.getFriends(),
     staleTime: 10 * 60 * 1000, // 10 minutes in milliseconds
   });
 
   const searchReponse = useQuery({
     queryKey: ['searchUsers', searchTerm],
-    queryFn: () => searchUser(searchTerm),
+    queryFn: () => dbService.searchUser(searchTerm),
     enabled: Boolean(searchTerm.length),
   });
 

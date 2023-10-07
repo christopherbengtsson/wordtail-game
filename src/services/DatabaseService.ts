@@ -1,17 +1,26 @@
 import { supabaseClientInstance } from '.';
+import { AuthStore } from '../stores';
 import type { Database } from './IDatabase';
 
 export type TProfile = Database['public']['Tables']['profiles']['Row'];
 
-export async function getFriends(userId: string) {
-  return supabaseClientInstance.rpc('get_user_friends', {
-    user_id: userId,
-  });
-}
+export class DatabaseService {
+  private authStore: AuthStore;
 
-export async function searchUser(searchTerm: string) {
-  return supabaseClientInstance
-    .from('profiles')
-    .select('id, username')
-    .textSearch('username', searchTerm);
+  constructor(authStore: AuthStore) {
+    this.authStore = authStore;
+  }
+
+  async getFriends() {
+    return supabaseClientInstance.rpc('get_user_friends', {
+      p_user_id: this.authStore.userId,
+    });
+  }
+
+  async searchUser(searchTerm: string) {
+    return supabaseClientInstance
+      .from('profiles')
+      .select('id, username')
+      .textSearch('username', searchTerm);
+  }
 }

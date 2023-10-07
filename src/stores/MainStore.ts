@@ -1,12 +1,18 @@
 import { makeAutoObservable } from 'mobx';
 import { AuthStore, GameStore, ModalStore, NotificationStore } from '.';
-import { AuthService, GameService, NotificationService } from '../services';
+import {
+  AuthService,
+  DatabaseService,
+  GameService,
+  NotificationService,
+} from '../services';
 
 export class MainStore {
   authStore: AuthStore;
   gameStore: GameStore;
   notificationStore: NotificationStore;
   modalStore: ModalStore;
+  dbService: DatabaseService;
 
   constructor() {
     const authService = new AuthService();
@@ -18,6 +24,9 @@ export class MainStore {
     const notificationService = new NotificationService();
     this.notificationStore = new NotificationStore(notificationService);
 
+    const databaseService = new DatabaseService(this.authStore);
+    this.dbService = databaseService;
+
     this.modalStore = new ModalStore();
 
     makeAutoObservable(this, {
@@ -25,6 +34,7 @@ export class MainStore {
       gameStore: false,
       notificationStore: false,
       modalStore: false,
+      dbService: false,
     });
   }
 }

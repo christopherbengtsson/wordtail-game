@@ -25,7 +25,7 @@ export const Game = observer(function Game() {
 
   const { data: response } = useQuery({
     queryKey: ['games', gameId],
-    queryFn: () => gameStore.getGameById(gameId!),
+    queryFn: () => gameStore.getGameById(gameId),
     enabled: !!gameId,
   });
 

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION get_user_friends(user_id UUID)
+CREATE OR REPLACE FUNCTION get_user_friends(p_user_id UUID)
 RETURNS TABLE("friendId" UUID, username TEXT, status friendship_status) AS $$
 BEGIN
     RETURN QUERY 
@@ -12,7 +12,7 @@ BEGIN
     JOIN
         profiles p ON f.receiver_id = p.id
     WHERE 
-        f.requester_id = user_id 
+        f.requester_id = p_user_id 
     UNION 
     -- Select friends where the given user is the receiver
     SELECT 
@@ -24,6 +24,6 @@ BEGIN
     JOIN
         profiles p ON f.requester_id = p.id
     WHERE 
-        f.receiver_id = user_id;
+        f.receiver_id = p_user_id;
 END;
 $$ LANGUAGE plpgsql;
