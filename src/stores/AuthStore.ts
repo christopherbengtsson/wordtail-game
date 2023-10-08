@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { Session } from '@supabase/supabase-js';
+import { Session, SignUpWithPasswordCredentials } from '@supabase/supabase-js';
 import { AuthService } from '../services';
-import { Credentials } from '../pages';
 
 export class AuthStore {
   private authService: AuthService;
@@ -51,11 +50,21 @@ export class AuthStore {
     return !!this.session?.user.id;
   }
 
-  async signIn(creds: Credentials) {
-    return await this.authService.signIn(creds);
+  async signIn(creds: SignUpWithPasswordCredentials) {
+    const res = await this.authService.signIn(creds);
+    if (res.error) {
+      throw res.error;
+    }
+
+    return res;
   }
-  async signUp(creds: Credentials) {
-    return await this.authService.signUp(creds);
+  async signUp(creds: SignUpWithPasswordCredentials) {
+    const res = await this.authService.signUp(creds);
+    if (res.error) {
+      throw res.error;
+    }
+
+    return res;
   }
   async signOut() {
     this.authService.signOut();

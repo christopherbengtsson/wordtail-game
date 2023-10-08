@@ -2,22 +2,26 @@ import { test } from '@playwright/test';
 import {
   assertCTAView,
   authSubmitButton,
+  authToggleRegister,
   createGameButton,
   createGameHeading,
   setup,
   setupAxe,
 } from './utils';
+import { EMAIL, PASSWORD } from './utils/constants';
 
 test('Desktop accessibility', async ({ page }) => {
   await setup({ page });
   await setupAxe(page);
 
-  // Authentication Form
-  await page.getByText('I already have an account').click();
-  await page
-    .getByPlaceholder('Email')
-    .fill('bengtsson.christopher@hotmail.com');
-  await page.getByPlaceholder('Password').fill('123456789');
+  // Toggle to login
+  await authToggleRegister(page).click();
+
+  // Fill in form
+  await page.getByPlaceholder('Email').fill(EMAIL);
+  await page.getByPlaceholder('Password').fill(PASSWORD);
+
+  // Login
   await assertCTAView({ page, locator: authSubmitButton(page) });
 
   // Landing page

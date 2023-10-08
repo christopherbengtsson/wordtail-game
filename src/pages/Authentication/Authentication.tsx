@@ -5,27 +5,31 @@ import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
-import { Button, Headline, StyledForm, FormInput } from '../../components';
+import {
+  Button,
+  Headline,
+  StyledForm,
+  FormInput,
+  Body,
+} from '../../components';
 import { Frame } from 'react95';
 import { getIsRecurringUser, setIsRecurringUser } from '../../utils';
+import {
+  AuthError,
+  AuthResponse,
+  SignInWithPasswordCredentials,
+  SignUpWithPasswordCredentials,
+} from '@supabase/supabase-js';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
-  .required('Email required');
+  .required('Email is required');
 const yupPasswordValidator = Yup.string()
   .min(6, 'Password must to be at least 6 characters')
-  .required('Password required');
+  .required('Password is required');
 const yupConfirmPasswordValidator = Yup.string()
   .oneOf([Yup.ref('password')], "Passwords don't match")
-  .required('Password required');
-
-export type Credentials = {
-  email: string;
-  password: string;
-};
-export interface FormValues extends Credentials {
-  confirmPassword: '';
-}
+  .required('Confirmation password is required');
 
 export function Authentication() {
   const { authStore } = useMainStore();
@@ -43,27 +47,43 @@ export function Authentication() {
         password: yupPasswordValidator,
       });
 
-  const signInMutation = useMutation({
-    mutationFn: (creds: Credentials) => authStore.signIn(creds),
+  const signInMutation = useMutation<
+    AuthResponse,
+    AuthError,
+    SignUpWithPasswordCredentials
+  >({
+    mutationFn: (creds: SignUpWithPasswordCredentials) =>
+      authStore.signIn(creds),
     onSuccess: () => {
       setIsRecurringUser();
       navigate('/');
     },
   });
 
-  const signUpMutation = useMutation({
-    mutationFn: (creds: Credentials) => authStore.signUp(creds),
+  const signUpMutation = useMutation<
+    AuthResponse,
+    AuthError,
+    SignUpWithPasswordCredentials
+  >({
+    mutationFn: (creds: SignUpWithPasswordCredentials) =>
+      authStore.signUp(creds),
     onSuccess: () => {
       setIsRecurringUser();
       navigate('/');
     },
   });
 
-  const onSubmit = async ({ email, password }: FormValues) => {
+  const mutationError = signInMutation.isError
+    ? signInMutation.error
+    : signUpMutation.isError
+    ? signUpMutation.error
+    : null;
+
+  const onSubmit = async (creds: SignInWithPasswordCredentials) => {
     if (doRegister) {
-      signUpMutation.mutate({ email, password });
+      signUpMutation.mutate(creds);
     } else {
-      signInMutation.mutate({ email, password });
+      signInMutation.mutate(creds);
     }
   };
 
@@ -115,6 +135,12 @@ export function Authentication() {
             <Button type="submit" size="lg" aria-label="Submit">
               {doRegister ? 'Register' : 'Sign In'}
             </Button>
+
+            {mutationError !== null && (
+              <ErrorContainer>
+                <Body color="error">{mutationError.message}</Body>
+              </ErrorContainer>
+            )}
           </StyledForm>
         </Formik>
 
@@ -132,6 +158,10 @@ export function Authentication() {
     </FormContainer>
   );
 }
+
+const ErrorContainer = styled.div`
+  align-self: flex-end;
+`;
 
 const StyledFrame = styled(Frame)`
   width: 95%;
@@ -169,6 +199,7 @@ const TextButton = styled.button`
   color: ${(p) => p.theme.anchor};
   background: none;
   border: none;
+  margin-top: ${(p) => p.theme.spacing.xs};
 
   text-decoration: underline;
 

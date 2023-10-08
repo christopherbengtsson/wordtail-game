@@ -1,4 +1,7 @@
-import type { Session } from '@supabase/supabase-js';
+import type {
+  Session,
+  SignInWithPasswordCredentials,
+} from '@supabase/supabase-js';
 import { supabaseClientInstance } from '.';
 
 export class AuthService {
@@ -14,15 +17,12 @@ export class AuthService {
     );
   }
 
-  async signUp({ email, password }: { email: string; password: string }) {
-    return supabaseClientInstance.auth.signUp({ email, password });
+  async signUp(creds: SignInWithPasswordCredentials) {
+    return supabaseClientInstance.auth.signUp(creds);
   }
 
-  async signIn({ email, password }: { email: string; password: string }) {
-    return supabaseClientInstance.auth.signInWithPassword({
-      email,
-      password,
-    });
+  async signIn(creds: SignInWithPasswordCredentials) {
+    return supabaseClientInstance.auth.signInWithPassword(creds);
   }
 
   async signOut() {
