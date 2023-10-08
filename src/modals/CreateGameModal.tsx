@@ -33,7 +33,7 @@ const initialFormValues = {
 export const CreateGameModal = observer(function CreateGameModal() {
   const { modalStore, dbService } = useMainStore();
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   const friendResponse = useQuery({
     queryKey: ['friends'],
@@ -42,9 +42,9 @@ export const CreateGameModal = observer(function CreateGameModal() {
   });
 
   const searchReponse = useQuery({
-    queryKey: ['searchUsers', searchTerm],
-    queryFn: () => dbService.searchUser(searchTerm),
-    enabled: Boolean(searchTerm.length),
+    queryKey: ['searchUsers', debouncedSearchTerm],
+    queryFn: () => dbService.searchUser(debouncedSearchTerm),
+    enabled: Boolean(debouncedSearchTerm.length),
   });
 
   const playerOptions = useMemo(() => {
@@ -62,16 +62,16 @@ export const CreateGameModal = observer(function CreateGameModal() {
     return [...friends, ...searchResults];
   }, [friendResponse.data?.data, searchReponse.data?.data]);
 
-  const handleChange = (val: string) => {
-    setSearchTerm(val);
+  const handleDebouncedSelectChange = (val: string) => {
+    setDebouncedSearchTerm(val);
   };
-  const debouncedResults = useMemo(() => {
-    return debouce(handleChange, 500);
+  const debouncedSelectResults = useMemo(() => {
+    return debouce(handleDebouncedSelectChange, 500);
   }, []);
 
   useEffect(() => {
     return () => {
-      debouncedResults.cancel();
+      debouncedSelectResults.cancel();
     };
   });
 
@@ -88,17 +88,17 @@ export const CreateGameModal = observer(function CreateGameModal() {
       return 'Loading friends...';
     }
 
-    if (searchReponse.status === 'loading') {
+    if (searchReponse.isInitialLoading) {
       return 'Searching...';
     }
 
-    if (searchTerm.length) {
+    if (debouncedSearchTerm.length && !searchReponse.data?.data?.length) {
       return 'No player with username ' + input;
     }
 
     return 'Type a username!';
   };
-  console.log(playerOptions);
+
   return (
     <Modal
       title="Create new game"
@@ -131,7 +131,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
             component={FormSelect}
             isMulti
             placeholder="Players..."
-            onInputChange={debouncedResults}
+            onInputChange={debouncedSelectResults}
             options={playerOptions}
             aria-label="Select players"
             noOptionsMessage={({ inputValue }: { inputValue: string }) =>
