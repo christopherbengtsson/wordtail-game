@@ -59,9 +59,12 @@ export const Profile = observer(function Profile() {
       <List
         items={friendsResponse?.data}
         emptyText="No friends added yet"
-        render={({ username }) => (
+        render={({ friendId, username }) => (
           <li key={username}>
-            <Body>{username}</Body>
+            <FlexContainer>
+              <Avatar src={getUniqueUserAvatar(friendId)} />
+              <Body>{username}</Body>
+            </FlexContainer>
           </li>
         )}
       />
