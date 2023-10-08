@@ -1,5 +1,5 @@
 - Handle errors from react query
-
+- Set key in local storage for returning users, to dynamically show register/login as default
 - Notifications
 - Select application theme
 - Edge function (?) to generate avatar on signup?

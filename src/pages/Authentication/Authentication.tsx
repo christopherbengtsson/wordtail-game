@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { styled } from 'styled-components';
 import { useMutation } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
-import { Formik, Field, FormikHelpers } from 'formik';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { Button, Headline, StyledForm, FormInput } from '../../components';
 import { Frame } from 'react95';
@@ -56,17 +56,12 @@ export function Authentication() {
     },
   });
 
-  const onSubmit = async (
-    { email, password }: FormValues,
-    { setSubmitting }: FormikHelpers<FormValues>,
-  ) => {
+  const onSubmit = async ({ email, password }: FormValues) => {
     if (doRegister) {
       signUpMutation.mutate({ email, password });
     } else {
       signInMutation.mutate({ email, password });
     }
-
-    setSubmitting(false);
   };
 
   return (
@@ -112,7 +107,7 @@ export function Authentication() {
             )}
 
             <Button type="submit" size="lg">
-              Submit
+              {doRegister ? 'Register' : 'Sign In'}
             </Button>
           </StyledForm>
         </Formik>
