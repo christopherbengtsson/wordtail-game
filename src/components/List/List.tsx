@@ -1,5 +1,5 @@
 interface ListProps<T> {
-  items?: T[];
+  items?: T[] | null;
   render: (data: T) => React.ReactNode;
   emptyText?: string;
 }
@@ -9,5 +9,5 @@ export function List<T>({
   render,
   emptyText = 'No data',
 }: ListProps<T>): React.ReactElement {
-  return <div>{items?.length ? items.map(render) : emptyText}</div>;
+  return <ul>{items?.length ? items.map(render) : emptyText}</ul>;
 }

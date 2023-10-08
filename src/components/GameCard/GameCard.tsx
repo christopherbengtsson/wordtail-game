@@ -46,7 +46,7 @@ export function GameListItem({
   };
 
   return (
-    <StyledDivContainer
+    <StyledListItem
       id={game.id}
       status={game.status}
       role="button"
@@ -64,13 +64,11 @@ export function GameListItem({
         />
       )}
       <CardFooter game={game} />
-    </StyledDivContainer>
+    </StyledListItem>
   );
 }
 
-const StyledDivContainer = styled.div<
-  CommonThemeProps & { status: TGameStatus }
->`
+const StyledListItem = styled.li<CommonThemeProps & { status: TGameStatus }>`
   position: relative;
   width: 100%;
   display: flex;
