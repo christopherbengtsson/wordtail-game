@@ -102,6 +102,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
   return (
     <Modal
       title="Create new game"
+      aria={{ labelledby: 'createGameModalTitle' }}
       open={modalStore.createGameModalVisible}
       onRequestClose={closeModal}
       onClose={closeModal}
@@ -120,6 +121,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
             name="name"
             type="text"
             placeholder="Game name..."
+            aria-label="Enter a game name"
             component={FormInput}
           />
 
@@ -131,12 +133,15 @@ export const CreateGameModal = observer(function CreateGameModal() {
             placeholder="Players..."
             onInputChange={debouncedResults}
             options={playerOptions}
+            aria-label="Select players"
             noOptionsMessage={({ inputValue }: { inputValue: string }) =>
               getLabel(inputValue)
             }
           />
 
-          <Button type="submit">Submit</Button>
+          <Button type="submit" name="submit">
+            Submit
+          </Button>
         </StyledForm>
       </Formik>
     </Modal>

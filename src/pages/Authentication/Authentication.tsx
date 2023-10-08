@@ -85,6 +85,7 @@ export function Authentication() {
               name="email"
               type="email"
               placeholder="Email"
+              aria-label="Email"
               component={FormInput}
             />
 
@@ -93,6 +94,7 @@ export function Authentication() {
               name="password"
               type="password"
               placeholder="Password"
+              aria-label="Password"
               component={FormInput}
             />
 
@@ -102,17 +104,23 @@ export function Authentication() {
                 name="confirmPassword"
                 type="password"
                 placeholder="Confirm password"
+                aria-label="Confirm password"
                 component={FormInput}
               />
             )}
 
-            <Button type="submit" size="lg">
+            <Button type="submit" size="lg" aria-label="Submit">
               {doRegister ? 'Register' : 'Sign In'}
             </Button>
           </StyledForm>
         </Formik>
 
-        <TextButton onClick={() => setDoRegister(!doRegister)}>
+        <TextButton
+          aria-label={
+            doRegister ? "I don't have an account" : 'I already have an account'
+          }
+          onClick={() => setDoRegister(!doRegister)}
+        >
           {!doRegister
             ? "I don't have an account"
             : 'I already have an account'}
@@ -132,7 +140,7 @@ const StyledFrame = styled(Frame)`
   }
 `;
 
-const FormContainer = styled.div`
+const FormContainer = styled.main`
   flex: 1 1 auto;
   position: relative;
   display: flex;

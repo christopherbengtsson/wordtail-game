@@ -84,9 +84,12 @@ export function Modal({
     >
       <ModalWrapper>
         <ModalHader>
-          <BodyAsTitleWrapper autoFocus>{title}</BodyAsTitleWrapper>
-          <Button onClick={onRequestClose}>
+          <BodyAsTitleWrapper id={aria?.labelledby} autoFocus>
+            {title}
+          </BodyAsTitleWrapper>
+          <Button name="close" onClick={onRequestClose}>
             <CloseIcon />
+            <VisuallyHidden>Close</VisuallyHidden>
           </Button>
         </ModalHader>
         <WindowContent>
@@ -105,6 +108,18 @@ const ModalHader = styled(WindowHeader)`
   align-items: center;
   justify-content: space-between;
   height: ${(p) => p.theme.spacing.xxl};
+`;
+
+const VisuallyHidden = styled.span`
+  &:not(:focus):not(:active) {
+    clip: rect(0 0 0 0);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
 `;
 
 const CloseIcon = styled.span`

@@ -3,7 +3,13 @@ import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TGameListItem } from '../../services';
-import { Button, GameListItem, List, Tabs } from '../../components';
+import {
+  Button,
+  GameListItem,
+  List,
+  PrimaryTitleWrapper,
+  Tabs,
+} from '../../components';
 import { styled } from 'styled-components';
 import { TabBody } from 'react95';
 import { useState } from 'react';
@@ -69,6 +75,8 @@ export const Landing = observer(function Landing() {
 
   return (
     <Container>
+      <PrimaryTitleWrapper>Games page</PrimaryTitleWrapper>
+
       <Button
         primary
         size="lg"
