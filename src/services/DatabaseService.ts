@@ -11,6 +11,14 @@ export class DatabaseService {
     this.authStore = authStore;
   }
 
+  async getProfileById(userId: string) {
+    return supabaseClientInstance
+      .from('profiles')
+      .select()
+      .eq('id', userId)
+      .single();
+  }
+
   async getFriends() {
     return supabaseClientInstance.rpc('get_user_friends', {
       p_user_id: this.authStore.userId,

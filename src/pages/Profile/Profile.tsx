@@ -1,12 +1,31 @@
 import { observer } from 'mobx-react';
 import { useMainStore } from '../../stores';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Body, Button } from '../../components';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  Avatar,
+  Body,
+  BodyBold,
+  Button,
+  List,
+  PrimaryTitleWrapper,
+} from '../../components';
+import { getUniqueUserAvatar } from '../../utils';
+import { styled } from 'styled-components';
 
 export const Profile = observer(function Profile() {
-  const { authStore } = useMainStore();
+  const { authStore, dbService } = useMainStore();
 
   const queryClient = useQueryClient();
+
+  const { data: profileResponse } = useQuery({
+    queryKey: ['profile', authStore.userId],
+    queryFn: () => dbService.getProfileById(authStore.userId),
+  });
+
+  const { data: friendsResponse } = useQuery({
+    queryKey: ['friends', authStore.userId],
+    queryFn: () => dbService.getFriends(),
+  });
 
   const signOutMutation = useMutation({
     mutationFn: () => authStore.signOut(),
@@ -15,6 +34,38 @@ export const Profile = observer(function Profile() {
 
   return (
     <>
+      <FlexContainer>
+        <Avatar
+          lazyLoad
+          width={80}
+          height={80}
+          src={getUniqueUserAvatar(authStore.userId)}
+        />
+        <PrimaryTitleWrapper>
+          {profileResponse?.data?.username}
+        </PrimaryTitleWrapper>
+      </FlexContainer>
+
+      <Body>
+        <BodyBold>ID: </BodyBold>
+        {authStore.user?.id}
+      </Body>
+      <Body>
+        <BodyBold>Email: </BodyBold>
+        {authStore.user?.email}
+      </Body>
+
+      <BodyBold>Friends:</BodyBold>
+      <List
+        items={friendsResponse?.data}
+        emptyText="No friends added yet"
+        render={({ username }) => (
+          <li key={username}>
+            <Body>{username}</Body>
+          </li>
+        )}
+      />
+
       <Button
         onClick={() => {
           signOutMutation.mutate();
@@ -22,9 +73,13 @@ export const Profile = observer(function Profile() {
       >
         Sign out
       </Button>
-
-      <Body>{authStore.user?.email}</Body>
-      <Body>{authStore.user?.id}</Body>
     </>
   );
 });
+
+const FlexContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: ${(p) => p.theme.spacing.s};
+`;

@@ -1,23 +1,36 @@
 import { styled } from 'styled-components';
 
-export function Avatar({ src, lazyLoad }: { src: string; lazyLoad?: boolean }) {
+export interface AvatarProps {
+  src: string;
+  lazyLoad?: boolean;
+  width?: number;
+  height?: number;
+}
+
+export function Avatar({
+  src,
+  lazyLoad,
+  width = 50,
+  height = 50,
+}: AvatarProps) {
   return (
-    <Wrapper>
+    <Wrapper width={width}>
       <StyledImg
         loading={lazyLoad ? 'lazy' : undefined}
-        width={50}
-        height={50}
+        width={width}
+        height={height}
+        alt="user avatar"
         src={src}
       />
     </Wrapper>
   );
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ width: number }>`
   display: inline-block;
   box-sizing: border-box;
   object-fit: contain;
-  width: 50px;
+  width: ${(p) => p.width}px;
   border-radius: 50%;
   overflow: hidden;
   border-width: 2px;
