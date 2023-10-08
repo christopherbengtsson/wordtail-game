@@ -11,13 +11,17 @@ export const getCardTitle = (game: TGameListItem, userId: string) => {
 export const getCardSubtitle = (game: TGameListItem, userId: string) => {
   if (game.status === 'active') {
     if (game.currentTurnProfileId === userId) {
-      return 'Your turn';
+      return 'Your turn!';
     }
     return `Waiting for ${game.currentTurnUsername}`;
   } else if (game.status === 'pending') {
     return 'Waiting for players to accept';
   } else if (game.status === 'abandoned') {
     return 'Not enough users accepted';
+  }
+
+  if (game.winnerProfileId === userId) {
+    return 'You won!';
   }
 
   return `${game.winnerUsername} won`;

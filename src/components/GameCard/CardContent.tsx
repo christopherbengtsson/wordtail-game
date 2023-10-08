@@ -29,7 +29,7 @@ const PendingContent = ({ game, userId }: CardContentProps) => {
 
   return (
     <Body>
-      <BodyBold>{game.creatorUsername}</BodyBold> has started a new game
+      <BodyBold>{game.creatorUsername}</BodyBold> wants to start a game
     </Body>
   );
 };
