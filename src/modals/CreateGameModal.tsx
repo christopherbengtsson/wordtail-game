@@ -96,7 +96,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
       return 'No player with username ' + input;
     }
 
-    return 'Type a username!';
+    return 'No friends found, try searching';
   };
 
   return (

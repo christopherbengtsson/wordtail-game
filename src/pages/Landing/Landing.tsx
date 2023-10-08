@@ -95,14 +95,14 @@ export const Landing = observer(function Landing() {
           tabs={[
             { label: 'Active' },
             { label: 'Pending', badge: gameStore.numberOfInvites },
-            { label: 'History' },
+            { label: 'Finished' },
           ]}
         />
 
         <TabBody>
           {activeTab === 0 && (
             <List
-              emptyText="You have no active games, why not create one?"
+              emptyText="You have no active games yet, why not create one?"
               items={gameStore.activeGames}
               render={(game: TGameListItem) => (
                 <GameListItem
