@@ -89,7 +89,7 @@ export function Modal({
           </BodyAsTitleWrapper>
           <Button name="close" onClick={onRequestClose}>
             <CloseIcon />
-            <VisuallyHidden>Close</VisuallyHidden>
+            <span className="visuallyHidden">Close</span>
           </Button>
         </ModalHader>
         <WindowContent>

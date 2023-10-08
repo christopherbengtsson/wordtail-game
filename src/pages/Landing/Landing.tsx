@@ -75,7 +75,9 @@ export const Landing = observer(function Landing() {
 
   return (
     <Container>
-      <PrimaryTitleWrapper>Games page</PrimaryTitleWrapper>
+      <PrimaryTitleWrapper className="visuallyHidden">
+        Games page
+      </PrimaryTitleWrapper>
 
       <Button
         primary

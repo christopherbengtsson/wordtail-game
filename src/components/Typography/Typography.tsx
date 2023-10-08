@@ -15,6 +15,7 @@ export interface TitleProps {
   children: React.ReactNode;
   autoFocus?: boolean;
   id?: string;
+  className?: string;
 }
 
 const MainHeadline = styled.h1<TypographyMappedProps>((p) => {

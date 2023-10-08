@@ -136,7 +136,7 @@ export function useSelectStyles<
               border: `2px dotted ${theme.focusSecondary}`,
             },
             '& .react-select__placeholder': {
-              color: theme.materialText,
+              color: theme.materialTextInvert,
             },
           };
         }

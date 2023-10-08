@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import type { TGameListItem, TGameStatus } from '../../services';
 import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
-import { PrimaryTitleWrapper } from '..';
+import { SecondaryTitle } from '..';
 import { getCardTitle } from './utils';
 import {
   createBorderStyles,
@@ -46,29 +46,31 @@ export function GameListItem({
   };
 
   return (
-    <StyledListItem
-      id={game.id}
-      status={game.status}
-      role="button"
-      tabIndex={0}
-      onClick={() => game.status !== 'pending' && handleOnClick(game)}
-      onKeyDown={(ev) => onKeyDown(ev, game)}
-    >
-      <PrimaryTitleWrapper>{getCardTitle(game, userId)}</PrimaryTitleWrapper>
-      <CardContent game={game} userId={userId} />
-      {game.status === 'pending' && (
-        <InviteActions
-          game={game}
-          userId={userId}
-          handleInvite={handleInvite}
-        />
-      )}
-      <CardFooter game={game} />
-    </StyledListItem>
+    <li>
+      <StyledListDiv
+        id={game.id}
+        status={game.status}
+        role="button"
+        tabIndex={0}
+        onClick={() => game.status !== 'pending' && handleOnClick(game)}
+        onKeyDown={(ev) => onKeyDown(ev, game)}
+      >
+        <SecondaryTitle>{getCardTitle(game, userId)}</SecondaryTitle>
+        <CardContent game={game} userId={userId} />
+        {game.status === 'pending' && (
+          <InviteActions
+            game={game}
+            userId={userId}
+            handleInvite={handleInvite}
+          />
+        )}
+        <CardFooter game={game} />
+      </StyledListDiv>
+    </li>
   );
 }
 
-const StyledListItem = styled.li<CommonThemeProps & { status: TGameStatus }>`
+const StyledListDiv = styled.div<CommonThemeProps & { status: TGameStatus }>`
   position: relative;
   width: 100%;
   display: flex;
@@ -83,7 +85,7 @@ const StyledListItem = styled.li<CommonThemeProps & { status: TGameStatus }>`
       case 'active':
         return {
           background: p.theme.desktopBackground,
-          color: p.theme.materialText,
+          color: p.theme.materialTextInvert,
         };
 
       case 'pending':

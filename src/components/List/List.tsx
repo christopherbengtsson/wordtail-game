@@ -9,5 +9,5 @@ export function List<T>({
   render,
   emptyText = 'No data',
 }: ListProps<T>): React.ReactElement {
-  return <ul>{items?.length ? items.map(render) : emptyText}</ul>;
+  return <ul>{items?.length ? items.map(render) : <li>{emptyText}</li>}</ul>;
 }
