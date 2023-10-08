@@ -7,6 +7,7 @@ import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { Button, Headline, StyledForm, FormInput } from '../../components';
 import { Frame } from 'react95';
+import { getIsRecurringUser, setIsRecurringUser } from '../../utils';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
@@ -29,7 +30,7 @@ export interface FormValues extends Credentials {
 export function Authentication() {
   const { authStore } = useMainStore();
   const navigate = useNavigate();
-  const [doRegister, setDoRegister] = useState(false);
+  const [doRegister, setDoRegister] = useState(!getIsRecurringUser());
 
   const ValidationSchema = doRegister
     ? Yup.object().shape({
@@ -45,6 +46,7 @@ export function Authentication() {
   const signInMutation = useMutation({
     mutationFn: (creds: Credentials) => authStore.signIn(creds),
     onSuccess: () => {
+      setIsRecurringUser();
       navigate('/');
     },
   });
@@ -52,6 +54,7 @@ export function Authentication() {
   const signUpMutation = useMutation({
     mutationFn: (creds: Credentials) => authStore.signUp(creds),
     onSuccess: () => {
+      setIsRecurringUser();
       navigate('/');
     },
   });

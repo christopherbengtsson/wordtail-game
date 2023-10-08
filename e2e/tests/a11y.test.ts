@@ -13,6 +13,7 @@ test('Desktop accessibility', async ({ page }) => {
   await setupAxe(page);
 
   // Authentication Form
+  await page.getByText('I already have an account').click();
   await page
     .getByPlaceholder('Email')
     .fill('bengtsson.christopher@hotmail.com');
