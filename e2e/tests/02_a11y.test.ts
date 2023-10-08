@@ -4,13 +4,14 @@ import {
   authSubmitButton,
   authToggleRegister,
   createGameButton,
-  createGameHeading,
+  createGameModalCloseBtn,
+  navButtonProfile,
   setup,
   setupAxe,
 } from './utils';
 import { EMAIL, PASSWORD } from './utils/constants';
 
-test('Desktop accessibility', async ({ page }) => {
+test('Application accessibility', async ({ page }) => {
   await setup({ page });
   await setupAxe(page);
 
@@ -28,5 +29,8 @@ test('Desktop accessibility', async ({ page }) => {
   await assertCTAView({ page, locator: createGameButton(page) });
 
   // Create game modal
-  await assertCTAView({ page, locator: createGameHeading(page) });
+  await assertCTAView({ page, locator: createGameModalCloseBtn(page) });
+
+  // Go to profile
+  await assertCTAView({ page, locator: navButtonProfile(page) });
 });

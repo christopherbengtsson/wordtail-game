@@ -17,5 +17,7 @@ export const STRINGS = {
   authToggleToLogin: 'I already have an account',
   authToggleToRegister: "I don't have an account",
   createGameModalCta: 'CREATE NEW GAME',
-  createGameModalHeading: 'Create new game',
+  createGameModalCloseBtn: 'Close',
+  gamesAnchorLink: 'Games',
+  profileAnchorLink: 'Profile',
 };
