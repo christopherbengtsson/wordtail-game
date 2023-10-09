@@ -1,116 +1,91 @@
-import { useEffect, useState } from 'react';
-import { observer } from 'mobx-react';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
-import { AnimateLetters } from './AnimateLetters';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Button, Input } from '../../components';
-import { TMoveType } from '../../services';
-import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
+import { observer } from 'mobx-react';
+import { Play } from './Play';
+import { Body, Button, PrimaryTitleWrapper, Subtitle } from '../../components';
+import { useDelayedVisible } from '../../hooks';
+import { TActiveGame } from '../../services';
 
-const ANIMATION_DURATION = 1000;
-export interface SubmitLetterParams {
-  gameId: string;
-  gameMove: TMoveType;
-  letter?: string;
-}
+const getReadyToPlayBody = (game: TActiveGame) => {
+  if (game.lettersSoFar.length) {
+    return `${game.lettersSoFar.length} are placed so far`;
+  }
+
+  return "You're starting this round!";
+};
+
 export const Game = observer(function Game() {
   // unstable_usePrompt({
   //   when: true,
   //   message: 'TODO: unstable_useBlocker with custom dialog?',
   // });
-
   const { gameId } = useParams();
   const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
   const { gameStore } = useMainStore();
 
-  const [animating, setAnimating] = useState(true);
-  const [newLetter, setNewLetter] = useState('');
+  const [start, setStart] = useState(false);
 
-  const submitLetterMutation = useMutation<
-    PostgrestSingleResponse<void>,
-    PostgrestError,
-    SubmitLetterParams
-  >({
-    mutationFn: (params: SubmitLetterParams) =>
-      gameStore.handleGameMove(params),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['game', gameId]);
-      queryClient.invalidateQueries(['games']);
-      navigate('/');
-    },
-  });
-
-  const { data: response } = useQuery({
+  const {
+    data: response,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['game', gameId],
     queryFn: () => gameStore.getGameById(gameId),
     enabled: !!gameId,
   });
 
-  const letters = response?.data?.lettersSoFar;
+  const shouldShowLoading = useDelayedVisible(isLoading, true);
 
   useEffect(() => {
     if (!gameId) {
       navigate('/', { replace: true });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [gameId, navigate]);
 
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (letters?.length) {
-      timeout = setTimeout(() => {
-        console.log('Animation should be done now');
-        setAnimating(false);
-      }, letters.length * ANIMATION_DURATION);
-    }
+  if (shouldShowLoading) {
+    return (
+      <StyledContainer>
+        <PrimaryTitleWrapper>Loading game...</PrimaryTitleWrapper>
+      </StyledContainer>
+    );
+  }
 
-    return () => clearTimeout(timeout);
-  }, [letters?.length]);
-
-  const submitLetter = () => {
-    const params: SubmitLetterParams = {
-      gameId: gameId!,
-      gameMove: 'add_letter',
-      letter: newLetter,
-    };
-    if (!newLetter.trim().length) {
-      // TODO: Confirm dialog
-      params.letter = undefined;
-    }
-
-    submitLetterMutation.mutate(params);
-  };
-
-  // TODO: Don't show input if there's no response yet
-  return (
+  if (isError) {
     <StyledContainer>
-      {letters?.length && animating ? (
-        <AnimateLetters
-          letters={letters}
-          animationDuration={ANIMATION_DURATION}
-        />
-      ) : (
-        <StyledForm>
-          <Input
-            className="letterInput"
-            autoFocus
-            maxLength={1}
-            value={newLetter}
-            onChange={(ev) => {
-              setNewLetter(ev.target.value.toUpperCase());
-            }}
-          />
-          <Button primary size="lg" onClick={() => submitLetter()}>
-            Place letter
-          </Button>
-        </StyledForm>
-      )}
-    </StyledContainer>
-  );
+      <PrimaryTitleWrapper>Something went wrong</PrimaryTitleWrapper>
+      <Body color="error">{response?.error?.message ?? 'Unknown error'}</Body>
+    </StyledContainer>;
+  }
+
+  if (!start && response?.data) {
+    return (
+      <StyledContainer>
+        <FlexContainer>
+          <PrimaryTitleWrapper>
+            Round {response.data.currentRoundNumber}
+          </PrimaryTitleWrapper>
+          <Subtitle>{getReadyToPlayBody(response.data)}</Subtitle>
+          <Button
+            primary
+            size="lg"
+            onClick={() => setStart(true)}
+          >{`I'm ready, let's go`}</Button>
+        </FlexContainer>
+      </StyledContainer>
+    );
+  }
+
+  if (start && gameId && response?.data) {
+    return (
+      <StyledContainer>
+        <Play gameId={gameId} game={response.data} />
+      </StyledContainer>
+    );
+  }
 });
 
 const StyledContainer = styled.div`
@@ -120,20 +95,9 @@ const StyledContainer = styled.div`
   flex: 1 1 auto;
 `;
 
-const StyledForm = styled.div`
+const FlexContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: ${(p) => p.theme.spacing.m};
-
-  & .letterInput {
-    height: 100px;
-    input {
-      width: 100px;
-      height: 100px;
-      text-align: center;
-      font-size: 4rem;
-    }
-  }
 `;

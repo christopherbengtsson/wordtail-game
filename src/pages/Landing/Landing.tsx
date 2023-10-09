@@ -12,7 +12,7 @@ import {
 } from '../../components';
 import { styled } from 'styled-components';
 import { TabBody } from 'react95';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export const Landing = observer(function Landing() {
   const { gameStore, authStore, modalStore } = useMainStore();
@@ -21,11 +21,25 @@ export const Landing = observer(function Landing() {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  useQuery({
+  const { data: gamesResponse } = useQuery({
     queryKey: ['games'],
     queryFn: () => gameStore.fetchGames(),
     staleTime: 10 * 60 * 1000, // 10 minutes in milliseconds
   });
+
+  const { activeGames, pendingGames, finishedGames, numberOfInvites } =
+    useMemo(() => {
+      const activeGames = gameStore.sortActiveGames(gamesResponse?.data ?? []);
+      const pendingGames = gameStore.sortPendingGames(
+        gamesResponse?.data ?? [],
+      );
+      const finishedGames = gameStore.sortFinishedGames(
+        gamesResponse?.data ?? [],
+      );
+      const numberOfInvites = gameStore.getNumberOfInvites(pendingGames);
+
+      return { activeGames, pendingGames, finishedGames, numberOfInvites };
+    }, [gameStore, gamesResponse?.data]);
 
   const handleInvitationMutation = useMutation({
     mutationFn: (params: { gameId: string; accept: boolean }) =>
@@ -75,7 +89,7 @@ export const Landing = observer(function Landing() {
           handleTabChange={handleTabChange}
           tabs={[
             { label: 'Active' },
-            { label: 'Pending', badge: gameStore.numberOfInvites },
+            { label: 'Pending', badge: numberOfInvites },
             { label: 'Finished' },
           ]}
         />
@@ -84,7 +98,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 0 && (
             <List
               emptyText="You have no active games yet, why not create one?"
-              items={gameStore.activeGames}
+              items={activeGames}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}
@@ -99,7 +113,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 1 && (
             <List
               emptyText="No pending games"
-              items={gameStore.pendingGames}
+              items={pendingGames}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}
@@ -114,7 +128,7 @@ export const Landing = observer(function Landing() {
           {activeTab === 2 && (
             <List
               emptyText="No game history"
-              items={gameStore.finishedGames}
+              items={finishedGames}
               render={(game: TGameListItem) => (
                 <GameListItem
                   key={game.id}

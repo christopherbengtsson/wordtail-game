@@ -4,3 +4,4 @@
 - Select application theme
 - Prevent navigation on Game page: https://gist.github.com/chaance/2f3c14ec2351a175024f62fd6ba64aa6
 - Strings internationalization
+- Clean up data cron job: https://supabase.com/docs/guides/database/extensions/pg_cron#delete-data-every-week

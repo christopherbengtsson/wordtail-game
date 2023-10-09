@@ -416,6 +416,7 @@ export interface Database {
           previousPlayerId: string;
           previousPlayerUsername: string;
           maxNumberOfMarks: number;
+          currentRoundNumber: number;
         }[];
       };
       get_user_friends: {

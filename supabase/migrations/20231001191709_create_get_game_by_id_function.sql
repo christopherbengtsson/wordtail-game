@@ -13,7 +13,8 @@ RETURNS TABLE (
     "lastMoveMade" move_type,
     "previousPlayerId" UUID,
     "previousPlayerUsername" TEXT,
-    "maxNumberOfMarks" INT
+    "maxNumberOfMarks" INT,
+    "currentRoundNumber" INT
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -43,7 +44,8 @@ BEGIN
         last_move.type,
         prev_move.user_id,
         prev_profile.username,
-        g.max_number_of_marks
+        g.max_number_of_marks,
+        gr.round_number
     FROM games g
     -- Joining relevant tables to fetch necessary data.
     LEFT JOIN game_rounds gr ON gr.game_id = g.id AND gr.status = 'active'
@@ -56,6 +58,6 @@ BEGIN
     LEFT JOIN LATERAL (SELECT user_id FROM round_moves WHERE game_round_id = gr.id AND type != last_move.type LIMIT 1) AS prev_move ON TRUE
     LEFT JOIN profiles prev_profile ON prev_profile.id = prev_move.user_id
     WHERE g.id = p_game_id
-    GROUP BY g.id, g.name, g.status, p.id, p.username, pw.id, pw.username, last_move.type, prev_move.user_id, prev_profile.username, g.max_number_of_marks;
+    GROUP BY g.id, g.name, g.status, p.id, p.username, pw.id, pw.username, last_move.type, prev_move.user_id, prev_profile.username, g.max_number_of_marks, gr.round_number;
 END;
 $$ LANGUAGE plpgsql;
