@@ -57,13 +57,11 @@ export const Landing = observer(function Landing() {
     const gameIsActive = game.status === 'active';
     const isUsersTurn = game.currentTurnProfileId === authStore.userId;
 
-    if (!isUsersTurn || !gameIsActive) {
-      // Go to game stats
-      console.log('Not implemented: Game stats page');
-      return;
+    if (!isUsersTurn && !gameIsActive) {
+      navigate(`games/${game.id}/stats`);
     }
 
-    navigate(`/games/${game.id}`);
+    navigate(`games/${game.id}`);
   };
 
   const handleTabChange = (

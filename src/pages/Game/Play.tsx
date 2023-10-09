@@ -39,7 +39,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
     onSuccess: () => {
       queryClient.invalidateQueries(['game', gameId]);
       queryClient.invalidateQueries(['games']);
-      navigate('/', { replace: true }); // TODO: Navigate to some stats or optimistically update like if too many marks
+      navigate('stats', { replace: true }); // TODO: Navigate to some stats or optimistically update like if too many marks
     },
   });
 
