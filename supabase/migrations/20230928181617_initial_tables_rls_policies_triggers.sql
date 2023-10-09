@@ -159,6 +159,14 @@ TO authenticated
 USING (true)
 WITH CHECK (true);
 
+-- round_player_order
+ALTER TABLE round_player_order ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Enable CRUD access for all authenticated users" ON round_player_order
+AS PERMISSIVE FOR ALL
+TO authenticated
+USING (true)
+WITH CHECK (true);
+
 -- round_moves
 ALTER TABLE round_moves ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable CRUD access for all authenticated users" ON round_moves

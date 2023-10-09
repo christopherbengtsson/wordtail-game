@@ -1,10 +1,8 @@
 -- To be run in Supabase SQL Editor, change UUIDs with real users.
-
--- Setting User IDs as Variables for Easier Reference
 DO $$ 
 DECLARE 
-    user1_id UUID := 'a5ec6c5f-4657-41a2-b559-61e0819f519d';
-    user2_id UUID := '1d9c14df-f681-4cc6-9f30-4efc0f7b70a0';
+    user1_id UUID := '4e32e06d-fe2c-40b0-ab42-7c5ebde83749';
+    user2_id UUID := 'f554a4ae-ba25-4139-9ec9-8a88bee65b2f';
     game1_id UUID := gen_random_uuid();
     game2_id UUID := gen_random_uuid();
     game3_id UUID := gen_random_uuid();
@@ -84,5 +82,29 @@ VALUES
 INSERT INTO notifications (user_id, type, reference_id, message, seen)
 VALUES
     (user2_id, 'game_invite', game3_id, 'You have been invited to join Game3', FALSE);
+
+-- Game Stats 
+-- For User1
+INSERT INTO user_stats (user_id, games_played, games_won, avg_place)
+VALUES 
+    (user1_id, 2, 0, 1.5); -- User1 has played 2 games, won 0, and has an average place of 1.5
+
+-- For User2
+INSERT INTO user_stats (user_id, games_played, games_won, avg_place)
+VALUES 
+    (user2_id, 2, 1, 1); -- User2 has played 2 games, won 1, and has an average place of 1
+
+-- round_player_order
+-- Order for Round 1 in Game1
+INSERT INTO round_player_order (round_id, player_id, order_of_play)
+VALUES 
+    (round1_id, user1_id, 1), -- User1 plays first in Round 1 of Game1
+    (round1_id, user2_id, 2); -- User2 plays second in Round 1 of Game1
+
+-- Order for Round 1 in Game2
+INSERT INTO round_player_order (round_id, player_id, order_of_play)
+VALUES 
+    (round2_id, user2_id, 1), -- User2 plays first in Round 1 of Game2
+    (round2_id, user1_id, 2); -- User1 plays second in Round 1 of Game2
 
 END $$;
