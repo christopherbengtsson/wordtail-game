@@ -15,6 +15,10 @@ import { useQuery } from '@tanstack/react-query';
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required('Required field'),
+  maxNumberOfMarks: Yup.number()
+    .min(1, 'Min 1 mark')
+    .max(5, 'Max 5 marks')
+    .required('Required field'),
   players: Yup.array()
     .min(1, 'Pick at least 1 player')
     .of(
@@ -27,6 +31,7 @@ const ValidationSchema = Yup.object().shape({
 
 const initialFormValues = {
   name: '',
+  maxNumberOfMarks: '',
   players: [],
 };
 
@@ -122,6 +127,15 @@ export const CreateGameModal = observer(function CreateGameModal() {
             type="text"
             placeholder="Game name..."
             aria-label="Enter a game name"
+            component={FormInput}
+          />
+
+          <Field
+            id="maxNumberOfMarks"
+            name="maxNumberOfMarks"
+            type="number"
+            placeholder="Max number of marks..."
+            aria-label="Enter max number of marks for a player"
             component={FormInput}
           />
 

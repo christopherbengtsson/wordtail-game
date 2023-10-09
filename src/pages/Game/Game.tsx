@@ -68,7 +68,7 @@ export const Game = observer(function Game() {
         />
       ) : (
         <StyledForm>
-          <StyledInput
+          <Input
             className="letterInput"
             autoFocus
             maxLength={1}
@@ -110,5 +110,3 @@ const StyledForm = styled.div`
     }
   }
 `;
-
-const StyledInput = styled(Input)``;

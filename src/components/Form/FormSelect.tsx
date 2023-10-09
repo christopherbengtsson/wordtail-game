@@ -13,7 +13,7 @@ export function FormSelect({
         {...field}
         {...props}
         tabIndex={0}
-        onChange={(option) => setFieldValue(field.name, option)} // The first parameter of React-Select's onChange is an option value while the first parameter of formik's handleChange is an event
+        onChange={(value) => setFieldValue(field.name, value)} // The first parameter of React-Select's onChange is an option value while the first parameter of formik's handleChange is an event
       />
       {touched[field.name] && errors[field.name] && (
         <ErrorLabel value={errors[field.name]} />
