@@ -10,6 +10,8 @@ export type TActiveGame =
   Database['public']['Functions']['get_game_by_id']['Returns'][0];
 
 export type TGameStatus = Database['public']['Enums']['game_status'];
+
+export type TMoveType = Database['public']['Enums']['move_type'];
 export class GameService {
   private authStore: AuthStore;
 
@@ -65,6 +67,14 @@ export class GameService {
     return supabaseClientInstance.rpc('decline_game_invitation', {
       p_game_id: gameId,
       p_user_id: this.authStore.userId,
+    });
+  }
+
+  async addLetter({ gameId, letter }: { gameId: string; letter?: string }) {
+    return supabaseClientInstance.rpc('submit_letter', {
+      p_game_id: gameId,
+      p_user_id: this.authStore.userId,
+      letter,
     });
   }
 }

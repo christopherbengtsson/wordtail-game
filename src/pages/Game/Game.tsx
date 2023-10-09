@@ -1,30 +1,51 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { useNavigate, useParams, unstable_usePrompt } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Button, Input } from '../../components';
+import { TMoveType } from '../../services';
+import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
 
 const ANIMATION_DURATION = 1000;
-
+export interface SubmitLetterParams {
+  gameId: string;
+  gameMove: TMoveType;
+  letter?: string;
+}
 export const Game = observer(function Game() {
-  unstable_usePrompt({
-    when: true,
-    message: 'TODO: unstable_useBlocker with custom dialog?',
-  });
+  // unstable_usePrompt({
+  //   when: true,
+  //   message: 'TODO: unstable_useBlocker with custom dialog?',
+  // });
 
   const { gameId } = useParams();
   const navigate = useNavigate();
 
+  const queryClient = useQueryClient();
   const { gameStore } = useMainStore();
 
   const [animating, setAnimating] = useState(true);
   const [newLetter, setNewLetter] = useState('');
 
+  const submitLetterMutation = useMutation<
+    PostgrestSingleResponse<void>,
+    PostgrestError,
+    SubmitLetterParams
+  >({
+    mutationFn: (params: SubmitLetterParams) =>
+      gameStore.handleGameMove(params),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['game', gameId]);
+      queryClient.invalidateQueries(['games']);
+      navigate('/');
+    },
+  });
+
   const { data: response } = useQuery({
-    queryKey: ['games', gameId],
+    queryKey: ['game', gameId],
     queryFn: () => gameStore.getGameById(gameId),
     enabled: !!gameId,
   });
@@ -33,7 +54,7 @@ export const Game = observer(function Game() {
 
   useEffect(() => {
     if (!gameId) {
-      navigate('/');
+      navigate('/', { replace: true });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -50,12 +71,18 @@ export const Game = observer(function Game() {
     return () => clearTimeout(timeout);
   }, [letters?.length]);
 
-  const onFinish = () => {
-    if (!newLetter.length) {
-      // TODO: Confirm give up
+  const submitLetter = () => {
+    const params: SubmitLetterParams = {
+      gameId: gameId!,
+      gameMove: 'add_letter',
+      letter: newLetter,
+    };
+    if (!newLetter.trim().length) {
+      // TODO: Confirm dialog
+      params.letter = undefined;
     }
 
-    // TODO: Send letter to db
+    submitLetterMutation.mutate(params);
   };
 
   // TODO: Don't show input if there's no response yet
@@ -77,7 +104,7 @@ export const Game = observer(function Game() {
               setNewLetter(ev.target.value.toUpperCase());
             }}
           />
-          <Button primary size="lg" onClick={() => onFinish()}>
+          <Button primary size="lg" onClick={() => submitLetter()}>
             Place letter
           </Button>
         </StyledForm>

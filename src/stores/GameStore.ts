@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx';
-import { GameService, TGameList } from '../services';
+import { GameService, TGameList, TMoveType } from '../services';
 import { AuthStore } from '.';
 import { compareDesc } from 'date-fns';
 
@@ -15,6 +15,7 @@ export class GameStore {
     this.gameService = gameService;
   }
 
+  // TODO: Remove filter from store?
   get activeGames() {
     return this.games.filter((game) => game.status === 'active');
   }
@@ -78,6 +79,25 @@ export class GameStore {
 
   async handleGameInvitation(params: { gameId: string; accept: boolean }) {
     return this.gameService.handleGameInvitation(params);
+  }
+
+  async handleGameMove({
+    gameId,
+    gameMove,
+    letter,
+  }: {
+    gameId: string;
+    gameMove: TMoveType;
+    letter?: string;
+  }) {
+    switch (gameMove) {
+      case 'add_letter':
+        return this.gameService.addLetter({ gameId, letter });
+      case 'call_bluff':
+        throw new Error('Not implemented');
+      case 'call_finished_word':
+        throw new Error('Not implemented');
+    }
   }
 
   private setGamesState(games: TGameList) {
