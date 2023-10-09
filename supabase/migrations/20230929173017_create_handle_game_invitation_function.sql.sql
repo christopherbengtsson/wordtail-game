@@ -87,7 +87,12 @@ BEGIN
         game_state := CASE WHEN total_players = 1 THEN 'abandoned' ELSE 'active' END;
     ELSE
         game_state := 'pending';
-        RETURN game_state; -- Early return if the game is still pending or abandoned
+    END IF;
+
+    -- Early return if the game is either pending or abandoned
+    IF game_state IN ('pending', 'abandoned') THEN
+        UPDATE games SET status = game_state WHERE id = p_game_id;
+        RETURN game_state;
     END IF;
 
     -- Insert the first round into the game_rounds table
