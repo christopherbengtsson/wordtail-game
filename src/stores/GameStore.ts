@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx';
-import { GameService, TGameList, TMoveType } from '../services';
+import { GameService, TGameList, TGameListItem, TMoveType } from '../services';
 import { AuthStore } from '.';
-import { compareDesc } from 'date-fns';
+import { multiSort } from '../utils';
 
 export class GameStore {
   private authStore: AuthStore;
@@ -63,46 +63,26 @@ export class GameStore {
   sortActiveGames(games: TGameList) {
     return games
       .filter((game) => game.status === 'active')
-      .sort((a, b) => {
-        // Check if a or b is waiting for logged in user turn
-        const aWaiting = a.currentTurnProfileId === this.authStore.userId;
-        const bWaiting = b.currentTurnProfileId === this.authStore.userId;
-
-        // If both are waiting or neither are waiting, sort by date
-        if (aWaiting === bWaiting) {
-          return compareDesc(new Date(a.updatedAt), new Date(b.updatedAt));
-        }
-
-        // If a is waiting, it should come first
-        if (aWaiting) {
-          return -1;
-        }
-
-        // If b is waiting, it should come first
-        return 1;
-      });
+      .sort((a, b) =>
+        multiSort({
+          a,
+          b,
+          condition: (item: TGameListItem) =>
+            item.currentTurnProfileId === this.authStore.userId,
+        }),
+      );
   }
   sortPendingGames(games: TGameList) {
     return games
       .filter((game) => game.status === 'pending')
-      .sort((a, b) => {
-        // Check if a or b await response from logged in user
-        const aWaiting = a.waitingForUsers.includes(this.authStore.userId);
-        const bWaiting = b.waitingForUsers.includes(this.authStore.userId);
-
-        // If both are waiting or neither are waiting, sort by date
-        if (aWaiting === bWaiting) {
-          return compareDesc(new Date(a.createdAt), new Date(b.createdAt));
-        }
-
-        // If a is waiting, it should come first
-        if (aWaiting) {
-          return -1;
-        }
-
-        // If b is waiting, it should come first
-        return 1;
-      });
+      .sort((a, b) =>
+        multiSort({
+          a,
+          b,
+          condition: (item: TGameListItem) =>
+            item.waitingForUsers.includes(this.authStore.userId),
+        }),
+      );
   }
   sortFinishedGames(games: TGameList) {
     return games.filter(
