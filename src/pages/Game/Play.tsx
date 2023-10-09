@@ -49,7 +49,6 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
     let timeout: NodeJS.Timeout;
     if (letters?.length) {
       timeout = setTimeout(() => {
-        console.log('Animation should be done now');
         setAnimating(false);
       }, letters.length * ANIMATION_DURATION);
     }
@@ -71,7 +70,6 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
     submitLetterMutation.mutate(params);
   };
 
-  // TODO: Don't show input if there's no response yet
   return (
     <>
       {letters.length && animating ? (

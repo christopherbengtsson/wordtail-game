@@ -9,12 +9,20 @@ import { Body, Button, PrimaryTitleWrapper, Subtitle } from '../../components';
 import { useDelayedVisible } from '../../hooks';
 import { TActiveGame } from '../../services';
 
-const getReadyToPlayBody = (game: TActiveGame) => {
-  if (game.lettersSoFar.length) {
-    return `${game.lettersSoFar.length} are placed so far`;
+const getReadyToPlayBody = (game: TActiveGame): string => {
+  const lastMove = game.lastMoveMade;
+
+  if (lastMove === 'add_letter') {
+    const numberOfLetters = game.lettersSoFar.length;
+
+    return numberOfLetters
+      ? `${numberOfLetters} letter${
+          numberOfLetters > 1 ? 's' : ''
+        } placed so far`
+      : "You're starting this round!";
   }
 
-  return "You're starting this round!";
+  return 'TODO: No yet implemented';
 };
 
 export const Game = observer(function Game() {
@@ -48,56 +56,49 @@ export const Game = observer(function Game() {
 
   if (shouldShowLoading) {
     return (
-      <StyledContainer>
+      <CenterContainer>
         <PrimaryTitleWrapper>Loading game...</PrimaryTitleWrapper>
-      </StyledContainer>
+      </CenterContainer>
     );
   }
 
   if (isError) {
-    <StyledContainer>
+    <CenterContainer>
       <PrimaryTitleWrapper>Something went wrong</PrimaryTitleWrapper>
       <Body color="error">{response?.error?.message ?? 'Unknown error'}</Body>
-    </StyledContainer>;
+    </CenterContainer>;
   }
 
   if (!start && response?.data) {
     return (
-      <StyledContainer>
-        <FlexContainer>
-          <PrimaryTitleWrapper>
-            Round {response.data.currentRoundNumber}
-          </PrimaryTitleWrapper>
-          <Subtitle>{getReadyToPlayBody(response.data)}</Subtitle>
-          <Button
-            primary
-            size="lg"
-            onClick={() => setStart(true)}
-          >{`I'm ready, let's go`}</Button>
-        </FlexContainer>
-      </StyledContainer>
+      <CenterContainer>
+        <PrimaryTitleWrapper>
+          Round {response.data.currentRoundNumber}
+        </PrimaryTitleWrapper>
+        <Subtitle>{getReadyToPlayBody(response.data)}</Subtitle>
+        <Button
+          primary
+          size="lg"
+          onClick={() => setStart(true)}
+        >{`I'm ready, let's go`}</Button>
+      </CenterContainer>
     );
   }
 
   if (start && gameId && response?.data) {
     return (
-      <StyledContainer>
+      <CenterContainer>
         <Play gameId={gameId} game={response.data} />
-      </StyledContainer>
+      </CenterContainer>
     );
   }
 });
 
-const StyledContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const CenterContainer = styled.div`
   flex: 1 1 auto;
-`;
-
-const FlexContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   gap: ${(p) => p.theme.spacing.m};
 `;
