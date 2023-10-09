@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION create_new_game(p_game_name TEXT, p_player_ids UUID[], p_creator_id UUID)
+CREATE OR REPLACE FUNCTION create_new_game(p_game_name TEXT, p_player_ids UUID[], p_creator_id UUID, p_max_number_of_marks INT)
 RETURNS UUID AS $$
 DECLARE
     new_game_id UUID;           -- Holds the ID of the newly created game.
@@ -14,10 +14,10 @@ BEGIN
         all_player_ids := p_player_ids || ARRAY[p_creator_id];
     END IF;
 
-    -- Insert a new game record with the provided name and the creator's ID, and set the initial status to 'pending'.
+    -- Insert a new game record with the provided details.
     -- Fetch the ID of this new game for later use.
-    INSERT INTO games (name, starter_id, status)
-    VALUES (p_game_name, p_creator_id, 'pending')
+    INSERT INTO games (name, starter_id, status, max_number_of_marks)
+    VALUES (p_game_name, p_creator_id, 'pending', p_max_number_of_marks)
     RETURNING id INTO new_game_id;
 
     -- Iterate through the combined list of player IDs to add each player to the game.
@@ -36,7 +36,7 @@ BEGIN
             END);
     END LOOP;
 
-    -- After all players have been added, return the ID of the newly created game.
+    -- Return the ID of the newly created game.
     RETURN new_game_id;
 END;
 $$ LANGUAGE plpgsql;

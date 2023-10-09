@@ -13,19 +13,19 @@ BEGIN
 
 -- Games
 -- Game 1: Finished Game
-INSERT INTO games (id, name, status, starter_id, winner_id)
+INSERT INTO games (id, name, status, starter_id, winner_id, max_number_of_marks)
 VALUES 
-    (game1_id, 'Game1', 'finished', user1_id, user2_id);
+    (game1_id, 'Game1', 'finished', user1_id, user2_id, 5);
 
 -- Game 2: Active Game
-INSERT INTO games (id, name, status, starter_id)
+INSERT INTO games (id, name, status, starter_id, max_number_of_marks)
 VALUES 
-    (game2_id, 'Game2', 'active', user2_id);
+    (game2_id, 'Game2', 'active', user2_id, 3);
 
 -- Game 3: Pending Game
-INSERT INTO games (id, name, status, starter_id)
+INSERT INTO games (id, name, status, starter_id, max_number_of_marks)
 VALUES 
-    (game3_id, 'Game3', 'pending', user1_id);
+    (game3_id, 'Game3', 'pending', user1_id, 4);
 
 -- Game Players
 -- For Game1

@@ -61,7 +61,8 @@ CREATE TABLE games (
     status game_status NOT NULL DEFAULT 'pending',
     created_at timestamp with time zone null default (now() at time zone 'utc'::text),
     starter_id UUID REFERENCES profiles(id),
-    winner_id UUID REFERENCES profiles(id)
+    winner_id UUID REFERENCES profiles(id),
+    max_number_of_marks INT NOT NULL DEFAULT 0
 );
 
 -- Game Players Table
