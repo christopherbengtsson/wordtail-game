@@ -13,6 +13,7 @@ import {
 } from '../../components';
 import { useDelayedVisible } from '../../hooks';
 import { TActiveGame } from '../../services';
+import { numberToWord } from '../../utils';
 
 const getReadyToPlayBody = (game: TActiveGame): string => {
   const lastMove = game.lastMoveMade;
@@ -21,7 +22,7 @@ const getReadyToPlayBody = (game: TActiveGame): string => {
     const numberOfLetters = game.lettersSoFar.length;
 
     return numberOfLetters
-      ? `${numberOfLetters} letter${
+      ? `${numberToWord(numberOfLetters)} letter${
           numberOfLetters > 1 ? 's' : ''
         } has placed so far`
       : "You're starting this round!";

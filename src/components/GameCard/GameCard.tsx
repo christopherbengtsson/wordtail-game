@@ -52,6 +52,7 @@ export function GameListItem({
         status={game.status}
         role="button"
         tabIndex={0}
+        // TODO: Should be clickable on pending but not on invite
         onClick={() => game.status !== 'pending' && handleOnClick(game)}
         onKeyDown={(ev) => onKeyDown(ev, game)}
       >

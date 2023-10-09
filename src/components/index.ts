@@ -15,3 +15,4 @@ export * from './Select';
 export * from './Badge';
 export * from './List';
 export * from './Tabs';
+export * from './CountdownIndicator';
