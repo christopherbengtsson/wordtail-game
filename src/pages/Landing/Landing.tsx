@@ -27,14 +27,6 @@ export const Landing = observer(function Landing() {
     staleTime: 10 * 60 * 1000, // 10 minutes in milliseconds
   });
 
-  const createGameMutation = useMutation({
-    mutationFn: (params: { name: string; players: string[] }) =>
-      gameStore.createGame(params),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['games'] });
-    },
-  });
-
   const handleInvitationMutation = useMutation({
     mutationFn: (params: { gameId: string; accept: boolean }) =>
       gameStore.handleGameInvitation(params),
@@ -44,12 +36,6 @@ export const Landing = observer(function Landing() {
   });
 
   const handleCreateNewGame = () => {
-    // TODO: Mock for now, just to test stored procedure
-    // createGameMutation.mutate({
-    //   name: 'Hard Coded Game',
-    //   players: ['33da3a39-80e5-4dff-a8e2-d95a3cb768e7'],
-    // });
-
     modalStore.setCreateGameModalVisible(true);
   };
 
@@ -79,12 +65,7 @@ export const Landing = observer(function Landing() {
         Games page
       </PrimaryTitleWrapper>
 
-      <Button
-        primary
-        size="lg"
-        onClick={handleCreateNewGame}
-        disabled={createGameMutation.isLoading}
-      >
+      <Button primary size="lg" onClick={handleCreateNewGame}>
         CREATE NEW GAME
       </Button>
 

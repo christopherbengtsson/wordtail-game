@@ -167,6 +167,7 @@ export interface Database {
         Row: {
           created_at: string | null;
           id: string;
+          max_number_of_marks: number;
           name: string;
           starter_id: string | null;
           status: Database['public']['Enums']['game_status'];
@@ -175,6 +176,7 @@ export interface Database {
         Insert: {
           created_at?: string | null;
           id?: string;
+          max_number_of_marks?: number;
           name: string;
           starter_id?: string | null;
           status?: Database['public']['Enums']['game_status'];
@@ -183,6 +185,7 @@ export interface Database {
         Update: {
           created_at?: string | null;
           id?: string;
+          max_number_of_marks?: number;
           name?: string;
           starter_id?: string | null;
           status?: Database['public']['Enums']['game_status'];
@@ -384,6 +387,7 @@ export interface Database {
           p_game_name: string;
           p_player_ids: string[];
           p_creator_id: string;
+          p_max_number_of_marks: number;
         };
         Returns: string;
       };
@@ -411,6 +415,7 @@ export interface Database {
           lastMoveMade: Database['public']['Enums']['move_type'];
           previousPlayerId: string;
           previousPlayerUsername: string;
+          maxNumberOfMarks: number;
         }[];
       };
       get_user_friends: {

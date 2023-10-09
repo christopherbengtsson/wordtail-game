@@ -25,10 +25,11 @@ export class DatabaseService {
     });
   }
 
-  async searchUser(searchTerm: string) {
+  async searchUser(searchTerm: string, userId: string) {
     return supabaseClientInstance
       .from('profiles')
       .select('id, username')
-      .textSearch('username', searchTerm);
+      .textSearch('username', searchTerm)
+      .neq('id', userId);
   }
 }

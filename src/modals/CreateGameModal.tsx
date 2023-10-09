@@ -6,12 +6,26 @@ import {
   StyledForm,
   FormInput,
   FormSelect,
+  Body,
 } from '../components';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import debouce from 'lodash.debounce';
 import { useEffect, useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { styled } from 'styled-components';
+import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
+
+export interface CreateGameValues {
+  name: string;
+  players: string[];
+  maxNumberOfMarks: number;
+}
+export interface CreateGameForm {
+  name: string;
+  players: { label: string; value: string }[];
+  maxNumberOfMarks: number;
+}
 
 const ValidationSchema = Yup.object().shape({
   name: Yup.string().required('Required field'),
@@ -31,14 +45,27 @@ const ValidationSchema = Yup.object().shape({
 
 const initialFormValues = {
   name: '',
-  maxNumberOfMarks: '',
+  maxNumberOfMarks: NaN,
   players: [],
 };
 
 export const CreateGameModal = observer(function CreateGameModal() {
-  const { modalStore, dbService } = useMainStore();
+  const { modalStore, authStore, gameStore, dbService } = useMainStore();
+  const queryClient = useQueryClient();
 
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+
+  const createGameNutation = useMutation<
+    PostgrestSingleResponse<string>,
+    PostgrestError,
+    CreateGameValues
+  >({
+    mutationFn: (values: CreateGameValues) => gameStore.createGame(values),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['games']);
+      closeModal();
+    },
+  });
 
   const friendResponse = useQuery({
     queryKey: ['friends'],
@@ -48,7 +75,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
 
   const searchReponse = useQuery({
     queryKey: ['searchUsers', debouncedSearchTerm],
-    queryFn: () => dbService.searchUser(debouncedSearchTerm),
+    queryFn: () => dbService.searchUser(debouncedSearchTerm, authStore.userId),
     enabled: Boolean(debouncedSearchTerm.length),
   });
 
@@ -80,9 +107,11 @@ export const CreateGameModal = observer(function CreateGameModal() {
     };
   });
 
-  const onSubmit = (formValues: typeof initialFormValues) => {
-    console.log(formValues);
-    // closeModal();
+  const onSubmit = ({ players, ...values }: CreateGameForm) => {
+    createGameNutation.mutate({
+      ...values,
+      players: players.map((p) => p.value),
+    });
   };
 
   const closeModal = () => {
@@ -156,8 +185,18 @@ export const CreateGameModal = observer(function CreateGameModal() {
           <Button type="submit" name="submit">
             Submit
           </Button>
+
+          {createGameNutation.isError && (
+            <ErrorContainer>
+              <Body color="error">{createGameNutation.error.message}</Body>
+            </ErrorContainer>
+          )}
         </StyledForm>
       </Formik>
     </Modal>
   );
 });
+
+const ErrorContainer = styled.div`
+  align-self: flex-end;
+`;

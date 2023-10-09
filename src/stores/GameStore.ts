@@ -63,8 +63,17 @@ export class GameStore {
     }
   }
 
-  async createGame(params: { name: string; players: string[] }) {
-    return this.gameService.createGame(params);
+  async createGame(params: {
+    name: string;
+    players: string[];
+    maxNumberOfMarks: number;
+  }) {
+    const res = await this.gameService.createGame(params);
+    if (res.error) {
+      throw res.error;
+    }
+
+    return res;
   }
 
   async handleGameInvitation(params: { gameId: string; accept: boolean }) {

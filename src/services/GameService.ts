@@ -31,11 +31,20 @@ export class GameService {
       .single();
   }
 
-  async createGame({ name, players }: { name: string; players: string[] }) {
+  async createGame({
+    name,
+    players,
+    maxNumberOfMarks,
+  }: {
+    name: string;
+    players: string[];
+    maxNumberOfMarks: number;
+  }) {
     return supabaseClientInstance.rpc('create_new_game', {
       p_creator_id: this.authStore.userId,
       p_game_name: name,
       p_player_ids: players,
+      p_max_number_of_marks: maxNumberOfMarks,
     });
   }
 
