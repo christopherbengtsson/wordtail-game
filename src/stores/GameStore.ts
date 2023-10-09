@@ -61,13 +61,32 @@ export class GameStore {
   }
 
   sortActiveGames(games: TGameList) {
-    return games.filter((game) => game.status === 'active');
+    return games
+      .filter((game) => game.status === 'active')
+      .sort((a, b) => {
+        // Check if a or b is waiting for logged in user turn
+        const aWaiting = a.currentTurnProfileId === this.authStore.userId;
+        const bWaiting = b.currentTurnProfileId === this.authStore.userId;
+
+        // If both are waiting or neither are waiting, sort by date
+        if (aWaiting === bWaiting) {
+          return compareDesc(new Date(a.updatedAt), new Date(b.updatedAt));
+        }
+
+        // If a is waiting, it should come first
+        if (aWaiting) {
+          return -1;
+        }
+
+        // If b is waiting, it should come first
+        return 1;
+      });
   }
   sortPendingGames(games: TGameList) {
     return games
       .filter((game) => game.status === 'pending')
       .sort((a, b) => {
-        // Check if a or b is waiting for the user
+        // Check if a or b await response from logged in user
         const aWaiting = a.waitingForUsers.includes(this.authStore.userId);
         const bWaiting = b.waitingForUsers.includes(this.authStore.userId);
 
