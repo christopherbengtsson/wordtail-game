@@ -57,11 +57,11 @@ export const Landing = observer(function Landing() {
     const gameIsActive = game.status === 'active';
     const isUsersTurn = game.currentTurnProfileId === authStore.userId;
 
-    if (!isUsersTurn && !gameIsActive) {
-      navigate(`games/${game.id}/stats`);
+    if (isUsersTurn && gameIsActive) {
+      return navigate(`games/${game.id}`);
     }
 
-    navigate(`games/${game.id}`);
+    navigate(`games/${game.id}/stats`);
   };
 
   const handleTabChange = (

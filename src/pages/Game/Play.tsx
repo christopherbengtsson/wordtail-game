@@ -70,11 +70,16 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
       letter: newLetter,
     };
     if (!newLetter.trim().length) {
+      if (!game.lettersSoFar) {
+        // TODO: User can't quit on first move, show some text or whatev
+        return;
+      }
+
       // TODO: Confirm dialog
       params.letter = undefined;
     }
 
-    submitLetterMutation.mutate(params);
+    // submitLetterMutation.mutate(params);
   };
 
   const onTimesUp = () => {
