@@ -7,7 +7,7 @@ export type TGameList =
 export type TGameListItem = TGameList[0];
 
 export type TActiveGame =
-  Database['public']['Functions']['get_game_by_id']['Returns'][0];
+  Database['public']['Functions']['get_active_game_by_id']['Returns'][0];
 
 export type TGameStatus = Database['public']['Enums']['game_status'];
 
@@ -27,7 +27,7 @@ export class GameService {
 
   async getActiveGameById(id: string) {
     return supabaseClientInstance
-      .rpc('get_game_by_id', {
+      .rpc('get_active_game_by_id', {
         p_game_id: id,
       })
       .single();

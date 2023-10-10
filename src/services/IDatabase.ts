@@ -166,35 +166,38 @@ export interface Database {
       games: {
         Row: {
           created_at: string | null;
+          creator_id: string | null;
           id: string;
           max_number_of_marks: number;
           name: string;
-          starter_id: string | null;
           status: Database['public']['Enums']['game_status'];
+          updated_at: string | null;
           winner_id: string | null;
         };
         Insert: {
           created_at?: string | null;
+          creator_id?: string | null;
           id?: string;
           max_number_of_marks?: number;
           name: string;
-          starter_id?: string | null;
           status?: Database['public']['Enums']['game_status'];
+          updated_at?: string | null;
           winner_id?: string | null;
         };
         Update: {
           created_at?: string | null;
+          creator_id?: string | null;
           id?: string;
           max_number_of_marks?: number;
           name?: string;
-          starter_id?: string | null;
           status?: Database['public']['Enums']['game_status'];
+          updated_at?: string | null;
           winner_id?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'games_starter_id_fkey';
-            columns: ['starter_id'];
+            foreignKeyName: 'games_creator_id_fkey';
+            columns: ['creator_id'];
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
@@ -398,19 +401,16 @@ export interface Database {
         };
         Returns: Database['public']['Enums']['game_status'];
       };
-      get_game_by_id: {
+      get_active_game_by_id: {
         Args: {
           p_game_id: string;
         };
         Returns: {
           id: string;
           name: string;
-          status: Database['public']['Enums']['game_status'];
           updatedAt: string;
           currentTurnProfileId: string;
           currentTurnUsername: string;
-          winnerProfileId: string;
-          winnerUsername: string;
           lettersSoFar: string[];
           lastMoveMade: Database['public']['Enums']['move_type'];
           previousPlayerId: string;

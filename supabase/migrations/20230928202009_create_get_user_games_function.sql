@@ -25,7 +25,7 @@ BEGIN
         g.name,
         g.status,
         g.created_at,  -- Game creation timestamp
-        MAX(rm.created_at),
+        COALESCE(MAX(rm.created_at), g.updated_at),
         ps.id,         -- ID of the profile who started the game
         ps.username,   -- Username of the profile who started the game
         CASE
@@ -75,7 +75,7 @@ BEGIN
     WHERE gp.user_id = get_user_games.p_user_id
     
     -- Group to structure the results as needed
-    GROUP BY g.id, g.name, g.status, g.created_at, p.id, p.username, pw.id, pw.username, ps.id, ps.username;
+    GROUP BY g.id, g.name, g.status, g.created_at, p.id, p.username, pw.id, pw.username, ps.id, ps.username, g.updated_at;
 
 END;
 

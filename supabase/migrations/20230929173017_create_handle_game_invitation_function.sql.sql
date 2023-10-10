@@ -53,7 +53,9 @@ BEGIN
     ORDER BY RANDOM();
 
     -- Update the game's status in the games table
-    UPDATE games SET status = game_state WHERE id = p_game_id;
+    UPDATE games 
+    SET status = game_state, updated_at = (now() at time zone 'utc'::text)
+    WHERE id = p_game_id;
 
     RETURN game_state;
 END;
@@ -91,7 +93,9 @@ BEGIN
 
     -- Early return if the game is either pending or abandoned
     IF game_state IN ('pending', 'abandoned') THEN
-        UPDATE games SET status = game_state WHERE id = p_game_id;
+        UPDATE games 
+        SET status = game_state, updated_at = (now() at time zone 'utc'::text)
+        WHERE id = p_game_id;
         RETURN game_state;
     END IF;
 
@@ -108,7 +112,9 @@ BEGIN
     ORDER BY CASE WHEN user_id = game_creator_id THEN 0 ELSE 1 END, RANDOM();
 
     -- Update the game's status in the games table
-    UPDATE games SET status = game_state WHERE id = p_game_id;
+    UPDATE games 
+    SET status = game_state, updated_at = (now() at time zone 'utc'::text)
+    WHERE id = p_game_id;
 
     RETURN game_state;
 END;

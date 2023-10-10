@@ -10,8 +10,8 @@ export function CardFooter({ game }: CardFooterProps) {
   return (
     <Caption>
       {game.status === 'pending'
-        ? `Game created ${formatDistanceToNow(new Date(game.createdAt))} ago`
-        : `Round updated ${formatDistanceToNow(new Date(game.updatedAt))} ago`}
+        ? `created ${formatDistanceToNow(new Date(game.createdAt))} ago`
+        : `updated ${formatDistanceToNow(new Date(game.updatedAt))} ago`}
     </Caption>
   );
 }
