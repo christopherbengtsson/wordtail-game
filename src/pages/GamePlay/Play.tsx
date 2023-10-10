@@ -79,7 +79,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
       params.letter = undefined;
     }
 
-    // submitLetterMutation.mutate(params);
+    submitLetterMutation.mutate(params);
   };
 
   const onTimesUp = () => {
