@@ -52,6 +52,7 @@ export class GameStore {
   }) {
     switch (gameMove) {
       case 'add_letter':
+      case 'give_up':
         return this.gameService.addLetter({ gameId, letter });
       case 'call_bluff':
         throw new Error('Not implemented');

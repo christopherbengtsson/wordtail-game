@@ -461,7 +461,7 @@ export interface Database {
       friendship_status: 'ignored' | 'accepted' | 'pending';
       game_invitation_status: 'pending' | 'accepted' | 'declined';
       game_status: 'active' | 'finished' | 'abandoned' | 'pending';
-      move_type: 'add_letter' | 'call_bluff' | 'call_finished_word';
+      move_type: 'add_letter' | 'call_bluff' | 'call_finished_word' | 'give_up';
       notification_type: 'game_invite' | 'friend_request' | 'game_move_turn';
       player_status: 'active' | 'out';
     };

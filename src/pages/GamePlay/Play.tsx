@@ -72,7 +72,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
     if (!newLetter.trim().length) {
       if (!game.lettersSoFar) {
         // TODO: User can't quit on first move, show some text or whatev
-        return;
+        // return;
       }
 
       // TODO: Confirm dialog

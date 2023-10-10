@@ -18,17 +18,16 @@ import { numberToWord } from '../../utils';
 const getReadyToPlayBody = (game: TActiveGame): string => {
   const lastMove = game.previousMoveType;
 
-  if (
-    lastMove === 'add_letter' ||
-    (!game.previousPlayerId && !game.previousMoveType)
-  ) {
+  if (!game.previousPlayerId) {
+    return "You're starting this round!";
+  }
+
+  if (game.previousMoveType === 'add_letter') {
     const numberOfLetters = game.lettersSoFar.length;
 
-    return numberOfLetters
-      ? `${numberToWord(numberOfLetters)} letter${
-          numberOfLetters > 1 ? 's' : ''
-        } has placed so far`
-      : "You're starting this round!";
+    return `${numberToWord(numberOfLetters)} letter${
+      numberOfLetters > 1 ? 's' : ''
+    } has placed so far`;
   }
 
   if (lastMove === 'call_bluff') {

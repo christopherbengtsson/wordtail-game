@@ -1,7 +1,7 @@
 -- ENUM types
 CREATE TYPE game_status AS ENUM('active', 'finished', 'abandoned', 'pending');
 CREATE TYPE player_status AS ENUM('active', 'out');
-CREATE TYPE move_type AS ENUM('add_letter', 'call_bluff', 'call_finished_word');
+CREATE TYPE move_type AS ENUM('add_letter', 'call_bluff', 'call_finished_word', 'give_up');
 CREATE TYPE friendship_status AS ENUM('ignored', 'accepted', 'pending');
 CREATE TYPE game_invitation_status AS ENUM('pending', 'accepted', 'declined');
 CREATE TYPE notification_type AS ENUM ('game_invite', 'friend_request', 'game_move_turn');
