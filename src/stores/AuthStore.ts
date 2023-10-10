@@ -69,4 +69,17 @@ export class AuthStore {
   async signOut() {
     this.authService.signOut();
   }
+
+  async DEV_GENERATE_USERS() {
+    await Promise.all([
+      this.authService.signUp({
+        email: 'bengtsson.christopher@hotmail.com',
+        password: '123456789',
+      }),
+      this.authService.signUp({
+        email: 'bengtsson.e.christopher@gmail.com',
+        password: '123456789',
+      }),
+    ]);
+  }
 }

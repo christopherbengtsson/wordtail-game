@@ -29,7 +29,7 @@ export const GameStats = observer(function GameStats() {
     isError,
   } = useQuery({
     queryKey: ['game', gameId],
-    queryFn: () => gameStore.getGameById(gameId),
+    queryFn: () => gameStore.getActiveGameById(gameId),
   });
 
   const shouldShowLoading = useDelayedVisible(isLoading, true);

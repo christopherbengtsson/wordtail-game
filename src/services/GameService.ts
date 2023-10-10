@@ -25,7 +25,7 @@ export class GameService {
     });
   }
 
-  async getGameById(id: string) {
+  async getActiveGameById(id: string) {
     return supabaseClientInstance
       .rpc('get_game_by_id', {
         p_game_id: id,

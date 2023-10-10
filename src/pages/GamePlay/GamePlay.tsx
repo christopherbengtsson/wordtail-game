@@ -38,7 +38,7 @@ const getReadyToPlayBody = (game: TActiveGame): string => {
   return 'TODO: No yet implemented';
 };
 
-export const Game = observer(function Game() {
+export const GamePlay = observer(function GamePlay() {
   // unstable_usePrompt({
   //   when: true,
   //   message: 'TODO: unstable_useBlocker with custom dialog?',
@@ -55,7 +55,7 @@ export const Game = observer(function Game() {
     isError,
   } = useQuery({
     queryKey: ['game', gameId],
-    queryFn: () => gameStore.getGameById(gameId),
+    queryFn: () => gameStore.getActiveGameById(gameId),
     enabled: !!gameId,
   });
 

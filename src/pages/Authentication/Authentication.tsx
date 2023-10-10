@@ -20,6 +20,7 @@ import {
   SignInWithPasswordCredentials,
   SignUpWithPasswordCredentials,
 } from '@supabase/supabase-js';
+import { isDev } from '../../Constants';
 
 const yupEmailValidator = Yup.string()
   .email('Invalid email')
@@ -87,6 +88,10 @@ export function Authentication() {
     }
   };
 
+  const DEV_GENERATE_USERS = async () => {
+    authStore.DEV_GENERATE_USERS();
+  };
+
   return (
     <FormContainer>
       <Headline>Wordtail</Headline>
@@ -135,6 +140,12 @@ export function Authentication() {
             <Button type="submit" size="lg" aria-label="Submit">
               {doRegister ? 'Register' : 'Sign In'}
             </Button>
+
+            {isDev && (
+              <Button type="button" onClick={DEV_GENERATE_USERS}>
+                Generate users
+              </Button>
+            )}
 
             {mutationError !== null && (
               <ErrorContainer>

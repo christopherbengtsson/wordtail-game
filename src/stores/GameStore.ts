@@ -18,9 +18,9 @@ export class GameStore {
     return this.gameService.fetchGames();
   }
 
-  async getGameById(id?: string) {
+  async getActiveGameById(id?: string) {
     if (id) {
-      return this.gameService.getGameById(id);
+      return this.gameService.getActiveGameById(id);
     }
   }
 
