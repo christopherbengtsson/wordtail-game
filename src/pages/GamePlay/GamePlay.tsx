@@ -16,11 +16,11 @@ import { TActiveGame } from '../../services';
 import { numberToWord } from '../../utils';
 
 const getReadyToPlayBody = (game: TActiveGame): string => {
-  const lastMove = game.lastMoveMade;
+  const lastMove = game.previousMoveType;
 
   if (
     lastMove === 'add_letter' ||
-    (!game.previousPlayerId && !game.lastMoveMade)
+    (!game.previousPlayerId && !game.previousMoveType)
   ) {
     const numberOfLetters = game.lettersSoFar.length;
 

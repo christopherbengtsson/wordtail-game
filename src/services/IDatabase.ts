@@ -412,7 +412,7 @@ export interface Database {
           currentTurnProfileId: string;
           currentTurnUsername: string;
           lettersSoFar: string[];
-          lastMoveMade: Database['public']['Enums']['move_type'];
+          previousMoveType: Database['public']['Enums']['move_type'];
           previousPlayerId: string;
           previousPlayerUsername: string;
           maxNumberOfMarks: number;
