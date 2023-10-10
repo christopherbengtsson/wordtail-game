@@ -6,7 +6,7 @@ DECLARE
     accepted_count INT;
     game_state game_status;
     round_id UUID;
-    creator_id UUID;
+    game_creator_id UUID;
     starting_player UUID;
     second_player UUID;
 BEGIN
@@ -22,13 +22,13 @@ BEGIN
     WHERE game_id = p_game_id;
 
     -- Fetch the game creator's ID
-    SELECT starter_id INTO creator_id FROM games WHERE id = p_game_id;
+    SELECT creator_id INTO game_creator_id FROM games WHERE id = p_game_id;
 
     -- Decide the starting player
     IF accepted_count = total_players THEN
         game_state := 'active';
         starting_player := p_user_id;
-        second_player := creator_id;
+        second_player := game_creator_id;
     ELSE
         game_state := 'pending';
         RETURN game_state; -- Early return if the game is still pending
@@ -67,7 +67,7 @@ DECLARE
     accepted_count INT;
     game_state game_status;
     round_id UUID;
-    creator_id UUID;
+    game_creator_id UUID;
 BEGIN
     -- Remove the user's association from the game
     DELETE FROM game_players 
@@ -80,7 +80,7 @@ BEGIN
     WHERE game_id = p_game_id;
 
     -- Fetch the game creator's ID
-    SELECT starter_id INTO creator_id FROM games WHERE id = p_game_id;
+    SELECT creator_id INTO game_creator_id FROM games WHERE id = p_game_id;
 
     -- Decide the game status
     IF accepted_count = total_players THEN
@@ -97,7 +97,7 @@ BEGIN
 
     -- Insert the first round into the game_rounds table
     INSERT INTO game_rounds (game_id, round_number, status, current_player_id)
-    VALUES (p_game_id, 1, 'active', creator_id)
+    VALUES (p_game_id, 1, 'active', game_creator_id)
     RETURNING id INTO round_id;
 
     -- Random order for the players (starting with the game creator)
@@ -105,7 +105,7 @@ BEGIN
     SELECT round_id, user_id, row_number() OVER ()
     FROM game_players 
     WHERE game_id = p_game_id
-    ORDER BY CASE WHEN user_id = creator_id THEN 0 ELSE 1 END, RANDOM();
+    ORDER BY CASE WHEN user_id = game_creator_id THEN 0 ELSE 1 END, RANDOM();
 
     -- Update the game's status in the games table
     UPDATE games SET status = game_state WHERE id = p_game_id;

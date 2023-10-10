@@ -66,7 +66,7 @@ BEGIN
     LEFT JOIN profiles pw ON pw.id = g.winner_id
     
     -- Join with profiles table to fetch details of the game's starter
-    LEFT JOIN profiles ps ON ps.id = g.starter_id
+    LEFT JOIN profiles ps ON ps.id = g.creator_id
     
     -- Optionally join with round_moves table to get the last update time
     LEFT JOIN round_moves rm ON rm.game_round_id = gr.id

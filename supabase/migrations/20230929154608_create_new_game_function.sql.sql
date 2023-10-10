@@ -14,7 +14,7 @@ BEGIN
 
     -- Insert a new game record with the provided details.
     -- Fetch the ID of this new game for later use.
-    INSERT INTO games (name, starter_id, status, max_number_of_marks)
+    INSERT INTO games (name, creator_id, status, max_number_of_marks)
     VALUES (p_game_name, p_creator_id, 'pending', p_max_number_of_marks)
     RETURNING id INTO new_game_id;
 
