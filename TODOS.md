@@ -6,3 +6,4 @@
 - Strings internationalization
 - Clean up data cron job: https://supabase.com/docs/guides/database/extensions/pg_cron#delete-data-every-week. Move relevant game data to a archived table
 - Dialog component
+- Routable tabs

@@ -14,6 +14,7 @@ RETURNS TABLE (
 ) AS $$
 BEGIN
     RETURN QUERY
+    -- get previous move as CTE
     WITH prev_move_cte AS (
          SELECT 
              rm.game_round_id, 
@@ -24,14 +25,14 @@ BEGIN
          ORDER BY rm.created_at DESC 
          LIMIT 1
     )
-    -- Fetching detailed game data, including its current and previous moves.
+    -- Fetching detailed game data, including previous move.
     SELECT 
         g.id,
         g.name,
-        COALESCE(MAX(rm.created_at), g.updated_at) as "updatedAt",
+        COALESCE(MAX(rm.created_at), g.updated_at) as "updatedAt", -- fallback to game's updated_at if first round move
         p.id as "currentTurnProfileId",
         p.username as "currentTurnUsername",
-        COALESCE(NULLIF(ARRAY_AGG(CASE WHEN rm.letter IS NOT NULL THEN rm.letter::text END ORDER BY rm.created_at), ARRAY[NULL::text]), ARRAY[]::text[]) AS "lettersSoFar",
+        COALESCE(NULLIF(ARRAY_AGG(CASE WHEN rm.letter IS NOT NULL THEN rm.letter::text END ORDER BY rm.created_at), ARRAY[NULL::text]), ARRAY[]::text[]) AS "lettersSoFar", -- fallback to empty array if no letters
         prev_move.type as "previousMoveType",
         prev_move.user_id as "previousPlayerId",
         prev_profile.username as "previousPlayerUsername",

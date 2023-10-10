@@ -69,7 +69,7 @@ BEGIN
 
             IF active_players_count = 1 THEN
                 UPDATE games
-                SET status = 'finished', winner_id = (SELECT user_id FROM game_players WHERE game_id = p_game_id AND status = 'active')
+                SET status = 'finished', winner_id = (SELECT user_id FROM game_players WHERE game_id = p_game_id AND status = 'active'), updated_at = (now() at time zone 'utc'::text)
                 WHERE id = p_game_id;
                 RETURN;
             ELSE
