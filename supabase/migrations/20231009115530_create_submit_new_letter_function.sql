@@ -7,8 +7,9 @@ DECLARE
     current_max_marks INT;
     current_round_id UUID;
     current_round_number INT;
+    new_round_id UUID;
 BEGIN
-    -- Fetching Current Round Information
+    -- Fetch Current Round Information
     WITH current_round AS (
         SELECT id, round_number
         FROM game_rounds 
@@ -17,89 +18,40 @@ BEGIN
     )
     SELECT id, round_number INTO current_round_id, current_round_number FROM current_round;
 
-    -- Determine Player Order for the Current Round
-    WITH player_order AS (
-        SELECT 
-            player_id, 
-            LEAD(player_id) OVER (ORDER BY order_of_play) as next_id,  -- Get the player who plays after the current player
-            LAG(player_id) OVER (ORDER BY order_of_play) as prev_id    -- Get the player who played before the current player
-        FROM round_player_order
-        WHERE round_id = current_round_id
-    )
-    SELECT prev_id, next_id INTO prev_player_id, next_player_id 
-    FROM player_order 
-    WHERE player_id = p_user_id;
+    -- Fetch the next and previous player's order
+    SELECT prev_id, next_id INTO prev_player_id, next_player_id
+    FROM internal_get_adjacent_players_order(current_round_id, p_user_id);
 
-    -- If User Submits an Empty Letter, Handle the Give Up Action
+    -- Handle when a user submits an empty letter
     IF letter IS NULL THEN
-        -- Record the give up move
-        INSERT INTO round_moves (game_round_id, user_id, type)
-        VALUES (current_round_id, p_user_id, 'give_up');
+         -- Record the give-up move
+        PERFORM internal_record_round_move(current_round_id, p_user_id, 'give_up');
 
-        -- Update the marks for the player and check if they're out of the game
-        WITH player_update AS (
-            UPDATE game_players 
-            SET marks = marks + 1
-            WHERE game_id = p_game_id AND user_id = p_user_id
-            RETURNING marks
-        )
-        SELECT marks INTO current_max_marks FROM player_update;
+        -- Update the marks for the player
+        current_max_marks := internal_increment_and_get_player_marks(p_game_id, p_user_id);
 
-        -- Player Action based on marks count and game condition
-        IF current_max_marks = (SELECT max_number_of_marks FROM games WHERE id = p_game_id) THEN
-            -- Update player status to 'out'
-            UPDATE game_players 
-            SET status = 'out'
-            WHERE game_id = p_game_id AND user_id = p_user_id;
-
-            -- Check if only one active player remains
-            SELECT COUNT(*) INTO active_players_count
-            FROM game_players
-            WHERE game_id = p_game_id AND status = 'active';
-
-            IF active_players_count = 1 THEN
-                -- Finish the game and set the winner
-                UPDATE games
-                SET status = 'finished', winner_id = (SELECT user_id FROM game_players WHERE game_id = p_game_id AND status = 'active'), updated_at = now()
-                WHERE id = p_game_id;
-                RETURN;
-            END IF;
+        -- Check the game's status and make necessary updates
+        IF internal_check_and_update_game_status(p_game_id, p_user_id, current_max_marks) THEN
+            -- TODO: set round to finished
+            RETURN; -- Game has finished, so exit the function
+            -- TODO: Handle game archiving, new function or trigger?
         END IF;
 
-        -- Set the status of the current round to 'finished' and update the last_moved_user_id
-        UPDATE game_rounds
-        SET status = 'finished', last_moved_user_id = p_user_id, current_player_id = NULL, updated_at = (now() at time zone 'utc'::text)
-        WHERE id = current_round_id;
+        -- Finish the current round and start a new one, fetching the ID of the new round
+        new_round_id := internal_finish_and_start_new_round(p_game_id, p_user_id, current_round_id, current_round_number, prev_player_id);
 
-        -- Start a new round with the previous player
-        IF prev_player_id IS NULL THEN
-            SELECT player_id INTO prev_player_id
-            FROM round_player_order
-            WHERE round_id = current_round_id
-            ORDER BY order_of_play DESC LIMIT 1;
-        END IF;
-        
-        INSERT INTO game_rounds (game_id, round_number, status, current_player_id)
-        VALUES (p_game_id, current_round_number + 1, 'active', prev_player_id);
+        -- Set player order for the new round
+        PERFORM internal_set_new_player_round_order(new_round_id, prev_player_id, current_round_id);
 
-    -- If User Submits a Letter
+    -- Handle when a user submits a letter
     ELSE
-        -- Fallback to the first player if next_player_id is NULL
-        IF next_player_id IS NULL THEN
-            SELECT player_id INTO next_player_id
-            FROM round_player_order
-            WHERE round_id = current_round_id
-            ORDER BY order_of_play ASC LIMIT 1;
-        END IF;
-
-        -- Update the round details with new move
+        -- Update the round details
         UPDATE game_rounds
         SET last_moved_user_id = p_user_id, current_player_id = next_player_id, updated_at = (now() at time zone 'utc'::text)
         WHERE id = current_round_id;
 
-        -- Insert the move in the round_moves table
-        INSERT INTO round_moves (game_round_id, user_id, type, letter)
-        VALUES (current_round_id, p_user_id, 'add_letter', letter);
+        -- Record the add-letter move
+        PERFORM internal_record_round_move(current_round_id, p_user_id, 'add_letter', letter);
     END IF;
 END;
 $$ LANGUAGE plpgsql;
