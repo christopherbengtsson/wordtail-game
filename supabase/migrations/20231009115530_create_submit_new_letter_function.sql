@@ -26,20 +26,20 @@ BEGIN
     IF letter IS NULL THEN
          -- Record the give-up move
         PERFORM internal_record_round_move(current_round_id, p_user_id, 'give_up');
-
         -- Update the marks for the player
         current_max_marks := internal_increment_and_get_player_marks(p_game_id, p_user_id);
 
         -- Check the game's status and make necessary updates
-        IF internal_check_and_update_game_status(p_game_id, p_user_id, current_max_marks) THEN
-            -- TODO: set round to finished
+        IF internal_check_and_update_game_status_by_marks(p_game_id, p_user_id, current_max_marks) THEN
+            PERFORM internal_finish_current_round(current_round_id, p_user_id);
             RETURN; -- Game has finished, so exit the function
             -- TODO: Handle game archiving, new function or trigger?
         END IF;
 
-        -- Finish the current round and start a new one, fetching the ID of the new round
-        new_round_id := internal_finish_and_start_new_round(p_game_id, p_user_id, current_round_id, current_round_number, prev_player_id);
-
+        -- Finish the current round
+        PERFORM internal_finish_current_round(current_round_id, p_user_id);
+        -- Start a new round, fetching the ID of the new round
+        new_round_id := internal_start_new_round(p_game_id, p_user_id, current_round_id, current_round_number, prev_player_id);
         -- Set player order for the new round
         PERFORM internal_set_new_player_round_order(new_round_id, prev_player_id, current_round_id);
 

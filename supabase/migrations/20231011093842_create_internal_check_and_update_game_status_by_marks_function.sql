@@ -1,5 +1,5 @@
 -- This function checks if a player has reached the maximum number of marks in a game and updates the game status accordingly.
-CREATE OR REPLACE FUNCTION internal_check_and_update_game_status(p_game_id UUID, p_user_id UUID, p_max_marks INTEGER) 
+CREATE OR REPLACE FUNCTION internal_check_and_update_game_status_by_marks(p_game_id UUID, p_user_id UUID, p_max_marks INTEGER) 
 RETURNS BOOLEAN AS $$
 DECLARE
     active_players_count INT;
