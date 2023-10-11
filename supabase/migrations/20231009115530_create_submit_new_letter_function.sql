@@ -1,3 +1,27 @@
+-- ================================================
+-- Function: submit_letter
+-- Description: 
+--    Handles a player's move in the game. This function can handle both scenarios when a player submits a letter 
+--    or when they decide to give up (submitting a NULL letter). Depending on the move, the game's state and the 
+--    player's marks are updated accordingly. Rounds may be concluded, and new rounds might be started based on the game logic.
+--
+-- Parameters:
+--    - p_game_id: The ID of the game where the move is made.
+--    - p_user_id: The ID of the player making the move.
+--    - letter: The letter being submitted. If NULL, it means the player is giving up.
+--
+-- Returns: 
+--    VOID - This function doesn't return any value; its main purpose is to handle and update the game's state based on player actions.
+--
+-- Usage Example:
+--    To submit a letter 'A' in game 'some_game_id' by user 'some_user_id':
+--    CALL submit_letter('some_game_id', 'some_user_id', 'A');
+--    To signify that the user is giving up:
+--    CALL submit_letter('some_game_id', 'some_user_id');
+--
+-- Note: 
+--    Make sure game and user IDs are valid when calling this function. The function assumes valid IDs and does not handle invalid ID errors.
+-- ================================================
 CREATE OR REPLACE FUNCTION submit_letter(p_game_id UUID, p_user_id UUID, letter CHAR(1) DEFAULT NULL)
 RETURNS VOID AS $$
 DECLARE
