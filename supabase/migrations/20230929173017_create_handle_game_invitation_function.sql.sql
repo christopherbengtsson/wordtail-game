@@ -1,4 +1,20 @@
--- Accepting a game invitation
+-- ================================================
+-- Function: accept_game_invitation
+-- Description: 
+--    Allows a user to accept an invitation to a game.
+--    If all players have accepted, the game is set to 'active' and the rounds are initiated.
+--
+-- Parameters:
+--    - p_game_id: The ID of the game to accept the invitation for.
+--    - p_user_id: The ID of the user accepting the invitation.
+--
+-- Returns: 
+--    A game_status indicating the current status of the game after the invitation is accepted.
+--
+-- Notes: 
+--    - This function assumes the existence of the required tables and relationships among them.
+--    - Game starts once all players have accepted the invitation.
+-- ================================================
 CREATE OR REPLACE FUNCTION accept_game_invitation(p_game_id UUID, p_user_id UUID)
 RETURNS game_status AS $$
 DECLARE
@@ -61,7 +77,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Declining a game invitation
+-- ================================================
+-- Function: decline_game_invitation
+-- Description: 
+--    Allows a user to decline an invitation to a game.
+--    If the number of players is reduced to 1, the game is marked 'abandoned'.
+--    If there are more players left and all have accepted, the game status is set to 'active' with a different round setup.
+--
+-- Parameters:
+--    - p_game_id: The ID of the game to decline the invitation for.
+--    - p_user_id: The ID of the user declining the invitation.
+--
+-- Returns: 
+--    A game_status indicating the current status of the game after the invitation is declined.
+--
+-- Notes: 
+--    - This function assumes the existence of the required tables and relationships among them.
+--    - The game can either be 'abandoned', 'pending', or 'active' depending on the decisions of the players.
+-- ================================================
 CREATE OR REPLACE FUNCTION decline_game_invitation(p_game_id UUID, p_user_id UUID)
 RETURNS game_status AS $$
 DECLARE

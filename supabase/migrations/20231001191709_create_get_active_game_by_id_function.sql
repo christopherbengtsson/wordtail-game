@@ -1,3 +1,28 @@
+-- ================================================
+-- Function: get_active_game_by_id
+-- Description: 
+--    Fetches detailed information about an active game by its ID. 
+--    This includes the current turn's player, letters used so far in the round, previous move's type, 
+--    and its player, the maximum number of marks for the game, and the current round number.
+--
+-- Parameters:
+--    - p_game_id: The ID of the game to fetch details for.
+--
+-- Returns: 
+--    A table containing details of the active game such as name, update time, current turn's player information,
+--    letters used so far in the round, the previous move's type, its player, the maximum number of marks for the game, 
+--    and the current round number.
+--
+-- Usage Example:
+--    To get the details for a game with ID 'some_game_id':
+--    SELECT * FROM get_active_game_by_id('some_game_id');
+--
+-- Notes: 
+--    - Ensure that the provided game ID is valid. This function does not handle invalid game IDs or provide error messages for them.
+--    - The function assumes the existence of the required tables and relationships among them.
+--    - The function aggregates letters in a round, and if there are no letters, it returns an empty array.
+--    - The previous move's player and its type are determined from the most recent entry in the round_moves table.
+-- ================================================
 CREATE OR REPLACE FUNCTION get_active_game_by_id(p_game_id UUID)
 RETURNS TABLE (
     "id" UUID,

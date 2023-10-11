@@ -1,3 +1,23 @@
+-- ================================================
+-- Function: create_new_game
+-- Description: 
+--    Creates a new game entry in the games table and associates players with the game.
+--    The game's creator is automatically set to 'accepted' status, while others are set to 'pending'.
+--
+-- Parameters:
+--    - p_game_name: Name of the new game.
+--    - p_player_ids: Array of player UUIDs who are to be part of this game.
+--    - p_creator_id: UUID of the user who creates the game.
+--    - p_max_number_of_marks: Maximum number of marks allowed for the game.
+--
+-- Returns: 
+--    UUID of the newly created game.
+--
+-- Notes: 
+--    - This function assumes the existence of the required tables (games, game_players).
+--    - Players will initially be set with a 'pending' invitation status unless they are the creator.
+--    - The creator of the game will always be included in the list of players, even if not explicitly provided in p_player_ids.
+-- ================================================
 CREATE OR REPLACE FUNCTION create_new_game(p_game_name TEXT, p_player_ids UUID[], p_creator_id UUID, p_max_number_of_marks INT)
 RETURNS UUID AS $$
 DECLARE
