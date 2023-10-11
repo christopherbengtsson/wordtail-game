@@ -70,8 +70,8 @@ export class GameService {
     });
   }
 
-  async addLetter({ gameId, letter }: { gameId: string; letter?: string }) {
-    return supabaseClientInstance.rpc('submit_letter', {
+  async addLetterOrGiveUp({ gameId, letter }: { gameId: string; letter?: string }) {
+    return supabaseClientInstance.rpc('submit_letter_or_give_up_move', {
       p_game_id: gameId,
       p_user_id: this.authStore.userId,
       letter,

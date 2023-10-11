@@ -448,7 +448,66 @@ export interface Database {
           waitingForUsers: string[];
         }[];
       };
-      submit_letter: {
+      internal_check_and_update_game_status_by_marks: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+          p_max_marks: number;
+        };
+        Returns: boolean;
+      };
+      internal_finish_current_round: {
+        Args: {
+          p_current_round_id: string;
+          p_user_id: string;
+        };
+        Returns: undefined;
+      };
+      internal_get_adjacent_players_order: {
+        Args: {
+          p_round_id: string;
+          p_user_id: string;
+        };
+        Returns: {
+          prev_id: string;
+          next_id: string;
+        }[];
+      };
+      internal_increment_and_get_player_marks: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+        };
+        Returns: number;
+      };
+      internal_record_round_move: {
+        Args: {
+          p_game_round_id: string;
+          p_user_id: string;
+          p_move_type: Database['public']['Enums']['move_type'];
+          p_letter?: string;
+        };
+        Returns: undefined;
+      };
+      internal_set_new_player_round_order: {
+        Args: {
+          p_new_round_id: string;
+          p_starting_player_id: string;
+          p_current_round_id: string;
+        };
+        Returns: undefined;
+      };
+      internal_start_new_round: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+          p_current_round_id: string;
+          p_current_round_number: number;
+          p_starting_player_id: string;
+        };
+        Returns: string;
+      };
+      submit_letter_or_give_up_move: {
         Args: {
           p_game_id: string;
           p_user_id: string;

@@ -1,5 +1,5 @@
 -- ================================================
--- Function: submit_letter
+-- Function: submit_letter_or_give_up_move
 -- Description: 
 --    Handles a player's move in the game. This function can handle both scenarios when a player submits a letter 
 --    or when they decide to give up (submitting a NULL letter). Depending on the move, the game's state and the 
@@ -15,14 +15,14 @@
 --
 -- Usage Example:
 --    To submit a letter 'A' in game 'some_game_id' by user 'some_user_id':
---    CALL submit_letter('some_game_id', 'some_user_id', 'A');
+--    CALL submit_letter_or_give_up_move('some_game_id', 'some_user_id', 'A');
 --    To signify that the user is giving up:
---    CALL submit_letter('some_game_id', 'some_user_id');
+--    CALL submit_letter_or_give_up_move('some_game_id', 'some_user_id');
 --
 -- Note: 
 --    Make sure game and user IDs are valid when calling this function. The function assumes valid IDs and does not handle invalid ID errors.
 -- ================================================
-CREATE OR REPLACE FUNCTION submit_letter(p_game_id UUID, p_user_id UUID, letter CHAR(1) DEFAULT NULL)
+CREATE OR REPLACE FUNCTION submit_letter_or_give_up_move(p_game_id UUID, p_user_id UUID, letter CHAR(1) DEFAULT NULL)
 RETURNS VOID AS $$
 DECLARE
     prev_player_id UUID;
