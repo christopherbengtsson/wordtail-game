@@ -183,7 +183,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
           />
 
           <Button type="submit" name="submit">
-            Submit
+            Create Game
           </Button>
 
           {createGameNutation.isError && (

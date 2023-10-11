@@ -25,13 +25,12 @@
 CREATE OR REPLACE FUNCTION submit_letter_or_give_up_move(p_game_id UUID, p_user_id UUID, letter CHAR(1) DEFAULT NULL)
 RETURNS VOID AS $$
 DECLARE
-    prev_player_id UUID;
-    next_player_id UUID;
-    active_players_count INT;
-    current_max_marks INT;
-    current_round_id UUID;
-    current_round_number INT;
-    new_round_id UUID;
+    prev_player_id UUID;          -- ID of the previous player in the game
+    next_player_id UUID;          -- ID of the next player in the game
+    current_max_marks INT;        -- Current maximum marks a player has
+    current_round_id UUID;        -- ID of the active round
+    current_round_number INT;     -- Number of the active round
+    new_round_id UUID;            -- ID of the new round (if created)
 BEGIN
     -- Fetch Current Round Information
     WITH current_round AS (

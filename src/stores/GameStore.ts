@@ -1,7 +1,24 @@
 import { makeAutoObservable } from 'mobx';
-import { GameService, TGameList, TGameListItem, TMoveType } from '../services';
+import { GameService, TGameList, TGameListItem } from '../services';
 import { AuthStore } from '.';
 import { multiSort } from '../utils';
+
+import { SAOL_BASE_URL } from '../Constants';
+
+export type GameMoveParams =
+  | {
+      gameId: string;
+      gameMove: 'add_letter' | 'give_up';
+      letter?: string;
+    }
+  | {
+      gameId: string;
+      gameMove: 'call_bluff';
+    }
+  | {
+      gameId: string;
+      gameMove: 'call_finished_word';
+    };
 
 export class GameStore {
   private authStore: AuthStore;
@@ -41,22 +58,28 @@ export class GameStore {
     return this.gameService.handleGameInvitation(params);
   }
 
-  async handleGameMove({
-    gameId,
-    gameMove,
-    letter,
-  }: {
-    gameId: string;
-    gameMove: TMoveType;
-    letter?: string;
-  }) {
+  async handleGameMove(params: GameMoveParams) {
+    const { gameId, gameMove } = params;
+
     switch (gameMove) {
       case 'add_letter':
       case 'give_up':
-        return this.gameService.addLetterOrGiveUp({ gameId, letter });
-      case 'call_bluff':
-        throw new Error('Not implemented');
+        return this.gameService.addLetterOrGiveUp({
+          gameId,
+          letter: params.letter,
+        });
+
       case 'call_finished_word':
+        if (!SAOL_BASE_URL) {
+          throw new Error('No SAOL base URL provided');
+        }
+
+        return this.gameService.validateCompletedWord({
+          gameId,
+          apiUrl: `${SAOL_BASE_URL}/sok?sok=`,
+        });
+
+      case 'call_bluff':
         throw new Error('Not implemented');
     }
   }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
 import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { useMainStore } from '../../stores';
+import { GameMoveParams, useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -14,6 +14,7 @@ import {
 import { TActiveGame, TMoveType } from '../../services';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
 import { quadraticDuration } from '../../utils';
+import { Json } from '../../services/IDatabase';
 
 const ANIMATION_DURATION = 1000;
 export interface SubmitLetterParams {
@@ -36,13 +37,12 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
   const [newLetter, setNewLetter] = useState('');
   const [timesUp, setTimesUp] = useState(false);
 
-  const submitLetterMutation = useMutation<
-    PostgrestSingleResponse<void>,
+  const playerMoveMutation = useMutation<
+    Document | PostgrestSingleResponse<void | Json>,
     PostgrestError,
-    SubmitLetterParams
+    GameMoveParams
   >({
-    mutationFn: (params: SubmitLetterParams) =>
-      gameStore.handleGameMove(params),
+    mutationFn: (params: GameMoveParams) => gameStore.handleGameMove(params),
     onSuccess: () => {
       queryClient.invalidateQueries(['game', gameId]);
       queryClient.invalidateQueries(['games']);
@@ -63,31 +63,39 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
     return () => clearTimeout(timeout);
   }, [letters?.length]);
 
-  const submitLetter = () => {
-    const params: SubmitLetterParams = {
+  const submitLetterOrGiveUp = () => {
+    const params: GameMoveParams = {
       gameId,
       gameMove: 'add_letter',
       letter: newLetter,
     };
     if (!newLetter.trim().length) {
-      if (!game.lettersSoFar) {
-        // TODO: User can't quit on first move, show some text or whatev
-        // return;
-      }
-
       // TODO: Confirm dialog
       params.letter = undefined;
+      params.gameMove = 'give_up';
     }
 
-    submitLetterMutation.mutate(params);
+    playerMoveMutation.mutate(params);
+  };
+
+  const callFinishedWord = () => {
+    const params: GameMoveParams = {
+      gameId,
+      gameMove: 'call_finished_word',
+    };
+    playerMoveMutation.mutate(params);
+  };
+
+  const callBluff = () => {
+    console.log('TODO: Not implemented');
   };
 
   const onTimesUp = () => {
-    setTimesUp(true);
-    setTimeout(() => {
-      setNewLetter('');
-      submitLetter();
-    }, 500);
+    // setTimesUp(true);
+    // setTimeout(() => {
+    //   setNewLetter('');
+    //   submitLetter();
+    // }, 500);
   };
 
   return (
@@ -114,14 +122,31 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
                 setNewLetter(ev.target.value.toUpperCase());
               }}
             />
+
             <Button
               primary
               size="lg"
               disabled={timesUp}
-              onClick={() => submitLetter()}
+              onClick={() => submitLetterOrGiveUp()}
             >
-              Place letter
+              Send letter
             </Button>
+
+            {/* {!!letters.length && ( */}
+            <ActionContainer>
+              <Button size="lg" disabled={true} onClick={() => callBluff()}>
+                Call Bluff
+              </Button>
+
+              <Button
+                size="lg"
+                disabled={false}
+                onClick={() => callFinishedWord()}
+              >
+                Call Finished Word
+              </Button>
+            </ActionContainer>
+            {/* )} */}
           </StyledForm>
         </CenterContainer>
       )}
@@ -129,6 +154,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
   );
 });
 
+// TODO: Should it be a form?
 const StyledForm = styled.div`
   display: flex;
   flex-direction: column;
@@ -144,5 +170,16 @@ const StyledForm = styled.div`
       text-align: center;
       font-size: 4rem;
     }
+  }
+`;
+
+const ActionContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: ${(p) => p.theme.spacing.m};
+  width: 100%;
+
+  & > button {
+    flex: 1;
   }
 `;

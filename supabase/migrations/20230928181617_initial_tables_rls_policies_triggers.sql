@@ -200,3 +200,7 @@ AS PERMISSIVE FOR ALL
 TO authenticated
 USING (true)
 WITH CHECK (true);
+
+-- Extensions
+-- Enable the "http" extension
+create extension http with schema extensions;

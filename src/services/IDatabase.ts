@@ -480,6 +480,17 @@ export interface Database {
         };
         Returns: number;
       };
+      internal_perform_http_get_from_server: {
+        Args: {
+          p_api_endpoint: string;
+          p_content_type?: string;
+        };
+        Returns: {
+          status: string;
+          data: string;
+          message: string;
+        }[];
+      };
       internal_record_round_move: {
         Args: {
           p_game_round_id: string;
@@ -507,6 +518,13 @@ export interface Database {
         };
         Returns: string;
       };
+      perform_http_get_from_server: {
+        Args: {
+          p_api_endpoint: string;
+          p_content_type?: string;
+        };
+        Returns: Json;
+      };
       submit_letter_or_give_up_move: {
         Args: {
           p_game_id: string;
@@ -514,6 +532,14 @@ export interface Database {
           letter?: string;
         };
         Returns: undefined;
+      };
+      validate_completed_word: {
+        Args: {
+          p_game_id: string;
+          p_api_url: string;
+          p_user_id: string;
+        };
+        Returns: Json;
       };
     };
     Enums: {
