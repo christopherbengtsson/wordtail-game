@@ -2,7 +2,6 @@ import { makeAutoObservable } from 'mobx';
 import { GameService, TGameList, TGameListItem } from '../services';
 import { AuthStore } from '.';
 import { multiSort } from '../utils';
-
 import { SAOL_BASE_URL } from '../Constants';
 
 export type GameMoveParams =
@@ -70,18 +69,22 @@ export class GameStore {
         });
 
       case 'call_finished_word':
-        if (!SAOL_BASE_URL) {
-          throw new Error('No SAOL base URL provided');
-        }
-
-        return this.gameService.validateCompletedWord({
-          gameId,
-          apiUrl: `${SAOL_BASE_URL}/sok?sok=`,
-        });
+        return this.validateCompletedWord(gameId);
 
       case 'call_bluff':
         throw new Error('Not implemented');
     }
+  }
+
+  private async validateCompletedWord(gameId: string) {
+    if (!SAOL_BASE_URL) {
+      throw new Error('No SAOL base URL provided');
+    }
+
+    return this.gameService.validateCompletedWord({
+      gameId,
+      apiUrl: `${SAOL_BASE_URL}/sok?sok=`,
+    });
   }
 
   sortActiveGames(games: TGameList) {

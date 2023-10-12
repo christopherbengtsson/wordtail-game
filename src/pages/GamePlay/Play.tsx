@@ -14,7 +14,6 @@ import {
 import { TActiveGame, TMoveType } from '../../services';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
 import { quadraticDuration } from '../../utils';
-import { Json } from '../../services/IDatabase';
 
 const ANIMATION_DURATION = 1000;
 export interface SubmitLetterParams {
@@ -33,20 +32,31 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
   const queryClient = useQueryClient();
   const { gameStore } = useMainStore();
 
-  const [animating, setAnimating] = useState(true);
+  const [letterAnimation, setLetterAnimating] = useState(true);
   const [newLetter, setNewLetter] = useState('');
   const [timesUp, setTimesUp] = useState(false);
 
   const playerMoveMutation = useMutation<
-    Document | PostgrestSingleResponse<void | Json>,
+    PostgrestSingleResponse<void | {
+      isValidWord: boolean;
+    }>,
     PostgrestError,
     GameMoveParams
   >({
     mutationFn: (params: GameMoveParams) => gameStore.handleGameMove(params),
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries(['game', gameId]);
       queryClient.invalidateQueries(['games']);
-      navigate('stats', { replace: true }); // TODO: Navigate to some stats or optimistically update like if too many marks
+
+      if (variables.gameMove === 'call_finished_word') {
+        if (data?.data?.isValidWord) {
+          // user's call action was a success, previous player got a mark
+        } else {
+          // it's not a word, bad call from the user who now got a mark
+        }
+      }
+      // TODO: Navigate to some stats or optimistically update like if too many marks
+      navigate('stats', { replace: true });
     },
   });
 
@@ -56,7 +66,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
     let timeout: NodeJS.Timeout;
     if (letters?.length) {
       timeout = setTimeout(() => {
-        setAnimating(false);
+        setLetterAnimating(false);
       }, letters.length * ANIMATION_DURATION);
     }
 
@@ -91,16 +101,16 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
   };
 
   const onTimesUp = () => {
-    // setTimesUp(true);
-    // setTimeout(() => {
-    //   setNewLetter('');
-    //   submitLetter();
-    // }, 500);
+    setTimesUp(true);
+    setTimeout(() => {
+      setNewLetter('');
+      submitLetterOrGiveUp();
+    }, 500);
   };
 
   return (
     <>
-      {letters.length && animating ? (
+      {letters.length && letterAnimation ? (
         <AnimateLetters
           letters={letters}
           animationDuration={ANIMATION_DURATION}
@@ -132,21 +142,21 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
               Send letter
             </Button>
 
-            {/* {!!letters.length && ( */}
-            <ActionContainer>
-              <Button size="lg" disabled={true} onClick={() => callBluff()}>
-                Call Bluff
-              </Button>
+            {letters.length > 1 && (
+              <ActionContainer>
+                <Button size="lg" disabled={true} onClick={() => callBluff()}>
+                  Call Bluff
+                </Button>
 
-              <Button
-                size="lg"
-                disabled={false}
-                onClick={() => callFinishedWord()}
-              >
-                Call Finished Word
-              </Button>
-            </ActionContainer>
-            {/* )} */}
+                <Button
+                  size="lg"
+                  disabled={false}
+                  onClick={() => callFinishedWord()}
+                >
+                  Call Finished Word
+                </Button>
+              </ActionContainer>
+            )}
           </StyledForm>
         </CenterContainer>
       )}

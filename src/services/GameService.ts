@@ -95,6 +95,6 @@ export class GameService {
       p_game_id: gameId,
       p_user_id: this.authStore.userId,
       p_api_url: apiUrl,
-    });
+    }).single();
   }
 }

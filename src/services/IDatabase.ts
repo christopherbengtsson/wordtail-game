@@ -483,7 +483,6 @@ export interface Database {
       internal_perform_http_get_from_server: {
         Args: {
           p_api_endpoint: string;
-          p_content_type?: string;
         };
         Returns: {
           status: string;
@@ -518,13 +517,6 @@ export interface Database {
         };
         Returns: string;
       };
-      perform_http_get_from_server: {
-        Args: {
-          p_api_endpoint: string;
-          p_content_type?: string;
-        };
-        Returns: Json;
-      };
       submit_letter_or_give_up_move: {
         Args: {
           p_game_id: string;
@@ -539,7 +531,9 @@ export interface Database {
           p_api_url: string;
           p_user_id: string;
         };
-        Returns: Json;
+        Returns: {
+          isValidWord: boolean;
+        }[];
       };
     };
     Enums: {
