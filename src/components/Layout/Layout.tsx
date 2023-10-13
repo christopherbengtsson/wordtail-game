@@ -2,13 +2,14 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMainStore } from '../../stores';
 import { AppModals } from '../../modals';
-import { HEADER_HEIGHT, ScrollView } from '..';
+import { HEADER_HEIGHT, ScrollView, useTranslation } from '..';
 import { MainContentContainer, MainWrapper } from './LayoutStyles';
 import { createBorderStyles } from '../shared/common';
 import { CommonThemeProps } from 'react95/dist/types';
 import { isDev } from '../../Constants';
 
 export function Layout() {
+  const t = useTranslation();
   const { authStore } = useMainStore();
   const { pathname } = useLocation();
 
@@ -26,13 +27,13 @@ export function Layout() {
       >
         <StyledNav>
           <Anchor isActive={pathname === '/'} to="/">
-            Games
+            {t('nav.header.games')}
           </Anchor>
           <Anchor
             isActive={pathname.includes('/profiles')}
             to={`/profiles/:${authStore.userId}`}
           >
-            Profile
+            {t('nav.header.profil')}
           </Anchor>
           {isDev && (
             <Anchor isActive={pathname === '/dev'} to="/dev">

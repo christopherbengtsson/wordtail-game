@@ -8,11 +8,13 @@ import {
   Button,
   List,
   PrimaryTitleWrapper,
+  useTranslation,
 } from '../../components';
 import { getUniqueUserAvatar } from '../../utils';
 import { styled } from 'styled-components';
 
 export const Profile = observer(function Profile() {
+  const t = useTranslation();
   const { authStore, dbService } = useMainStore();
 
   const queryClient = useQueryClient();
@@ -47,18 +49,18 @@ export const Profile = observer(function Profile() {
       </FlexContainer>
 
       <Body>
-        <BodyBold>ID: </BodyBold>
+        <BodyBold>{t('profile.id')}: </BodyBold>
         {authStore.user?.id}
       </Body>
       <Body>
-        <BodyBold>Email: </BodyBold>
+        <BodyBold>{t('profile.email')}: </BodyBold>
         {authStore.user?.email}
       </Body>
 
-      <BodyBold>Friends:</BodyBold>
+      <BodyBold>{t('profile.friends')}:</BodyBold>
       <List
         items={friendsResponse?.data}
-        emptyText="No friends added yet"
+        emptyText={t('profile.friends.list.empty')}
         render={({ friendId, username }) => (
           <li key={username}>
             <FlexContainer>
@@ -74,7 +76,7 @@ export const Profile = observer(function Profile() {
           signOutMutation.mutate();
         }}
       >
-        Sign out
+        {t('auth.cta.logout')}
       </Button>
     </>
   );

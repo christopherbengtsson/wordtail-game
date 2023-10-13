@@ -16,3 +16,4 @@ export * from './Badge';
 export * from './List';
 export * from './Tabs';
 export * from './CountdownIndicator';
+export * from './Language';

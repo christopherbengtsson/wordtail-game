@@ -9,12 +9,14 @@ import {
   List,
   PrimaryTitleWrapper,
   Tabs,
+  useTranslation,
 } from '../../components';
 import { styled } from 'styled-components';
 import { TabBody } from 'react95';
 import { useMemo, useState } from 'react';
 
 export const Landing = observer(function Landing() {
+  const t = useTranslation();
   const { gameStore, authStore, modalStore } = useMainStore();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -74,11 +76,11 @@ export const Landing = observer(function Landing() {
   return (
     <Container>
       <PrimaryTitleWrapper className="visuallyHidden">
-        Games page
+        {t('games.header')}
       </PrimaryTitleWrapper>
 
       <Button primary size="lg" onClick={handleCreateNewGame}>
-        CREATE NEW GAME
+        {t('games.cta.create')}
       </Button>
 
       <div>
@@ -86,16 +88,16 @@ export const Landing = observer(function Landing() {
           activeTab={activeTab}
           handleTabChange={handleTabChange}
           tabs={[
-            { label: 'Active' },
-            { label: 'Pending', badge: numberOfInvites },
-            { label: 'Finished' },
+            { label: t('games.tabs.active') },
+            { label: t('games.tabs.pending'), badge: numberOfInvites },
+            { label: t('games.tabs.finished') },
           ]}
         />
 
         <TabBody>
           {activeTab === 0 && (
             <List
-              emptyText="You have no active games yet, why not create one?"
+              emptyText={t('games.list.active.empty')}
               items={activeGames}
               render={(game: TGameListItem) => (
                 <GameListItem
@@ -110,7 +112,7 @@ export const Landing = observer(function Landing() {
           )}
           {activeTab === 1 && (
             <List
-              emptyText="No pending games"
+              emptyText={t('games.list.pending.empty')}
               items={pendingGames}
               render={(game: TGameListItem) => (
                 <GameListItem
@@ -125,7 +127,7 @@ export const Landing = observer(function Landing() {
           )}
           {activeTab === 2 && (
             <List
-              emptyText="No game history"
+              emptyText={t('games.list.finished.empty')}
               items={finishedGames}
               render={(game: TGameListItem) => (
                 <GameListItem

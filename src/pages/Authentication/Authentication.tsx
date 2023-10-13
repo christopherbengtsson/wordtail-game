@@ -11,6 +11,7 @@ import {
   StyledForm,
   FormInput,
   Body,
+  useTranslation,
 } from '../../components';
 import { Frame } from 'react95';
 import { getIsRecurringUser, setIsRecurringUser } from '../../utils';
@@ -22,20 +23,21 @@ import {
 } from '@supabase/supabase-js';
 import { isDev } from '../../Constants';
 
-const yupEmailValidator = Yup.string()
-  .email('Invalid email')
-  .required('Email is required');
-const yupPasswordValidator = Yup.string()
-  .min(6, 'Password must to be at least 6 characters')
-  .required('Password is required');
-const yupConfirmPasswordValidator = Yup.string()
-  .oneOf([Yup.ref('password')], "Passwords don't match")
-  .required('Confirmation password is required');
-
 export function Authentication() {
+  const t = useTranslation();
   const { authStore } = useMainStore();
   const navigate = useNavigate();
   const [doRegister, setDoRegister] = useState(!getIsRecurringUser());
+
+  const yupEmailValidator = Yup.string()
+    .email(t('auth.email.invalid'))
+    .required(t('general.input.required'));
+  const yupPasswordValidator = Yup.string()
+    .min(6, t('auth.password.invalid'))
+    .required(t('general.input.required'));
+  const yupConfirmPasswordValidator = Yup.string()
+    .oneOf([Yup.ref('password')], t('auth.password.confirm.invalid'))
+    .required(t('general.input.required'));
 
   const ValidationSchema = doRegister
     ? Yup.object().shape({
@@ -112,8 +114,8 @@ export function Authentication() {
               id="email"
               name="email"
               type="email"
-              placeholder="Email"
-              aria-label="Email"
+              placeholder={t('auth.email.label')}
+              aria-label={t('auth.email.label')}
               component={FormInput}
             />
 
@@ -121,8 +123,8 @@ export function Authentication() {
               id="password"
               name="password"
               type="password"
-              placeholder="Password"
-              aria-label="Password"
+              placeholder={t('auth.password.label')}
+              aria-label={t('auth.password.label')}
               component={FormInput}
             />
 
@@ -131,14 +133,20 @@ export function Authentication() {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
-                placeholder="Confirm password"
-                aria-label="Confirm password"
+                placeholder={t('auth.password.confirm.label')}
+                aria-label={t('auth.password.confirm.label')}
                 component={FormInput}
               />
             )}
 
-            <Button type="submit" size="lg" aria-label="Submit">
-              {doRegister ? 'Register' : 'Sign In'}
+            <Button
+              type="submit"
+              size="lg"
+              aria-label={
+                doRegister ? t('auth.cta.register') : t('auth.cta.login')
+              }
+            >
+              {doRegister ? t('auth.cta.register') : t('auth.cta.login')}
             </Button>
 
             {isDev && (
@@ -157,13 +165,11 @@ export function Authentication() {
 
         <TextButton
           aria-label={
-            doRegister ? "I don't have an account" : 'I already have an account'
+            doRegister ? t('auth.toggle.register') : t('auth.toggle.login')
           }
           onClick={() => setDoRegister(!doRegister)}
         >
-          {!doRegister
-            ? "I don't have an account"
-            : 'I already have an account'}
+          {!doRegister ? t('auth.toggle.register') : t('auth.toggle.login')}
         </TextButton>
       </StyledFrame>
     </FormContainer>
