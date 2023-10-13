@@ -1,5 +1,27 @@
+- Create pages from when a move is made, reusable as stats?
+
+  - From making a move
+    - Adding letter
+    - Give up
+      - Generic stats page?
+    - Call Bluff
+      - Show previous username
+      - Possible outcomes
+    - Reveal bluff
+      - ... not sure
+    - Claim finished word
+      - Link to SAOL if word
+      - Show latest player who got a mark.
+      - Show stats
+  - For pending games
+    - Show usernames
+    - Invitation status
+    - Button to add as friend
+  - Finished games
+    - ...
+
 - Handle errors from react query
-- Set key in local storage for returning users, to dynamically show register/login as default
+- Refactor local storage handling for returning users, to dynamically show register/login as default
 - Notifications
 - Select application theme
 - Prevent navigation on Game page: https://gist.github.com/chaance/2f3c14ec2351a175024f62fd6ba64aa6

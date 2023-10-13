@@ -19,7 +19,7 @@ import { formatDistanceToNow } from 'date-fns';
  * Handle Pending games
  * Handle Finished games
  */
-export const GameStats = observer(function GameStats() {
+export const Stats = observer(function Stats() {
   const { gameId } = useParams();
   const { gameStore } = useMainStore();
 

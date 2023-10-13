@@ -39,7 +39,6 @@ BEGIN
     SELECT id, round_number INTO current_round_id, current_round_number FROM current_round;
 
     -- Fetch the previous player's order
-    -- TODO: Should fetch next instead?
     SELECT prev_id INTO prev_player_id
     FROM internal_get_adjacent_players_order(current_round_id, p_user_id);
 
