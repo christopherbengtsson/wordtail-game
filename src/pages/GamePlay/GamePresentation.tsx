@@ -14,10 +14,12 @@ import {
 import { useDelayedVisible } from '../../hooks';
 import { TActiveGame } from '../../services';
 import { numberToWord } from '../../utils';
+import { RevealBluff } from './RevealBluff';
 
 const getReadyToPlayBody = (game: TActiveGame): string => {
   const lastMove = game.previousMoveType;
 
+  // Starting player of a new round
   if (!game.previousPlayerId) {
     return "You're starting this round!";
   }
@@ -34,10 +36,14 @@ const getReadyToPlayBody = (game: TActiveGame): string => {
     return `${game.previousPlayerUsername} thinks you're bluffing! Prepare to come clean`;
   }
 
-  return 'TODO: No yet implemented';
+  // We should not reach this far. If latest game move is 'claim_finished_word' or reveal_bluff,
+  // new rounds should have been initiated.
+  throw new Error(
+    'Function `getReadyToPlayBody` could not predict text presentation',
+  );
 };
 
-export const GamePlay = observer(function GamePlay() {
+export const GamePresentation = observer(function GamePresentation() {
   // unstable_usePrompt({
   //   when: true,
   //   message: 'TODO: unstable_useBlocker with custom dialog?',
@@ -101,7 +107,14 @@ export const GamePlay = observer(function GamePlay() {
   if (start && gameId && response?.data) {
     return (
       <CenterContainer>
-        <Play gameId={gameId} game={response.data} />
+        {response.data.previousMoveType === 'call_bluff' ? (
+          <RevealBluff
+            gameId={gameId}
+            letters={response.data.lettersSoFar.join('')}
+          />
+        ) : (
+          <Play gameId={gameId} game={response.data} />
+        )}
       </CenterContainer>
     );
   }

@@ -1,29 +1,26 @@
 -- ================================================
--- Function: validate_completed_word
+-- Function: claim_finished_word_move
 -- Description: 
 --    Validates a completed word using an external API to determine its validity. 
 --    Marks the current or previous player based on the word's validity.
 --
 -- Parameters:
 --    - p_game_id: The ID of the game in which the word needs validation.
---    - p_api_url: The URL endpoint of the external API to call for word validation.
+--    - p_saol_base_url: The URL endpoint of the external API to call for word validation.
 --    - p_user_id: The ID of the current player.
 --
 -- Returns: 
 --    A table with "isValidWord" (boolean indicating word validity).
 --
--- Notes: 
---    - This function uses the `internal_perform_http_get_from_server` function.
 -- ================================================
-CREATE OR REPLACE FUNCTION validate_completed_word(
+CREATE OR REPLACE FUNCTION claim_finished_word_move(
     p_game_id UUID,
-    p_api_url TEXT,
+    p_saol_base_url TEXT,
     p_user_id UUID
 ) 
 RETURNS TABLE ("isValidWord" BOOLEAN) AS $$
 DECLARE
     round_letters TEXT;           -- Concatenated letters from the active round to form the word
-    api_result RECORD;            -- Holds the response received from the external API
     prev_player_id UUID;          -- ID of the previous player in the game
     starting_player_id UUID;      -- ID of of the player that should start next round
     current_max_marks INT;        -- Current maximum marks a player has
@@ -41,40 +38,31 @@ BEGIN
     )
     SELECT id, round_number INTO current_round_id, current_round_number FROM current_round;
 
-    -- Fetch the next and previous player's order
+    -- Fetch the previous player's order
+    -- TODO: Should fetch next instead?
     SELECT prev_id INTO prev_player_id
     FROM internal_get_adjacent_players_order(current_round_id, p_user_id);
 
     -- Get all letters for the active round.
-    SELECT string_agg(letter, '' ORDER BY created_at) INTO round_letters
-    FROM round_moves
-    WHERE game_round_id = current_round_id AND type = 'add_letter';
+    round_letters := internal_get_round_letters(current_round_id);
 
-    -- Execute the internal function to get the API's response.
-    api_result := internal_perform_http_get_from_server(format('%s%s', p_api_url, round_letters));
+    -- Record 'claim_finished_word' move
+    PERFORM internal_record_round_move(current_round_id, p_user_id, 'claim_finished_word');
 
-    -- If error, raise an exception
-    IF api_result.status = 'error' THEN
-        RAISE EXCEPTION 'API Error: %', api_result.message;
-    END IF;
-
-    -- Record 'call_finished_word' move
-    PERFORM internal_record_round_move(current_round_id, p_user_id, 'call_finished_word');
-
-    IF api_result.data LIKE format('%%Sökningen på <strong>%s</strong> i SAOL gav inga svar%%', round_letters) THEN
-        -- Not a valid word ❌
-        -- Current player will get a mark
-        -- Previous player starts new round
-        affected_player_id := p_user_id;
-        starting_player_id := prev_player_id;
-        "isValidWord" := FALSE;
-    ELSE
+    IF internal_validate_word_with_saol(p_saol_base_url, round_letters) THEN
         -- Valid word ✅
         -- Previous player will get a mark
         -- Current player starts new round
         affected_player_id := prev_player_id;
         starting_player_id := p_user_id;
         "isValidWord" := TRUE;
+    ELSE
+        -- Not a valid word ❌
+        -- Current player will get a mark
+        -- Previous player starts new round
+        affected_player_id := p_user_id;
+        starting_player_id := prev_player_id;
+        "isValidWord" := FALSE;
     END IF;
     
     -- Common operations based on affected player:

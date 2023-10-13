@@ -8,7 +8,7 @@
 --    - p_game_round_id: The ID of the round in which the move is being made.
 --    - p_user_id: The ID of the user/player making the move.
 --    - p_move_type: Specifies the type of the move ('add_letter', 'give_up', etc.).
---    - p_letter (optional): The letter being added if the move type is 'add_letter'.
+--    - p_value (optional): The letter or word being added if the move type is 'add_letter' or 'reveal_bluff'.
 --
 -- Returns: 
 --    VOID - This function does not return any value; its purpose is to insert a record into the 'round_moves' table.
@@ -16,11 +16,21 @@
 -- Note: 
 --    Ensure that the move type and any associated data (like the letter) are valid before calling this function.
 -- ================================================
-CREATE OR REPLACE FUNCTION internal_record_round_move(p_game_round_id UUID, p_user_id UUID, p_move_type move_type, p_letter CHAR(1) DEFAULT NULL) 
+CREATE OR REPLACE FUNCTION internal_record_round_move(p_game_round_id UUID, p_user_id UUID, p_move_type move_type, p_value TEXT DEFAULT NULL) 
 RETURNS VOID AS $$
 BEGIN
-    -- Insert the details of the move made by the player into the 'round_moves' table.
-    INSERT INTO round_moves (game_round_id, user_id, type, letter)
-    VALUES (p_game_round_id, p_user_id, p_move_type, p_letter);
+    IF p_move_type = 'reveal_bluff' THEN
+        INSERT INTO round_moves (game_round_id, user_id, type, word)
+        VALUES (p_game_round_id, p_user_id, p_move_type, p_value);
+
+    ELSIF p_move_type = 'add_letter' AND LENGTH(p_value) = 1 THEN
+        INSERT INTO round_moves (game_round_id, user_id, type, letter)
+        VALUES (p_game_round_id, p_user_id, p_move_type, p_value);
+
+    ELSE
+        INSERT INTO round_moves (game_round_id, user_id, type)
+        VALUES (p_game_round_id, p_user_id, p_move_type);
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
+

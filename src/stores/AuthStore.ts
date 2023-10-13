@@ -73,11 +73,15 @@ export class AuthStore {
   async DEV_GENERATE_USERS() {
     await Promise.all([
       this.authService.signUp({
-        email: 'bengtsson.christopher@hotmail.com',
+        email: 'user1@example.com',
         password: '123456789',
       }),
       this.authService.signUp({
-        email: 'bengtsson.e.christopher@gmail.com',
+        email: 'user2@example.com',
+        password: '123456789',
+      }),
+      this.authService.signUp({
+        email: 'user3@example.com',
         password: '123456789',
       }),
     ]);

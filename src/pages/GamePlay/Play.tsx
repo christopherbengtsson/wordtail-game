@@ -48,7 +48,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
       queryClient.invalidateQueries(['game', gameId]);
       queryClient.invalidateQueries(['games']);
 
-      if (variables.gameMove === 'call_finished_word') {
+      if (variables.gameMove === 'claim_finished_word') {
         if (data?.data?.isValidWord) {
           // user's call action was a success, previous player got a mark
         } else {
@@ -74,36 +74,40 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
   }, [letters?.length]);
 
   const submitLetterOrGiveUp = () => {
-    const params: GameMoveParams = {
+    if (!newLetter.trim().length) {
+      // TODO: Confirm dialog
+
+      playerMoveMutation.mutate({
+        gameId,
+        gameMove: 'give_up',
+      });
+    }
+
+    playerMoveMutation.mutate({
       gameId,
       gameMove: 'add_letter',
       letter: newLetter,
-    };
-    if (!newLetter.trim().length) {
-      // TODO: Confirm dialog
-      params.letter = undefined;
-      params.gameMove = 'give_up';
-    }
-
-    playerMoveMutation.mutate(params);
+    });
   };
 
   const callFinishedWord = () => {
     const params: GameMoveParams = {
       gameId,
-      gameMove: 'call_finished_word',
+      gameMove: 'claim_finished_word',
     };
     playerMoveMutation.mutate(params);
   };
 
   const callBluff = () => {
-    console.log('TODO: Not implemented');
+    playerMoveMutation.mutate({
+      gameId,
+      gameMove: 'call_bluff',
+    });
   };
 
   const onTimesUp = () => {
     setTimesUp(true);
     setTimeout(() => {
-      setNewLetter('');
       submitLetterOrGiveUp();
     }, 500);
   };
@@ -144,13 +148,17 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
 
             {letters.length > 1 && (
               <ActionContainer>
-                <Button size="lg" disabled={true} onClick={() => callBluff()}>
+                <Button
+                  size="lg"
+                  disabled={timesUp}
+                  onClick={() => callBluff()}
+                >
                   Call Bluff
                 </Button>
 
                 <Button
                   size="lg"
-                  disabled={false}
+                  disabled={timesUp}
                   onClick={() => callFinishedWord()}
                 >
                   Call Finished Word

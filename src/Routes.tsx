@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useMainStore } from './stores';
-import { Authentication, GamePlay, GameStats, Landing, Profile } from './pages';
+import { Authentication, GamePresentation, GameStats, Landing, Profile } from './pages';
 import { Layout } from './components';
 import { LazyExoticComponent, Suspense, lazy } from 'react';
 import { isDev } from './Constants';
@@ -32,7 +32,7 @@ export const Routes = observer(function Routes() {
         <Route element={<Layout />}>
           <Route element={<Landing />} path="/" />
           <Route element={<Profile />} path="/profiles/:profileId" />
-          <Route element={<GamePlay />} path="/games/:gameId" />
+          <Route element={<GamePresentation />} path="/games/:gameId" />
           <Route element={<GameStats />} path="/games/:gameId/stats" />
 
           {isDev && DevComponent && (

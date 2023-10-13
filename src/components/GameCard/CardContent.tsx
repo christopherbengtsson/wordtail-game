@@ -15,6 +15,8 @@ export function CardContent({ game, userId }: CardContentProps) {
       <Avatar lazyLoad src={getUniqueUserAvatar(game.currentTurnProfileId)} />
       {game.status === 'pending' ? (
         <PendingContent game={game} userId={userId} />
+      ) : game.playerStatus === 'out' ? (
+        <Body>{`You're out`}</Body>
       ) : (
         <Subtitle>{getCardSubtitle(game, userId)}</Subtitle>
       )}

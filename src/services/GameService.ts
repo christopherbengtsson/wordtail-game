@@ -70,31 +70,58 @@ export class GameService {
     });
   }
 
-  async addLetterOrGiveUp({
-    gameId,
-    letter,
-  }: {
-    gameId: string;
-    letter?: string;
-  }) {
-    return supabaseClientInstance.rpc('submit_letter_or_give_up_move', {
+  async giveUpMove(gameId: string) {
+    return supabaseClientInstance.rpc('give_up_move', {
       p_game_id: gameId,
       p_user_id: this.authStore.userId,
-      letter,
     });
   }
 
-  async validateCompletedWord({
+  async addLetterMove({ gameId, letter }: { gameId: string; letter: string }) {
+    return supabaseClientInstance.rpc('add_letter_move', {
+      p_game_id: gameId,
+      p_user_id: this.authStore.userId,
+      p_letter: letter,
+    });
+  }
+
+  async claimFinishedWordMove({
     gameId,
     apiUrl,
   }: {
     gameId: string;
     apiUrl: string;
   }) {
-    return supabaseClientInstance.rpc('validate_completed_word', {
+    return supabaseClientInstance
+      .rpc('claim_finished_word_move', {
+        p_game_id: gameId,
+        p_user_id: this.authStore.userId,
+        p_saol_base_url: apiUrl,
+      })
+      .single();
+  }
+
+  async callBluffMove(gameId: string) {
+    return supabaseClientInstance.rpc('call_bluff_move', {
       p_game_id: gameId,
       p_user_id: this.authStore.userId,
-      p_api_url: apiUrl,
-    }).single();
+    });
+  }
+
+  async revealBluffMove({
+    gameId,
+    word,
+    saolBaseUrl,
+  }: {
+    gameId: string;
+    word: string;
+    saolBaseUrl: string;
+  }) {
+    return supabaseClientInstance.rpc('reveal_bluff_move', {
+      p_game_id: gameId,
+      p_user_id: this.authStore.userId,
+      p_word: word,
+      p_saol_base_api_url: saolBaseUrl,
+    });
   }
 }

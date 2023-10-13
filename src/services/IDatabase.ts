@@ -279,6 +279,7 @@ export interface Database {
           letter: string | null;
           type: Database['public']['Enums']['move_type'];
           user_id: string | null;
+          word: string | null;
         };
         Insert: {
           created_at?: string | null;
@@ -287,6 +288,7 @@ export interface Database {
           letter?: string | null;
           type: Database['public']['Enums']['move_type'];
           user_id?: string | null;
+          word?: string | null;
         };
         Update: {
           created_at?: string | null;
@@ -295,6 +297,7 @@ export interface Database {
           letter?: string | null;
           type?: Database['public']['Enums']['move_type'];
           user_id?: string | null;
+          word?: string | null;
         };
         Relationships: [
           {
@@ -385,6 +388,31 @@ export interface Database {
         };
         Returns: Database['public']['Enums']['game_status'];
       };
+      add_letter_move: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+          p_letter: string;
+        };
+        Returns: undefined;
+      };
+      call_bluff_move: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+        };
+        Returns: undefined;
+      };
+      claim_finished_word_move: {
+        Args: {
+          p_game_id: string;
+          p_saol_base_url: string;
+          p_user_id: string;
+        };
+        Returns: {
+          isValidWord: boolean;
+        }[];
+      };
       create_new_game: {
         Args: {
           p_game_name: string;
@@ -439,6 +467,7 @@ export interface Database {
           status: Database['public']['Enums']['game_status'];
           createdAt: string;
           updatedAt: string;
+          playerStatus: Database['public']['Enums']['player_status'];
           creatorProfileId: string;
           creatorUsername: string;
           currentTurnProfileId: string;
@@ -447,6 +476,13 @@ export interface Database {
           winnerUsername: string;
           waitingForUsers: string[];
         }[];
+      };
+      give_up_move: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+        };
+        Returns: undefined;
       };
       internal_check_and_update_game_status_by_marks: {
         Args: {
@@ -473,6 +509,12 @@ export interface Database {
           next_id: string;
         }[];
       };
+      internal_get_round_letters: {
+        Args: {
+          p_game_round_id: string;
+        };
+        Returns: string;
+      };
       internal_increment_and_get_player_marks: {
         Args: {
           p_game_id: string;
@@ -495,7 +537,7 @@ export interface Database {
           p_game_round_id: string;
           p_user_id: string;
           p_move_type: Database['public']['Enums']['move_type'];
-          p_letter?: string;
+          p_value?: string;
         };
         Returns: undefined;
       };
@@ -517,30 +559,33 @@ export interface Database {
         };
         Returns: string;
       };
-      submit_letter_or_give_up_move: {
+      internal_validate_word_with_saol: {
+        Args: {
+          p_api_url: string;
+          word: string;
+        };
+        Returns: boolean;
+      };
+      reveal_bluff_move: {
         Args: {
           p_game_id: string;
           p_user_id: string;
-          letter?: string;
+          p_saol_base_api_url: string;
+          p_word: string;
         };
         Returns: undefined;
-      };
-      validate_completed_word: {
-        Args: {
-          p_game_id: string;
-          p_api_url: string;
-          p_user_id: string;
-        };
-        Returns: {
-          isValidWord: boolean;
-        }[];
       };
     };
     Enums: {
       friendship_status: 'ignored' | 'accepted' | 'pending';
       game_invitation_status: 'pending' | 'accepted' | 'declined';
       game_status: 'active' | 'finished' | 'abandoned' | 'pending';
-      move_type: 'add_letter' | 'call_bluff' | 'call_finished_word' | 'give_up';
+      move_type:
+        | 'add_letter'
+        | 'give_up'
+        | 'call_bluff'
+        | 'reveal_bluff'
+        | 'claim_finished_word';
       notification_type: 'game_invite' | 'friend_request' | 'game_move_turn';
       player_status: 'active' | 'out';
     };

@@ -1,7 +1,11 @@
+-- Extensions
+-- Enable the "http" extension
+create extension http with schema extensions;
+
 -- ENUM types
 CREATE TYPE game_status AS ENUM('active', 'finished', 'abandoned', 'pending');
 CREATE TYPE player_status AS ENUM('active', 'out');
-CREATE TYPE move_type AS ENUM('add_letter', 'call_bluff', 'call_finished_word', 'give_up');
+CREATE TYPE move_type AS ENUM('add_letter', 'give_up', 'call_bluff', 'reveal_bluff', 'claim_finished_word');
 CREATE TYPE friendship_status AS ENUM('ignored', 'accepted', 'pending');
 CREATE TYPE game_invitation_status AS ENUM('pending', 'accepted', 'declined');
 CREATE TYPE notification_type AS ENUM ('game_invite', 'friend_request', 'game_move_turn');
@@ -104,6 +108,7 @@ CREATE TABLE round_moves (
     user_id UUID REFERENCES profiles(id),
     type move_type NOT NULL,
     letter CHAR(1),
+    word TEXT,
     created_at timestamp with time zone null default (now() at time zone 'utc'::text)
 );
 
@@ -200,7 +205,3 @@ AS PERMISSIVE FOR ALL
 TO authenticated
 USING (true)
 WITH CHECK (true);
-
--- Extensions
--- Enable the "http" extension
-create extension http with schema extensions;
