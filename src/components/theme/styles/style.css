@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'MS Sans Serif';
-  src: url('../../assets/fonts/MSSansSerif/MSSansSerif.woff2') format('woff2');
+  src: url('../../assets/fonts/PixeloidSans/PixeloidSans.woff2') format('woff2');
 }
 @font-face {
   font-family: 'MS Sans Serif Bold';
-  src: url('../../assets/fonts/MSSansSerif/MSSansSerif_Bold.woff2')
+  src: url('../../assets/fonts/PixeloidSans/PixeloidSans-Bold.woff2')
     format('woff2');
 }
 
