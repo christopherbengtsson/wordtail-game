@@ -10,44 +10,19 @@ import {
   CenterContainer,
   PrimaryTitleWrapper,
   Subtitle,
+  useTranslation,
 } from '../../components';
 import { useDelayedVisible } from '../../hooks';
 import { TActiveGame } from '../../services';
 import { numberToWord } from '../../utils';
 import { RevealBluff } from './RevealBluff';
 
-const getReadyToPlayBody = (game: TActiveGame): string => {
-  const lastMove = game.previousMoveType;
-
-  // Starting player of a new round
-  if (!game.previousPlayerId) {
-    return "You're starting this round!";
-  }
-
-  if (game.previousMoveType === 'add_letter') {
-    const numberOfLetters = game.lettersSoFar.length;
-
-    return `${numberToWord(numberOfLetters)} letter${
-      numberOfLetters > 1 ? 's' : ''
-    } has placed so far`;
-  }
-
-  if (lastMove === 'call_bluff') {
-    return `${game.previousPlayerUsername} thinks you're bluffing! Prepare to come clean`;
-  }
-
-  // We should not reach this far. If latest game move is 'claim_finished_word' or reveal_bluff,
-  // new rounds should have been initiated.
-  throw new Error(
-    'Function `getReadyToPlayBody` could not predict text presentation',
-  );
-};
-
 export const GamePresentation = observer(function GamePresentation() {
   // unstable_usePrompt({
   //   when: true,
   //   message: 'TODO: unstable_useBlocker with custom dialog?',
   // });
+  const t = useTranslation();
   const { gameId } = useParams();
   const navigate = useNavigate();
   const { gameStore } = useMainStore();
@@ -72,10 +47,45 @@ export const GamePresentation = observer(function GamePresentation() {
     }
   }, [gameId, navigate]);
 
+  const getReadyToPlayBody = (game: TActiveGame): string => {
+    const lastMove = game.previousMoveType;
+
+    // Starting player of a new round
+    if (!game.previousPlayerId) {
+      return t('game.presentation.body.first.round');
+    }
+
+    if (game.previousMoveType === 'add_letter') {
+      const numberOfLetters = game.lettersSoFar.length;
+
+      if (numberOfLetters > 1) {
+        return t('game.presentation.body.letters', {
+          values: [numberToWord(numberOfLetters)],
+        });
+      }
+
+      return t('game.presentation.body.letter');
+    }
+
+    if (lastMove === 'call_bluff') {
+      return t('game.presentation.body.bluff', {
+        values: [game.previousPlayerUsername],
+      });
+    }
+
+    // We should not reach this far. If latest game move is 'claim_finished_word' or reveal_bluff,
+    // new rounds should have been initiated.
+    throw new Error(
+      'Function `getReadyToPlayBody` could not predict text presentation',
+    );
+  };
+
   if (shouldShowLoading) {
     return (
       <CenterContainer>
-        <PrimaryTitleWrapper>Loading game...</PrimaryTitleWrapper>
+        <PrimaryTitleWrapper>
+          {t('game.presentation.loading')}
+        </PrimaryTitleWrapper>
       </CenterContainer>
     );
   }
@@ -83,7 +93,9 @@ export const GamePresentation = observer(function GamePresentation() {
   if (isError) {
     <CenterContainer>
       <PrimaryTitleWrapper>Something went wrong</PrimaryTitleWrapper>
-      <Body color="error">{response?.error?.message ?? 'Unknown error'}</Body>
+      <Body color="error">
+        {response?.error?.message ?? t('general.error')}
+      </Body>
     </CenterContainer>;
   }
 
@@ -99,7 +111,9 @@ export const GamePresentation = observer(function GamePresentation() {
           size="lg"
           disabled={isLoading}
           onClick={() => setStart(true)}
-        >{`I'm ready, let's go`}</Button>
+        >
+          {t('game.presentation.cta')}
+        </Button>
       </CenterContainer>
     );
   }

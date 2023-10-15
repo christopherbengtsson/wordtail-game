@@ -1,6 +1,73 @@
 export const numberToWord = (number: number) => {
   switch (number) {
     case 1:
+      return 'Ett';
+    case 2:
+      return 'Två';
+    case 3:
+      return 'Tre';
+    case 4:
+      return 'Fyra';
+    case 5:
+      return 'Fem';
+    case 6:
+      return 'Sex';
+    case 7:
+      return 'Sju';
+    case 8:
+      return 'Åtta';
+    case 9:
+      return 'Nio';
+    case 10:
+      return 'Tio';
+    case 11:
+      return 'Elva';
+    case 12:
+      return 'Tolv';
+    case 13:
+      return 'Tretton';
+    case 14:
+      return 'Fjorton';
+    case 15:
+      return 'Femton';
+    case 16:
+      return 'Sexton';
+    case 17:
+      return 'Sjutton';
+    case 18:
+      return 'Arton';
+    case 19:
+      return 'Nitton';
+    case 20:
+      return 'Tjugo';
+    case 21:
+      return 'Tjugoett';
+    case 22:
+      return 'Tjugotvå';
+    case 23:
+      return 'Tjugotre';
+    case 24:
+      return 'Tjugofyra';
+    case 25:
+      return 'Tjugofem';
+    case 26:
+      return 'Tjugosex';
+    case 27:
+      return 'Tjugosju';
+    case 28:
+      return 'Tjugoåtta';
+    case 29:
+      return 'Tjugonio';
+    case 30:
+      return 'Trettio';
+    default:
+      return '';
+  }
+};
+
+export const numberToWordEng = (number: number) => {
+  switch (number) {
+    case 1:
       return 'One';
     case 2:
       return 'Two';

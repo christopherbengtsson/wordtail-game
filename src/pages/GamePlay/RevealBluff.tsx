@@ -4,6 +4,7 @@ import {
   CenterContainer,
   CountdownIndicator,
   Input,
+  useTranslation,
 } from '../../components';
 import { styled } from 'styled-components';
 import { useState } from 'react';
@@ -19,6 +20,7 @@ export const RevealBluff = observer(function RevealBluff({
   gameId: string;
   letters: string;
 }) {
+  const t = useTranslation();
   const { gameStore } = useMainStore();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -80,7 +82,7 @@ export const RevealBluff = observer(function RevealBluff({
           disabled={timesUp}
           onClick={() => submitWordOrGiveUp()}
         >
-          Send letter
+          {t('game.reveal.bluff.cta')}
         </Button>
       </StyledForm>
     </CenterContainer>

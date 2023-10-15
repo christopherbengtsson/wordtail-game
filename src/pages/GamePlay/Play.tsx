@@ -10,6 +10,7 @@ import {
   CenterContainer,
   CountdownIndicator,
   Input,
+  useTranslation,
 } from '../../components';
 import { TActiveGame, TMoveType } from '../../services';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
@@ -28,7 +29,7 @@ export interface PlayProps {
 
 export const Play = observer(function Play({ gameId, game }: PlayProps) {
   const navigate = useNavigate();
-
+  const t = useTranslation();
   const queryClient = useQueryClient();
   const { gameStore } = useMainStore();
 
@@ -143,7 +144,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
               disabled={timesUp}
               onClick={() => submitLetterOrGiveUp()}
             >
-              Send letter
+              {t('game.play.letter.cta')}
             </Button>
 
             {letters.length > 1 && (
@@ -153,7 +154,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
                   disabled={timesUp}
                   onClick={() => callBluff()}
                 >
-                  Call Bluff
+                  {t('game.play.call.bluff')}
                 </Button>
 
                 <Button
@@ -161,7 +162,7 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
                   disabled={timesUp}
                   onClick={() => callFinishedWord()}
                 >
-                  Call Finished Word
+                  {t('game.play.call.finished.word')}
                 </Button>
               </ActionContainer>
             )}
