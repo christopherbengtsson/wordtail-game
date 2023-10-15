@@ -1,6 +1,12 @@
-import { makeAutoObservable } from 'mobx';
-import { NotificationService } from '../services';
+import { makeAutoObservable, reaction } from 'mobx';
+import { NotificationService, supabaseClientInstance } from '../services';
+import { QueryClient } from '@tanstack/react-query';
+import { RealtimePostgresInsertPayload } from '@supabase/supabase-js';
+import { AuthStore } from '.';
+import { Database } from '../services/IDatabase';
 
+export type NotificationRow =
+  Database['public']['Tables']['notifications']['Row'];
 export class Notification {
   id: string;
   message: string;
@@ -16,38 +22,55 @@ export class Notification {
 }
 
 export class NotificationStore {
+  private queryClient: QueryClient;
+  private authStore: AuthStore;
+
   notifications: Notification[] = [];
   service: NotificationService;
 
-  constructor(service: NotificationService) {
+  constructor(service: NotificationService, authStore: AuthStore) {
     makeAutoObservable(this);
     this.service = service;
-  }
+    this.authStore = authStore;
 
-  async fetchNotifications() {
-    try {
-      const fetchedNotifications = await this.service.fetchNotifications();
-      this.notifications = fetchedNotifications.map(
-        (notif) =>
-          new Notification(
-            notif.id,
-            notif.message,
-            notif.seen,
-            new Date(notif.createdAt),
-          ),
-      );
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error);
-    }
-  }
+    this.queryClient = new QueryClient();
 
-  markAsSeen(notificationId: string) {
-    const notification = this.notifications.find(
-      (notif) => notif.id === notificationId,
+    reaction(
+      () => this.authStore.session?.user.id,
+      (userId) => {
+        if (userId) {
+          this.subscribe();
+        } else {
+          supabaseClientInstance.removeAllChannels();
+        }
+      },
     );
-    if (notification) {
-      notification.seen = true;
-      this.service.updateNotificationStatus(notificationId, true);
+  }
+  async subscribe() {
+    supabaseClientInstance
+      .channel('any')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: `user_id=eq.${this.authStore.session?.user.id}`,
+        },
+        this.handleNotifications,
+      )
+      .subscribe();
+  }
+
+  async handleNotifications(
+    payload: RealtimePostgresInsertPayload<NotificationRow>,
+  ) {
+    const queries = [];
+    switch (payload.new.type) {
+      case 'game_invite':
+        queries.push('games');
+        break;
     }
+    this.queryClient.invalidateQueries(queries);
   }
 }

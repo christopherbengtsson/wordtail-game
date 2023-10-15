@@ -22,7 +22,10 @@ export class MainStore {
     this.gameStore = new GameStore(this.authStore, gameService);
 
     const notificationService = new NotificationService();
-    this.notificationStore = new NotificationStore(notificationService);
+    this.notificationStore = new NotificationStore(
+      notificationService,
+      this.authStore,
+    );
 
     const databaseService = new DatabaseService(this.authStore);
     this.dbService = databaseService;
