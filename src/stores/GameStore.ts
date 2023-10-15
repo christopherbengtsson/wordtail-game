@@ -42,7 +42,7 @@ export class GameStore {
   }
 
   async createGame(params: {
-    name: string;
+    gameName: string;
     players: string[];
     maxNumberOfMarks: number;
   }) {

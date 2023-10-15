@@ -34,17 +34,17 @@ export class GameService {
   }
 
   async createGame({
-    name,
+    gameName,
     players,
     maxNumberOfMarks,
   }: {
-    name: string;
+    gameName: string;
     players: string[];
     maxNumberOfMarks: number;
   }) {
     return supabaseClientInstance.rpc('create_new_game', {
       p_creator_id: this.authStore.userId,
-      p_game_name: name,
+      p_game_name: gameName,
       p_player_ids: players,
       p_max_number_of_marks: maxNumberOfMarks,
     });

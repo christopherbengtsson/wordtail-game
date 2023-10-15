@@ -1,6 +1,7 @@
 export default {
   'nav.header.games': 'Spel',
   'nav.header.profil': 'Profil',
+  'auth.avatar.alt': 'Användaravatar',
   'auth.email.label': 'Email',
   'auth.email.invalid': 'Ogitlig email',
   'auth.password.label': 'Lösenord',
@@ -36,7 +37,19 @@ export default {
   'profile.id': 'ID',
   'profile.friends': 'Vänner',
   'profile.friends.list.empty': 'Inga tillagda vänner ännu',
-  '': '',
+  'modal.create.game.title': 'Skapa ett nytt spel',
+  'modal.create.game.name.label': 'Ge spelet ett namn...',
+  'modal.create.game.marks.label': 'Ange max antal prickar...',
+  'modal.create.game.players.label': 'Bjud in spelare...',
+  'modal.create.game.cta': 'Skapa spel',
+  'modal.create.game.friend.loading': 'Hämtar vänner...',
+  'modal.create.game.friends.empty': 'Inga vänner, prova att söka istället',
+  'modal.create.game.search.loading': 'Söker användare...',
+  'modal.create.game.search.empty':
+    'Ingen användare med användarnamn {{username}}',
+  'modal.create.game.min.marks': 'Minst 1 prick',
+  'modal.create.game.max.marks': 'Max 5 prickar',
+  'modal.create.game.min.players': 'Bjud in minst 1 spelare',
   'general.input.required': 'Obligatoriskt fält, får inte lämnas tomt',
   'general.error': 'Ett oväntat fel har inträffat',
 } as const;

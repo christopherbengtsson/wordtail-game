@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { useTranslation } from '..';
 
 export interface AvatarProps {
   src: string;
@@ -13,13 +14,15 @@ export function Avatar({
   width = 50,
   height = 50,
 }: AvatarProps) {
+  const t = useTranslation();
+
   return (
     <Wrapper width={width}>
       <StyledImg
         loading={lazyLoad ? 'lazy' : undefined}
         width={width}
         height={height}
-        alt="user avatar"
+        alt={t('auth.avatar.alt')}
         src={src}
       />
     </Wrapper>

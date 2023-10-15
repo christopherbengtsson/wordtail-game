@@ -7,6 +7,7 @@ import {
   FormInput,
   FormSelect,
   Body,
+  useTranslation,
 } from '../components';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
@@ -17,39 +18,24 @@ import { styled } from 'styled-components';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
 
 export interface CreateGameValues {
-  name: string;
+  gameName: string;
   players: string[];
   maxNumberOfMarks: number;
 }
 export interface CreateGameForm {
-  name: string;
+  gameName: string;
   players: { label: string; value: string }[];
   maxNumberOfMarks: number;
 }
 
-const ValidationSchema = Yup.object().shape({
-  name: Yup.string().required('Required field'),
-  maxNumberOfMarks: Yup.number()
-    .min(1, 'Min 1 mark')
-    .max(5, 'Max 5 marks')
-    .required('Required field'),
-  players: Yup.array()
-    .min(1, 'Pick at least 1 player')
-    .of(
-      Yup.object().shape({
-        value: Yup.string().required(),
-        label: Yup.string().required(),
-      }),
-    ),
-});
-
 const initialFormValues = {
-  name: '',
+  gameName: '',
   maxNumberOfMarks: NaN,
   players: [],
 };
 
 export const CreateGameModal = observer(function CreateGameModal() {
+  const t = useTranslation();
   const { modalStore, authStore, gameStore, dbService } = useMainStore();
   const queryClient = useQueryClient();
 
@@ -119,23 +105,39 @@ export const CreateGameModal = observer(function CreateGameModal() {
   };
   const getLabel = (input: string) => {
     if (friendResponse.status === 'loading') {
-      return 'Loading friends...';
+      return t('modal.create.game.friend.loading');
     }
 
     if (searchReponse.isInitialLoading) {
-      return 'Searching...';
+      return t('modal.create.game.search.loading');
     }
 
     if (debouncedSearchTerm.length && !searchReponse.data?.data?.length) {
-      return 'No player with username ' + input;
+      return t('modal.create.game.search.empty', { values: [input] });
     }
 
-    return 'No friends found, try searching';
+    return t('modal.create.game.friends.empty');
   };
+
+  const ValidationSchema = Yup.object().shape({
+    name: Yup.string().required(t('general.input.required')),
+    maxNumberOfMarks: Yup.number()
+      .min(1, t('modal.create.game.min.marks'))
+      .max(5, t('modal.create.game.max.marks'))
+      .required(t('general.input.required')),
+    players: Yup.array()
+      .min(1, t('modal.create.game.min.players'))
+      .of(
+        Yup.object().shape({
+          value: Yup.string().required(),
+          label: Yup.string().required(),
+        }),
+      ),
+  });
 
   return (
     <Modal
-      title="Create new game"
+      title={t('modal.create.game.title')}
       aria={{ labelledby: 'createGameModalTitle' }}
       open={modalStore.createGameModalVisible}
       onRequestClose={closeModal}
@@ -151,11 +153,11 @@ export const CreateGameModal = observer(function CreateGameModal() {
       >
         <StyledForm>
           <Field
-            id="name"
-            name="name"
+            id="gameName"
+            name="gameName"
             type="text"
-            placeholder="Game name..."
-            aria-label="Enter a game name"
+            placeholder={t('modal.create.game.name.label')}
+            aria-label={t('modal.create.game.name.label')}
             component={FormInput}
           />
 
@@ -163,8 +165,8 @@ export const CreateGameModal = observer(function CreateGameModal() {
             id="maxNumberOfMarks"
             name="maxNumberOfMarks"
             type="number"
-            placeholder="Max number of marks..."
-            aria-label="Enter max number of marks for a player"
+            placeholder={t('modal.create.game.marks.label')}
+            aria-label={t('modal.create.game.marks.label')}
             component={FormInput}
           />
 
@@ -173,17 +175,17 @@ export const CreateGameModal = observer(function CreateGameModal() {
             name="players"
             component={FormSelect}
             isMulti
-            placeholder="Players..."
+            placeholder={t('modal.create.game.players.label')}
             onInputChange={debouncedSelectResults}
             options={playerOptions}
-            aria-label="Select players"
+            aria-label={t('modal.create.game.players.label')}
             noOptionsMessage={({ inputValue }: { inputValue: string }) =>
               getLabel(inputValue)
             }
           />
 
           <Button type="submit" name="submit">
-            Create Game
+            {t('modal.create.game.cta')}
           </Button>
 
           {createGameNutation.isError && (
