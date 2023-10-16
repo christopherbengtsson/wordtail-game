@@ -27,7 +27,7 @@ DECLARE
     second_player UUID;
 BEGIN
     -- Remove notification
-    internal_delete_notification(p_user_id, p_game_id);
+    PERFORM internal_delete_notification(p_user_id, p_game_id);
     -- Update the invitation status for the user
     UPDATE game_players 
     SET invitation_status = 'accepted' 

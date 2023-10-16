@@ -49,9 +49,9 @@ BEGIN
     WHERE game_id = new_game_id AND user_id = p_creator_id;
 
     -- Add notification for each player, referencing the new game ID
-    FOREACH player_id IN ARRAY p_player_ids
-    LOOP        
-        internal_add_notification(player_id, 'game_invite', new_game_id);
+    FOR i IN 1..array_length(p_player_ids, 1)
+    LOOP
+        PERFORM internal_add_notification(p_player_ids[i], 'game_invite', new_game_id);
     END LOOP;
 
     -- Return the ID of the newly created game.
