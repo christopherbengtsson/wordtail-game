@@ -1,42 +1,21 @@
 import { makeAutoObservable, reaction } from 'mobx';
-import { NotificationService, supabaseClientInstance } from '../services';
-import { QueryClient } from '@tanstack/react-query';
+import { supabaseClientInstance } from '../services';
 import { RealtimePostgresInsertPayload } from '@supabase/supabase-js';
-import { AuthStore } from '.';
+import { MainStore } from '.';
 import { Database } from '../services/IDatabase';
 
 export type NotificationRow =
   Database['public']['Tables']['notifications']['Row'];
-export class Notification {
-  id: string;
-  message: string;
-  seen: boolean;
-  createdAt: Date;
-
-  constructor(id: string, message: string, seen: boolean, createdAt: Date) {
-    this.id = id;
-    this.message = message;
-    this.seen = seen;
-    this.createdAt = createdAt;
-  }
-}
 
 export class NotificationStore {
-  private queryClient: QueryClient;
-  private authStore: AuthStore;
+  mainStore: MainStore;
 
-  notifications: Notification[] = [];
-  service: NotificationService;
-
-  constructor(service: NotificationService, authStore: AuthStore) {
+  constructor(mainStore: MainStore) {
     makeAutoObservable(this);
-    this.service = service;
-    this.authStore = authStore;
-
-    this.queryClient = new QueryClient();
+    this.mainStore = mainStore;
 
     reaction(
-      () => this.authStore.session?.user.id,
+      () => this.mainStore.authStore.session?.user.id,
       (userId) => {
         if (userId) {
           this.subscribe();
@@ -57,9 +36,10 @@ export class NotificationStore {
           event: 'INSERT',
           schema: 'public',
           table: 'notifications',
-          filter: `user_id=eq.${this.authStore.session?.user.id}`,
+          filter: `user_id=eq.${this.mainStore.authStore.userId}`,
         },
-        this.handleNotifications,
+        (payload: RealtimePostgresInsertPayload<NotificationRow>) =>
+          this.handleNotifications(payload),
       )
       .subscribe();
   }
@@ -76,6 +56,6 @@ export class NotificationStore {
         break;
     }
 
-    this.queryClient.invalidateQueries(queries);
+    this.mainStore.queryClient?.invalidateQueries(queries);
   }
 }

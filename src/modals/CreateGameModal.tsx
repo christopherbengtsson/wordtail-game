@@ -120,7 +120,7 @@ export const CreateGameModal = observer(function CreateGameModal() {
   };
 
   const ValidationSchema = Yup.object().shape({
-    name: Yup.string().required(t('general.input.required')),
+    gameName: Yup.string().required(t('general.input.required')),
     maxNumberOfMarks: Yup.number()
       .min(1, t('modal.create.game.min.marks'))
       .max(5, t('modal.create.game.max.marks'))

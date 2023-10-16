@@ -140,8 +140,10 @@ CREATE TABLE notifications (
     updated_at timestamp with time zone null default (now() at time zone 'utc'::text) -- The time the notification was updated
 );
 
--- Row Level Security for other tables
+-- Replications
+alter publication supabase_realtime add table notifications;
 
+-- Row Level Security for other tables
 -- games
 ALTER TABLE games ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable CRUD access for all authenticated users" ON games

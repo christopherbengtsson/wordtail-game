@@ -9,13 +9,12 @@ import {
 } from './components';
 import { isDev } from './Constants';
 
-const store = new MainStore();
+const client = new QueryClient();
+const store = new MainStore(client);
 
 if (isDev) {
   window.store = store;
 }
-
-const client = new QueryClient();
 
 export function Application() {
   return (
