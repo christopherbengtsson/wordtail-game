@@ -43,5 +43,9 @@ BEGIN
 
     -- Record the add-letter move
     PERFORM internal_record_round_move(current_round_id, p_user_id, 'add_letter', p_letter);
+    -- Remove notification for current user
+    PERFORM internal_delete_notification(p_user_id, current_round_id);
+    -- Add notification for next user
+    PERFORM internal_add_notification(next_player_id, 'game_move_turn', current_round_id);
 END;
 $$ LANGUAGE plpgsql;

@@ -26,6 +26,8 @@ DECLARE
     starting_player UUID;
     second_player UUID;
 BEGIN
+    -- Remove notification
+    internal_delete_notification(p_user_id, p_game_id);
     -- Update the invitation status for the user
     UPDATE game_players 
     SET invitation_status = 'accepted' 
@@ -104,6 +106,9 @@ DECLARE
     round_id UUID;
     game_creator_id UUID;
 BEGIN
+    -- Remove notification
+    PERFORM internal_delete_notification(p_user_id, p_game_id);
+
     -- Remove the user's association from the game
     DELETE FROM game_players 
     WHERE game_id = p_game_id AND user_id = p_user_id;
@@ -148,6 +153,9 @@ BEGIN
     UPDATE games 
     SET status = game_state, updated_at = (now() at time zone 'utc'::text)
     WHERE id = p_game_id;
+
+    -- Add notification for starting player
+    PERFORM internal_add_notification(game_creator_id, 'game_move_turn', round_id);
 
     RETURN game_state;
 END;

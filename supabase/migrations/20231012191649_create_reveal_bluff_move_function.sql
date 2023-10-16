@@ -80,6 +80,9 @@ BEGIN
 
     -- Common operations based on affected player:
 
+    -- Remove notification
+    PERFORM internal_delete_notification(p_user_id, current_round_id);
+
     -- Record the reveal_bluff move
     PERFORM internal_record_round_move(current_round_id, p_user_id, 'reveal_bluff', p_word);
     -- Update the marks for the affected player
@@ -96,6 +99,8 @@ BEGIN
         new_round_id := internal_start_new_round(p_game_id, p_user_id, current_round_id, current_round_number, starting_player_id);
         -- Set player order for the new round
         PERFORM internal_set_new_player_round_order(new_round_id, starting_player_id, current_round_id);
+        -- Add notification for next player
+        PERFORM internal_add_notification(starting_player_id, 'game_move_turn', new_round_id);
     END IF;
 END;
 $$ LANGUAGE plpgsql;

@@ -36,5 +36,8 @@ BEGIN
     WHERE id = current_round_id;    
     -- Record the call-bluff move
     PERFORM internal_record_round_move(current_round_id, p_user_id, 'call_bluff');
+    -- Remove and add new notification
+    PERFORM internal_delete_notification(p_user_id, current_round_id);
+    PERFORM internal_add_notification(prev_player_id, 'game_move_turn', current_round_id);
 END;
 $$ LANGUAGE plpgsql;

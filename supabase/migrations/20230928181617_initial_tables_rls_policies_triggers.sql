@@ -134,10 +134,10 @@ CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),                                    -- Unique ID for the notification
     user_id UUID REFERENCES profiles(id),                                             -- The user this notification is for
     type notification_type NOT NULL,                                                  -- The type of notification (e.g., game invite, friend request, etc.)
-    reference_id UUID,                                                                -- Generic ID that can refer to any other table, depending on the notification type (e.g., game ID, friend request ID)
+    reference_id UUID NOT NULL,                                                                -- Generic ID that can refer to any other table, depending on the notification type (e.g., game ID, friend request ID)
     message TEXT,                                                                     -- A brief description or message for the notification
-    seen BOOLEAN DEFAULT FALSE,                                                       -- Whether the notification has been seen/read by the user
-    created_at timestamp with time zone null default (now() at time zone 'utc'::text) -- The time the notification was created
+    created_at timestamp with time zone null default (now() at time zone 'utc'::text), -- The time the notification was created
+    updated_at timestamp with time zone null default (now() at time zone 'utc'::text) -- The time the notification was updated
 );
 
 -- Row Level Security for other tables

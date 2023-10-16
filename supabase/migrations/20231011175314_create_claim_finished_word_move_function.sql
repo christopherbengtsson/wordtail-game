@@ -66,6 +66,8 @@ BEGIN
     
     -- Common operations based on affected player:
 
+    -- Remove notification for current user
+    PERFORM internal_delete_notification(p_user_id, current_round_id);
     -- Update the marks for the affected player
     current_max_marks := internal_increment_and_get_player_marks(p_game_id, affected_player_id);
     -- Check the game's status and make necessary updates
@@ -80,6 +82,8 @@ BEGIN
         new_round_id := internal_start_new_round(p_game_id, p_user_id, current_round_id, current_round_number, starting_player_id);
         -- Set player order for the new round
         PERFORM internal_set_new_player_round_order(new_round_id, starting_player_id, current_round_id);
+         -- Add notification for next user
+        PERFORM internal_add_notification(starting_player_id, 'game_move_turn', new_round_id);
     END IF;
 RETURN NEXT;
 END;

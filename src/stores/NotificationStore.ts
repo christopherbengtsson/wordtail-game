@@ -46,7 +46,9 @@ export class NotificationStore {
       },
     );
   }
-  async subscribe() {
+
+  // Subscribing to inserts on notifications for logged in user
+  private async subscribe() {
     supabaseClientInstance
       .channel('any')
       .on(
@@ -62,15 +64,18 @@ export class NotificationStore {
       .subscribe();
   }
 
-  async handleNotifications(
+  private async handleNotifications(
     payload: RealtimePostgresInsertPayload<NotificationRow>,
   ) {
     const queries = [];
+
     switch (payload.new.type) {
       case 'game_invite':
+      case 'game_move_turn':
         queries.push('games');
         break;
     }
+
     this.queryClient.invalidateQueries(queries);
   }
 }
