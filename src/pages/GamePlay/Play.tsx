@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { observer } from 'mobx-react';
-import { useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { GameMoveParams, useMainStore } from '../../stores';
 import { AnimateLetters } from './AnimateLetters';
@@ -15,6 +14,7 @@ import {
 import { TActiveGame, TMoveType } from '../../services';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
 import { quadraticDuration } from '../../utils';
+import { useNavigateParams } from '../../hooks';
 
 const ANIMATION_DURATION = 1000;
 export interface SubmitLetterParams {
@@ -28,7 +28,7 @@ export interface PlayProps {
 }
 
 export const Play = observer(function Play({ gameId, game }: PlayProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigateParams();
   const t = useTranslation();
   const queryClient = useQueryClient();
   const { gameStore } = useMainStore();
@@ -57,7 +57,13 @@ export const Play = observer(function Play({ gameId, game }: PlayProps) {
         }
       }
       // TODO: Navigate to some stats or optimistically update like if too many marks
-      navigate('stats', { replace: true });
+      navigate(
+        'stats',
+        {
+          statsType: 'move',
+        },
+        { replace: true },
+      );
     },
   });
 

@@ -1,6 +1,5 @@
 import { useMainStore } from '../../stores';
 import { observer } from 'mobx-react';
-import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { TGameListItem } from '../../services';
 import {
@@ -14,11 +13,12 @@ import {
 import { styled } from 'styled-components';
 import { TabBody } from 'react95';
 import { useMemo, useState } from 'react';
+import { useNavigateParams } from '../../hooks';
 
 export const Landing = observer(function Landing() {
   const t = useTranslation();
   const { gameStore, authStore, modalStore } = useMainStore();
-  const navigate = useNavigate();
+  const navigate = useNavigateParams();
   const queryClient = useQueryClient();
 
   const [activeTab, setActiveTab] = useState(0);
@@ -60,10 +60,18 @@ export const Landing = observer(function Landing() {
     const isUsersTurn = game.currentTurnProfileId === authStore.userId;
 
     if (isUsersTurn && gameIsActive) {
-      return navigate(`games/${game.id}`);
+      return navigate(`games/${game.id}`, {});
     }
 
-    navigate(`games/${game.id}/stats`);
+    const statsType = gameIsActive
+      ? 'active'
+      : game.status === 'pending'
+      ? 'pending'
+      : 'finished';
+
+    navigate(`games/${game.id}/stats`, {
+      statsType,
+    });
   };
 
   const handleTabChange = (

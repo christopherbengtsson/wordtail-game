@@ -124,4 +124,13 @@ export class GameService {
       p_saol_base_api_url: saolBaseUrl,
     });
   }
+
+  async getGameStatsById(gameId: string) {
+    return supabaseClientInstance
+      .rpc('get_game_stats_by_id', {
+        p_game_id: gameId,
+        p_user_id: this.authStore.userId,
+      })
+      .single();
+  }
 }

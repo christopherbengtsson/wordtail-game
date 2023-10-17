@@ -43,7 +43,7 @@ export default {
   'modal.create.game.players.label': 'Bjud in spelare...',
   'modal.create.game.cta': 'Skapa spel',
   'modal.create.game.friend.loading': 'Hämtar vänner...',
-  'modal.create.game.friends.empty': 'Inga vänner, prova att söka istället',
+  'modal.create.game.friends.empty': 'Tom vänlista, prova sök',
   'modal.create.game.search.loading': 'Söker användare...',
   'modal.create.game.search.empty':
     'Ingen användare med användarnamn {{username}}',

@@ -214,27 +214,27 @@ export interface Database {
           created_at: string | null;
           id: string;
           message: string | null;
-          reference_id: string | null;
-          seen: boolean | null;
+          reference_id: string;
           type: Database['public']['Enums']['notification_type'];
+          updated_at: string | null;
           user_id: string | null;
         };
         Insert: {
           created_at?: string | null;
           id?: string;
           message?: string | null;
-          reference_id?: string | null;
-          seen?: boolean | null;
+          reference_id: string;
           type: Database['public']['Enums']['notification_type'];
+          updated_at?: string | null;
           user_id?: string | null;
         };
         Update: {
           created_at?: string | null;
           id?: string;
           message?: string | null;
-          reference_id?: string | null;
-          seen?: boolean | null;
+          reference_id?: string;
           type?: Database['public']['Enums']['notification_type'];
+          updated_at?: string | null;
           user_id?: string | null;
         };
         Relationships: [
@@ -447,6 +447,21 @@ export interface Database {
           currentRoundNumber: number;
         }[];
       };
+      get_game_stats_by_id: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+        };
+        Returns: {
+          currentPlayerId: string;
+          currentPlayerUsername: string;
+          moveType: Database['public']['Enums']['move_type'];
+          letter: string;
+          word: string;
+          standings: Json[];
+          rounds: Json[];
+        }[];
+      };
       get_user_friends: {
         Args: {
           p_user_id: string;
@@ -484,6 +499,15 @@ export interface Database {
         };
         Returns: undefined;
       };
+      internal_add_notification: {
+        Args: {
+          p_user_id: string;
+          p_type: Database['public']['Enums']['notification_type'];
+          p_reference_id: string;
+          p_message?: string;
+        };
+        Returns: undefined;
+      };
       internal_check_and_update_game_status_by_marks: {
         Args: {
           p_game_id: string;
@@ -491,6 +515,13 @@ export interface Database {
           p_max_marks: number;
         };
         Returns: boolean;
+      };
+      internal_delete_notification: {
+        Args: {
+          p_user_id: string;
+          p_reference_id: string;
+        };
+        Returns: undefined;
       };
       internal_finish_current_round: {
         Args: {

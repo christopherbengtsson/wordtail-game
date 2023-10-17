@@ -89,6 +89,11 @@ export class GameStore {
     }
   }
 
+  /** Stats queries */
+  async getGameStatsById(gameId: string) {
+    return this.gameService.getGameStatsById(gameId);
+  }
+
   sortActiveGames(games: TGameList) {
     return games
       .filter((game) => game.status === 'active')

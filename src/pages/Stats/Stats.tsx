@@ -1,66 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
-import { observer } from 'mobx-react';
-import { useParams } from 'react-router-dom';
-import { useMainStore } from '../../stores';
-import {
-  Body,
-  CenterContainer,
-  PrimaryTitleWrapper,
-  Subtitle,
-} from '../../components';
-import { useDelayedVisible } from '../../hooks';
-import { formatDistanceToNow } from 'date-fns';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { ActiveGameStats } from './ActiveGameStats';
+import { FinishedGameStats } from './FinishedGameStats';
+import { MoveMadeStats } from './MoveMadeStats';
 
-/**
- * TODOS:
- * Handle Active games
- *  User clicks from Landing page
- *  User gets redirected from Game by making a move
- * Handle Pending games
- * Handle Finished games
- */
-export const Stats = observer(function Stats() {
+export interface CommonStatsProps {
+  gameId: string;
+}
+
+export function Stats() {
   const { gameId } = useParams();
-  const { gameStore } = useMainStore();
+  const [searchParams] = useSearchParams();
 
-  const {
-    data: gameResponse,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['game', gameId],
-    queryFn: () => gameStore.getActiveGameById(gameId),
-  });
+  const statsType = searchParams.get('statsType');
 
-  const shouldShowLoading = useDelayedVisible(isLoading, true);
+  // TODO: Get some query param to determine component?
 
-  if (shouldShowLoading) {
-    return (
-      <CenterContainer>
-        <PrimaryTitleWrapper>Loading game stats...</PrimaryTitleWrapper>
-      </CenterContainer>
-    );
+  if (!gameId) {
+    throw new Error('No gameId provided to stats');
   }
 
-  if (isError) {
-    <CenterContainer>
-      <PrimaryTitleWrapper>Something went wrong</PrimaryTitleWrapper>
-      <Body color="error">
-        {gameResponse?.error?.message ?? 'Unknown error'}
-      </Body>
-    </CenterContainer>;
+  if (statsType === 'active') {
+    return <ActiveGameStats gameId={gameId} />;
+  }
+  if (statsType === 'move') {
+    return <MoveMadeStats gameId={gameId} />;
   }
 
-  if (gameResponse?.data) {
-    const game = gameResponse.data;
-    return (
-      <CenterContainer>
-        <PrimaryTitleWrapper>{game.name}</PrimaryTitleWrapper>
-        <Subtitle>{game.status}</Subtitle>
-        <Body>
-          Last updated {formatDistanceToNow(new Date(game.updatedAt))}
-        </Body>
-      </CenterContainer>
-    );
-  }
-});
+  // Defaulting to finished stats
+  return <FinishedGameStats gameId={gameId} />;
+}
