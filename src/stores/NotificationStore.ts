@@ -49,10 +49,17 @@ export class NotificationStore {
   ) {
     const queries = [];
 
+    // TODO: query keys as constants
     switch (payload.new.type) {
       case 'game_invite':
+        queries.push('games');
+        break;
+
       case 'game_move_turn':
         queries.push('games');
+        queries.push('game');
+        queries.push('gameStats');
+        queries.push('gameBaseStats');
         break;
     }
 
