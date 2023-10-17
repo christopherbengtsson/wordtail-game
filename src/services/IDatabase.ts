@@ -447,6 +447,17 @@ export interface Database {
           currentRoundNumber: number;
         }[];
       };
+      get_base_game_stats_by_id: {
+        Args: {
+          p_game_id: string;
+          p_user_id: string;
+        };
+        Returns: {
+          currentPlayerId: string;
+          currentPlayerUsername: string;
+          standings: Json[];
+        }[];
+      };
       get_game_stats_by_id: {
         Args: {
           p_game_id: string;

@@ -125,6 +125,14 @@ export class GameService {
     });
   }
 
+  async getBaseGameStatsById(gameId: string) {
+    return supabaseClientInstance
+      .rpc('get_base_game_stats_by_id', {
+        p_game_id: gameId,
+        p_user_id: this.authStore.userId,
+      })
+      .single();
+  }
   async getGameStatsById(gameId: string) {
     return supabaseClientInstance
       .rpc('get_game_stats_by_id', {

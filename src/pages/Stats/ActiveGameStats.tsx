@@ -6,8 +6,8 @@ export function ActiveGameStats({ gameId }: CommonStatsProps) {
   const { gameStore } = useMainStore();
 
   const { data, error } = useQuery({
-    queryKey: ['gameStats', gameId],
-    queryFn: () => gameStore.getGameStatsById(gameId),
+    queryKey: ['baseGameStats', gameId],
+    queryFn: () => gameStore.getBaseGameStatsById(gameId),
   });
   const game = data?.data;
   console.log(game);

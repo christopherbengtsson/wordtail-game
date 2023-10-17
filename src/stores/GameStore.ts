@@ -90,6 +90,9 @@ export class GameStore {
   }
 
   /** Stats queries */
+  async getBaseGameStatsById(gameId: string) {
+    return this.gameService.getBaseGameStatsById(gameId);
+  }
   async getGameStatsById(gameId: string) {
     return this.gameService.getGameStatsById(gameId);
   }
