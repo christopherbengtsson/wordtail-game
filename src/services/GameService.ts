@@ -10,6 +10,7 @@ export type TActiveGame =
   Database['public']['Functions']['get_active_game_by_id']['Returns'][0];
 
 export type TGameStatus = Database['public']['Enums']['game_status'];
+export type TPlayerStatus = Database['public']['Enums']['player_status'];
 
 export type TMoveType = Database['public']['Enums']['move_type'];
 export class GameService {

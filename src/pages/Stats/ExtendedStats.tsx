@@ -18,7 +18,7 @@ export interface Standing {
   playerId: string;
   username: string;
 }
-export function MoveMadeStats({ gameId }: CommonStatsProps) {
+export function ExtendedStats({ gameId }: CommonStatsProps) {
   const { gameStore } = useMainStore();
 
   const {
@@ -66,7 +66,7 @@ export function MoveMadeStats({ gameId }: CommonStatsProps) {
         </Body>
 
         <FlexStartContainer>
-          <BodyBold>Ställning:</BodyBold>
+          <BodyBold>Prickar:</BodyBold>
           <List
             items={
               game.standings as {

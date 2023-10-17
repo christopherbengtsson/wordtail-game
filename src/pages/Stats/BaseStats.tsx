@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { CommonStatsProps } from '.';
 import { useMainStore } from '../../stores';
 
-export function ActiveGameStats({ gameId }: CommonStatsProps) {
+export function BaseStats({ gameId }: CommonStatsProps) {
   const { gameStore } = useMainStore();
 
   const { data, error } = useQuery({

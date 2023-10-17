@@ -1,7 +1,7 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import { ActiveGameStats } from './ActiveGameStats';
-import { FinishedGameStats } from './FinishedGameStats';
-import { MoveMadeStats } from './MoveMadeStats';
+import { BaseStats } from './BaseStats';
+import { ExtendedStats } from './ExtendedStats';
+import { TPlayerStatus } from '../../services';
 
 export interface CommonStatsProps {
   gameId: string;
@@ -11,21 +11,19 @@ export function Stats() {
   const { gameId } = useParams();
   const [searchParams] = useSearchParams();
 
-  const statsType = searchParams.get('statsType');
-
-  // TODO: Get some query param to determine component?
+  const statsType = searchParams.get('statsType'); // TODO: typing
+  const playerStatus = searchParams.get('playerStatus') as TPlayerStatus | null;
 
   if (!gameId) {
     throw new Error('No gameId provided to stats');
   }
 
-  if (statsType === 'active') {
-    return <ActiveGameStats gameId={gameId} />;
-  }
-  if (statsType === 'move') {
-    return <MoveMadeStats gameId={gameId} />;
+  if (
+    statsType === 'move' ||
+    (statsType === 'active' && playerStatus === 'out')
+  ) {
+    return <ExtendedStats gameId={gameId} />;
   }
 
-  // Defaulting to finished stats
-  return <FinishedGameStats gameId={gameId} />;
+  return <BaseStats gameId={gameId} />;
 }
