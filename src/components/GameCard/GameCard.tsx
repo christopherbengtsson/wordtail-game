@@ -16,8 +16,8 @@ import { CardFooter } from './CardFooter';
 export interface GameListItemProps {
   game: TGameListItem;
   userId: string;
-  handleOnClick: (game: TGameListItem) => void;
-  handleGameInvitation: UseMutationResult<
+  handleOnClick?: (game: TGameListItem) => void;
+  handleGameInvitation?: UseMutationResult<
     PostgrestSingleResponse<TGameStatus>,
     unknown,
     {
@@ -37,12 +37,20 @@ export function GameListItem({
   const onKeyDown = (event: React.KeyboardEvent, game: TGameListItem) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
-      handleOnClick(game);
+      onClick(game);
     }
   };
 
   const handleInvite = (accept: boolean) => {
-    handleGameInvitation.mutate({ accept, gameId: game.id });
+    if (handleGameInvitation) {
+      handleGameInvitation.mutate({ accept, gameId: game.id });
+    }
+  };
+
+  const onClick = (game: TGameListItem) => {
+    if (handleOnClick) {
+      handleOnClick(game);
+    }
   };
 
   return (
@@ -52,8 +60,8 @@ export function GameListItem({
         status={game.status}
         role="button"
         tabIndex={0}
-        // TODO: Should be clickable on pending but not on invite
-        onClick={() => game.status !== 'pending' && handleOnClick(game)}
+        onClick={() => game.status !== 'pending' && onClick(game)}
+        clickable={!!handleOnClick}
         onKeyDown={(ev) => onKeyDown(ev, game)}
       >
         <SecondaryTitle>{getCardTitle(game, userId)}</SecondaryTitle>
@@ -71,7 +79,9 @@ export function GameListItem({
   );
 }
 
-const StyledListDiv = styled.div<CommonThemeProps & { status: TGameStatus }>`
+const StyledListDiv = styled.div<
+  CommonThemeProps & { status: TGameStatus; clickable: boolean }
+>`
   position: relative;
   width: 100%;
   display: flex;
@@ -103,6 +113,9 @@ const StyledListDiv = styled.div<CommonThemeProps & { status: TGameStatus }>`
 
   ${createBorderStyles({ style: 'button' })}
 
+  ${(p) =>
+    p.clickable === true &&
+    `
   &:after {
     content: '';
     position: absolute;
@@ -114,24 +127,20 @@ const StyledListDiv = styled.div<CommonThemeProps & { status: TGameStatus }>`
   }
 
   &:active {
-    ${(p) =>
-      p.status !== 'pending' && createBorderStyles({ style: 'buttonPressed' })}
+    ${p.status !== 'pending' && createBorderStyles({ style: 'buttonPressed' })}
   }
 
   &:focus {
     &:after {
-      ${(p) => p.status !== 'pending' && focusOutline}
+      ${p.status !== 'pending' && focusOutline}
     }
   }
 
   &:hover {
-    ${(p) =>
-      p.status !== 'pending' &&
-      `
-      cursor: pointer;
-
-      > * {
-        text-decoration: underline;
-      }
+    cursor: pointer;
+    > * {
+      text-decoration: underline;
+    }
+  }
     `}
 `;

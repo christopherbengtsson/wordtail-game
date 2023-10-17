@@ -71,6 +71,7 @@ export const Landing = observer(function Landing() {
 
     navigate(`games/${game.id}/stats`, {
       statsType,
+      playerStatus: game.playerStatus,
     });
   };
 
@@ -112,7 +113,6 @@ export const Landing = observer(function Landing() {
                   key={game.id}
                   game={game}
                   userId={authStore.userId}
-                  handleGameInvitation={handleInvitationMutation}
                   handleOnClick={handleGoToGame}
                 />
               )}
@@ -128,7 +128,6 @@ export const Landing = observer(function Landing() {
                   game={game}
                   userId={authStore.userId}
                   handleGameInvitation={handleInvitationMutation}
-                  handleOnClick={handleGoToGame}
                 />
               )}
             />
@@ -142,8 +141,7 @@ export const Landing = observer(function Landing() {
                   key={game.id}
                   game={game}
                   userId={authStore.userId}
-                  handleGameInvitation={handleInvitationMutation}
-                  handleOnClick={handleGoToGame}
+                  // TODO: handleOnClick={handleGoToGame}
                 />
               )}
             />
