@@ -9,6 +9,7 @@ export const CenterContainer = styled.div<{
   justify-content: center;
   align-items: center;
   gap: ${(p) => p.theme.spacing.m};
+  text-align: center;
 
   ${(p) => !p.skipFlexGrow && 'flex: 1 1 auto;'}
   ${(p) => p.fullWidth && 'width: 100%;'}

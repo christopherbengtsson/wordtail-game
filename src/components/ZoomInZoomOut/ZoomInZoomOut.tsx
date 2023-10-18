@@ -1,4 +1,5 @@
-import { styled } from 'styled-components';
+import { Monitor } from 'react95';
+import { styled, useTheme } from 'styled-components';
 
 export function ZoomInZoomOut({
   text,
@@ -9,16 +10,34 @@ export function ZoomInZoomOut({
   iterationCount: number;
   duration?: number;
 }) {
+  const theme = useTheme();
   return (
-    <StyledH1
-      $iteration={iterationCount}
-      $duration={duration}
-      className="zoomInZoomOut"
-    >
-      {text}
-    </StyledH1>
+    <Monitor backgroundStyles={{ background: theme.desktopBackground }}>
+      <Absolute>
+        <StyledH1
+          $iteration={iterationCount}
+          $duration={duration}
+          className="zoomInZoomOut"
+        >
+          {text}
+        </StyledH1>
+      </Absolute>
+    </Monitor>
   );
 }
+
+const Absolute = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`;
 
 const StyledH1 = styled.h1<{
   $iteration: number;
@@ -38,7 +57,8 @@ const StyledH1 = styled.h1<{
   }
 
   opacity: 0;
-  font-size: 10rem;
+  font-size: 8rem;
+  color: ${(p) => p.theme.materialTextInvert};
 
   animation-name: zoomInZoomOut;
   animation-duration: ${(p) => p.$duration ?? 1000}ms;

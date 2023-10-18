@@ -49,10 +49,6 @@ export const Profile = observer(function Profile() {
       </FlexContainer>
 
       <Body>
-        <BodyBold>{t('profile.id')}: </BodyBold>
-        {authStore.user?.id}
-      </Body>
-      <Body>
         <BodyBold>{t('profile.email')}: </BodyBold>
         {authStore.user?.email}
       </Body>
