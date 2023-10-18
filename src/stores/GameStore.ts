@@ -131,4 +131,10 @@ export class GameStore {
       waitingForUsers?.includes(this.authStore.userId),
     ).length;
   }
+  getNumberOfWaitingTurns(activeGames: TGameList) {
+    return activeGames.filter(
+      ({ currentTurnProfileId }) =>
+        currentTurnProfileId === this.authStore.userId,
+    ).length;
+  }
 }

@@ -29,19 +29,29 @@ export const Landing = observer(function Landing() {
     staleTime: 10 * 60 * 1000, // 10 minutes in milliseconds
   });
 
-  const { activeGames, pendingGames, finishedGames, numberOfInvites } =
-    useMemo(() => {
-      const activeGames = gameStore.sortActiveGames(gamesResponse?.data ?? []);
-      const pendingGames = gameStore.sortPendingGames(
-        gamesResponse?.data ?? [],
-      );
-      const finishedGames = gameStore.sortFinishedGames(
-        gamesResponse?.data ?? [],
-      );
-      const numberOfInvites = gameStore.getNumberOfInvites(pendingGames);
+  const {
+    activeGames,
+    pendingGames,
+    finishedGames,
+    numberOfInvites,
+    numberOfWaitingTurns,
+  } = useMemo(() => {
+    const activeGames = gameStore.sortActiveGames(gamesResponse?.data ?? []);
+    const pendingGames = gameStore.sortPendingGames(gamesResponse?.data ?? []);
+    const finishedGames = gameStore.sortFinishedGames(
+      gamesResponse?.data ?? [],
+    );
+    const numberOfInvites = gameStore.getNumberOfInvites(pendingGames);
+    const numberOfWaitingTurns = gameStore.getNumberOfWaitingTurns(activeGames);
 
-      return { activeGames, pendingGames, finishedGames, numberOfInvites };
-    }, [gameStore, gamesResponse?.data]);
+    return {
+      activeGames,
+      pendingGames,
+      finishedGames,
+      numberOfInvites,
+      numberOfWaitingTurns,
+    };
+  }, [gameStore, gamesResponse?.data]);
 
   const handleInvitationMutation = useMutation({
     mutationFn: (params: { gameId: string; accept: boolean }) =>
@@ -97,7 +107,7 @@ export const Landing = observer(function Landing() {
           activeTab={activeTab}
           handleTabChange={handleTabChange}
           tabs={[
-            { label: t('games.tabs.active') },
+            { label: t('games.tabs.active'), badge: numberOfWaitingTurns },
             { label: t('games.tabs.pending'), badge: numberOfInvites },
             { label: t('games.tabs.finished') },
           ]}
