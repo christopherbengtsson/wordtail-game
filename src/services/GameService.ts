@@ -9,6 +9,11 @@ export type TGameListItem = TGameList[0];
 export type TActiveGame =
   Database['public']['Functions']['get_active_game_by_id']['Returns'][0];
 
+export type GameExtendedStats =
+  Database['public']['Functions']['get_game_stats_by_id']['Returns'][0];
+export type GameBaseStats =
+  Database['public']['Functions']['get_base_game_stats_by_id']['Returns'][0];
+
 export type TGameStatus = Database['public']['Enums']['game_status'];
 export type TPlayerStatus = Database['public']['Enums']['player_status'];
 

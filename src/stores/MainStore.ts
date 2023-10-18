@@ -1,6 +1,11 @@
 import { makeAutoObservable } from 'mobx';
 import { AuthStore, GameStore, ModalStore, NotificationStore } from '.';
-import { AuthService, DatabaseService, GameService } from '../services';
+import {
+  AuthService,
+  DatabaseService,
+  GameService,
+  NotificationService,
+} from '../services';
 import { QueryClient } from '@tanstack/react-query';
 
 export class MainStore {
@@ -20,7 +25,8 @@ export class MainStore {
     const gameService = new GameService(this.authStore);
     this.gameStore = new GameStore(this.authStore, gameService);
 
-    this.notificationStore = new NotificationStore(this);
+    const notificationService = new NotificationService();
+    this.notificationStore = new NotificationStore(this, notificationService);
 
     const databaseService = new DatabaseService(this.authStore);
     this.dbService = databaseService;

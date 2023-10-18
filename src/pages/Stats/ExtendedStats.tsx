@@ -1,23 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMainStore } from '../../stores';
 import {
-  Avatar,
   Body,
   BodyBold,
   CenterContainer,
-  List,
   PrimaryTitleWrapper,
 } from '../../components';
 import { useDelayedVisible } from '../../hooks';
-import { styled } from 'styled-components';
-import { getUniqueUserAvatar } from '../../utils';
-import { CommonStatsProps } from '.';
 
-export interface Standing {
-  marks: number;
-  playerId: string;
-  username: string;
-}
+import { CommonStatsProps } from '.';
+import { Standings } from './Standings';
+
 export function ExtendedStats({ gameId }: CommonStatsProps) {
   const { gameStore } = useMainStore();
 
@@ -35,7 +28,7 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
   if (shouldShowLoading) {
     return (
       <CenterContainer>
-        <PrimaryTitleWrapper>Loading game stats...</PrimaryTitleWrapper>
+        <PrimaryTitleWrapper>Hämtar speldata...</PrimaryTitleWrapper>
       </CenterContainer>
     );
   }
@@ -51,7 +44,7 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
 
   if (gameResponse?.data) {
     const game = gameResponse.data;
-    console.log(game);
+
     return (
       <CenterContainer>
         <PrimaryTitleWrapper>
@@ -62,41 +55,11 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
 
         <Body>
           Nu är det
-          <BodyBold>{` ${game.currentPlayerUsername}`}</BodyBold>s tur
+          <BodyBold>{` ${game.currentPlayerUsername}`}</BodyBold>{`'s tur`}
         </Body>
 
-        <FlexStartContainer>
-          <BodyBold>Prickar:</BodyBold>
-          <List
-            items={
-              game.standings as {
-                marks: number;
-                playerId: string;
-                username: string;
-              }[]
-            }
-            render={(standing: Standing) => (
-              <StyledListItem key={standing.playerId}>
-                <Avatar lazyLoad src={getUniqueUserAvatar(standing.playerId)} />
-                <Body>
-                  {standing.username}: <BodyBold>{standing.marks}</BodyBold>
-                </Body>
-              </StyledListItem>
-            )}
-          />
-        </FlexStartContainer>
+        <Standings game={game} />
       </CenterContainer>
     );
   }
 }
-
-const StyledListItem = styled.li`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: ${(p) => p.theme.spacing.s};
-`;
-
-const FlexStartContainer = styled.div`
-  gap: ${(p) => p.theme.spacing.s};
-`;

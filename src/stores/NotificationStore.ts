@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction } from 'mobx';
-import { supabaseClientInstance } from '../services';
+import { NotificationService, supabaseClientInstance } from '../services';
 import { RealtimePostgresInsertPayload } from '@supabase/supabase-js';
 import { MainStore } from '.';
 import { Database } from '../services/IDatabase';
@@ -8,11 +8,13 @@ export type NotificationRow =
   Database['public']['Tables']['notifications']['Row'];
 
 export class NotificationStore {
-  mainStore: MainStore;
+  private mainStore: MainStore;
+  private notificationService: NotificationService;
 
-  constructor(mainStore: MainStore) {
+  constructor(mainStore: MainStore, notificationService: NotificationService) {
     makeAutoObservable(this);
     this.mainStore = mainStore;
+    this.notificationService = notificationService;
 
     reaction(
       () => this.mainStore.authStore.session?.user.id,
@@ -64,5 +66,10 @@ export class NotificationStore {
     }
 
     this.mainStore.queryClient?.invalidateQueries(queries);
+    this.removeNotification(payload.new.id);
+  }
+
+  private async removeNotification(id: string) {
+    this.notificationService.removeNotification(id);
   }
 }

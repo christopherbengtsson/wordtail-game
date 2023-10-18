@@ -1,14 +1,17 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import { makeAutoObservable, observable, runInAction } from 'mobx';
 import { Session, SignUpWithPasswordCredentials } from '@supabase/supabase-js';
 import { AuthService } from '../services';
 
 export class AuthStore {
-  private authService: AuthService;
-
   session: Session | null = null;
 
+  private authService: AuthService;
+
   constructor(authService: AuthService) {
-    makeAutoObservable(this);
+    makeAutoObservable(this, {
+      session: observable,
+    });
+
     this.authService = authService;
 
     this.init();
