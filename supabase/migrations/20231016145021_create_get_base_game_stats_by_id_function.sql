@@ -25,36 +25,36 @@ RETURNS TABLE(
   "currentPlayerUsername" TEXT,
   "standings" JSONB[]
 ) AS $$
--- Fetch the current player details for the given game
-WITH game_details AS (
+BEGIN
+    RETURN QUERY 
+    WITH game_details AS (
+        SELECT
+            gr.current_player_id AS "currentPlayerId",
+            p.username AS "currentPlayerUsername"
+        FROM game_rounds gr
+        JOIN profiles p ON gr.current_player_id = p.id
+        WHERE gr.game_id = p_game_id
+        LIMIT 1
+    ),
+    player_standings AS (
+        SELECT
+            ARRAY_AGG(
+                jsonb_build_object(
+                    'playerId', gp.user_id,
+                    'username', p.username,
+                    'marks', gp.marks
+                )
+            ) AS "standingsData"
+        FROM game_players gp
+        JOIN profiles p ON gp.user_id = p.id
+        WHERE gp.game_id = p_game_id
+    )
     SELECT
-        gr.current_player_id AS "currentPlayerId",
-        p.username AS "currentPlayerUsername"
-    FROM game_rounds gr
-    JOIN profiles p ON gr.current_player_id = p.id
-    WHERE gr.game_id = p_game_id
-    LIMIT 1
-),
--- Fetch the standings of all players in the game
-player_standings AS (
-    SELECT
-        ARRAY_AGG(
-            jsonb_build_object(
-                'playerId', gp.user_id,
-                'username', p.username,
-                'marks', gp.marks
-            )
-        ) AS "standingsData"
-    FROM game_players gp
-    JOIN profiles p ON gp.user_id = p.id
-    WHERE gp.game_id = p_game_id
-)
--- Return the current player details and game standings
-SELECT
-    gd."currentPlayerId",
-    gd."currentPlayerUsername",
-    ps."standingsData" AS "standings"
-FROM game_details gd 
-CROSS JOIN player_standings ps;
+        gd."currentPlayerId",
+        gd."currentPlayerUsername",
+        ps."standingsData" AS "standings"
+    FROM game_details gd 
+    CROSS JOIN player_standings ps;
+END;
 $$
-LANGUAGE SQL;
+LANGUAGE plpgsql;
