@@ -10,8 +10,8 @@ export function CardFooter({ game }: CardFooterProps) {
   return (
     <Caption>
       {game.status === 'pending'
-        ? `skapad för ${distanceToNow(game.createdAt)} sen`
-        : `uppdaterad för ${distanceToNow(game.updatedAt)} sen`}
+        ? `skapad för ${distanceToNow(game.createdAt)}`
+        : `uppdaterad för ${distanceToNow(game.updatedAt)}`}
     </Caption>
   );
 }

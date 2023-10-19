@@ -3,6 +3,7 @@ import { useMainStore } from '../../stores';
 import {
   Body,
   BodyBold,
+  Caption,
   CenterContainer,
   PrimaryTitleWrapper,
   Tree,
@@ -86,8 +87,17 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
               expandable: true,
               items: moves.map((move) => ({
                 id: move.playerId,
-                label:
-                  move.playerId === authStore.userId ? 'Du' : move.username,
+                label: (
+                  <>
+                    {move.playerId === authStore.userId ? 'Du' : move.username},
+                    <Caption>
+                      {' '}
+                      {distanceToNow(move.createdAt, {
+                        addSuffix: true,
+                      })}
+                    </Caption>
+                  </>
+                ),
                 expandable: true,
                 items: [
                   {
@@ -104,7 +114,7 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
                         : move.moveType === 'reveal_bluff'
                         ? 'Svarade bluff'
                         : ''
-                    }, ${distanceToNow(move.createdAt)} sen`,
+                    }`,
                   },
                 ],
               })),

@@ -91,7 +91,8 @@ const StyledListItem = styled.li<{ expandable?: boolean; expanded?: boolean }>`
   padding: 0 ${(p) => p.theme.spacing.xs};
 
   &::before {
-    content: '→'; // default right arrow
+    content: '+'; // default right arrow
+    font-size: 1.5rem;
     position: absolute;
     left: -20px;
     top: 50%;
@@ -139,7 +140,7 @@ const StyledListItem = styled.li<{ expandable?: boolean; expanded?: boolean }>`
     css`
       list-style-type: none;
       &::before {
-        content: '↓'; // down arrow when expanded
+        content: '-'; // down arrow when expanded
       }
     `}
 `;
