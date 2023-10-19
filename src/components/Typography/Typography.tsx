@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { IColors } from '../theme/theme';
 import { fontFamilies } from '../theme/designTokens';
 import { useAutoFocus } from '../../hooks';

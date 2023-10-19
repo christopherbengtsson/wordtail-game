@@ -17,3 +17,4 @@ export * from './List';
 export * from './Tabs';
 export * from './CountdownIndicator';
 export * from './Language';
+export * from './Tree';

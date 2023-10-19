@@ -1,6 +1,6 @@
-import { formatDistanceToNow } from 'date-fns';
 import { Caption } from '..';
 import type { TGameListItem } from '../../services';
+import { distanceToNow } from '../../utils';
 
 export interface CardFooterProps {
   game: TGameListItem;
@@ -10,8 +10,8 @@ export function CardFooter({ game }: CardFooterProps) {
   return (
     <Caption>
       {game.status === 'pending'
-        ? `created ${formatDistanceToNow(new Date(game.createdAt))} ago`
-        : `updated ${formatDistanceToNow(new Date(game.updatedAt))} ago`}
+        ? `skapad för ${distanceToNow(game.createdAt)} sen`
+        : `uppdaterad för ${distanceToNow(game.updatedAt)} sen`}
     </Caption>
   );
 }

@@ -61,10 +61,12 @@ BEGIN
         JOIN round_moves rm ON gr.id = rm.game_round_id
         WHERE gr.game_id = p_game_id
     ),
-    round_moves AS (
-        SELECT
-            COALESCE(NULLIF(ARRAY_AGG("moveData" ORDER BY "moveData"->>'createdAt' DESC), ARRAY[NULL::jsonb]), ARRAY[]::jsonb[]) AS "roundsData"
+    aggregated_moves AS (
+        SELECT 
+            "roundNumber",
+            ARRAY_AGG("moveData" ORDER BY "moveData"->>'createdAt' DESC) AS moves
         FROM moves
+        GROUP BY "roundNumber"
     )
     SELECT
         bi."currentPlayerId",
@@ -73,10 +75,13 @@ BEGIN
         md.letter,
         md.word,
         bi."standings",
-        COALESCE(rm."roundsData", ARRAY[]::jsonb[]) AS "rounds"
+        ARRAY(
+            SELECT jsonb_build_object('roundNumber', am."roundNumber", 'moves', am.moves)
+            FROM aggregated_moves am
+            ORDER BY am."roundNumber" DESC
+        ) AS "rounds"
     FROM base_info bi
-    CROSS JOIN move_details md
-    CROSS JOIN round_moves rm;
+    CROSS JOIN move_details md;
 END;
 $$
 LANGUAGE plpgsql;

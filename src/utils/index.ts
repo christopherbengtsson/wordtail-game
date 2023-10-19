@@ -3,3 +3,4 @@ export * from './storage';
 export * from './multiSort';
 export * from './getTimeToPlayDuration';
 export * from './numberToWord';
+export * from './dateFnsLocale';

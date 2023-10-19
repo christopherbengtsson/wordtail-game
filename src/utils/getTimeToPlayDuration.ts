@@ -9,7 +9,7 @@
 // 3 letters: 6747ms
 // ... and so on
 export function logarithmicDuration(numLetters: number) {
-  const baseTime = 3000; // 3 seconds for 0 letters
+  const baseTime = 10000; // 3 seconds for 0 letters
   const logMultiplier = 2000; // Multiplier to control the rate of increase
 
   return baseTime + logMultiplier * Math.log(numLetters + 1);
