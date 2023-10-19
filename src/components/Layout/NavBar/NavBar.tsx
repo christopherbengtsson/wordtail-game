@@ -1,16 +1,29 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from '../..';
 import { useMainStore } from '../../../stores';
-import { AppBar, Button, Toolbar } from 'react95';
-import { styled } from 'styled-components';
+import { AppBar, Button, Frame, Toolbar } from 'react95';
+import { styled, useTheme } from 'styled-components';
 import { isDev } from '../../../Constants';
 import { AgentIcon, JoystickIcon } from '../../assets/img';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 export function NavBar() {
   const t = useTranslation();
   const { authStore } = useMainStore();
   const { pathname } = useLocation();
+  const theme = useTheme();
+  const [time, setTime] = useState(
+    `${new Date().getHours()}:${new Date().getMinutes()}`,
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const date = new Date();
+      setTime(`${date.getHours()}:${date.getMinutes()}`);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const routes = [
     {
@@ -52,6 +65,16 @@ export function NavBar() {
             </Anchor>
           )}
         </StyledNav>
+
+        <Frame
+          variant="field"
+          style={{
+            background: theme.material,
+            padding: `${theme.spacing.xs} ${theme.spacing.s}`,
+          }}
+        >
+          {time}
+        </Frame>
       </StyledToolbar>
     </StyledAppBar>
   );
@@ -70,6 +93,7 @@ const StyledAppBar = styled(AppBar)`
 const StyledToolbar = styled(Toolbar)`
   height: ${(p) => p.theme.sizes.buttonHeight};
   padding: 0 ${(p) => p.theme.spacing.m};
+  justify-content: space-between;
 `;
 
 const StyledNav = styled.nav`

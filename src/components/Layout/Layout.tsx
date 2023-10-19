@@ -54,7 +54,8 @@ export function Layout() {
             </MainContentContainer>
           </ScrollView>
         </MainWrapper>
-        {<NavBar />}
+
+        <NavBar />
       </RelativeContainer>
     </>
   );
