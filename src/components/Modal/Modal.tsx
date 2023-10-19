@@ -110,18 +110,6 @@ const ModalHader = styled(WindowHeader)`
   height: ${(p) => p.theme.spacing.xxl};
 `;
 
-const VisuallyHidden = styled.span`
-  &:not(:focus):not(:active) {
-    clip: rect(0 0 0 0);
-    clip-path: inset(100%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-  }
-`;
-
 const CloseIcon = styled.span`
   display: inline-block;
   width: ${(p) => p.theme.spacing.s};
