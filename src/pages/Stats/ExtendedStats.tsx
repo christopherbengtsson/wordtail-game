@@ -112,7 +112,7 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
                         : move.moveType === 'give_up'
                         ? 'Gav upp'
                         : move.moveType === 'reveal_bluff'
-                        ? 'Svarade bluff'
+                        ? 'Besvarade bluff'
                         : ''
                     }`,
                   },

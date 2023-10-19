@@ -10,8 +10,8 @@ import { styled } from 'styled-components';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GameMoveParams, useMainStore } from '../../stores';
-import { useNavigate } from 'react-router-dom';
 import { quadraticDuration } from '../../utils';
+import { useNavigateParams } from '../../hooks';
 
 export const RevealBluff = observer(function RevealBluff({
   gameId,
@@ -22,7 +22,7 @@ export const RevealBluff = observer(function RevealBluff({
 }) {
   const t = useTranslation();
   const { gameStore } = useMainStore();
-  const navigate = useNavigate();
+  const navigate = useNavigateParams();
   const queryClient = useQueryClient();
   const [word, setWord] = useState('');
   const [timesUp, setTimesUp] = useState(false);
@@ -32,7 +32,13 @@ export const RevealBluff = observer(function RevealBluff({
     onSuccess: () => {
       queryClient.invalidateQueries(['game', gameId]);
       queryClient.invalidateQueries(['games']);
-      navigate('stats', { replace: true });
+      navigate(
+        'stats',
+        {
+          statsType: 'move',
+        },
+        { replace: true },
+      );
     },
   });
 
