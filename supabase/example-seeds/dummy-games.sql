@@ -83,17 +83,6 @@ INSERT INTO notifications (user_id, type, reference_id, message, seen)
 VALUES
     (user2_id, 'game_invite', game3_id, 'You have been invited to join Game3', FALSE);
 
--- Game Stats 
--- For User1
-INSERT INTO user_stats (user_id, games_played, games_won, avg_place)
-VALUES 
-    (user1_id, 2, 0, 1.5); -- User1 has played 2 games, won 0, and has an average place of 1.5
-
--- For User2
-INSERT INTO user_stats (user_id, games_played, games_won, avg_place)
-VALUES 
-    (user2_id, 2, 1, 1); -- User2 has played 2 games, won 1, and has an average place of 1
-
 -- round_player_order
 -- Order for Round 1 in Game1
 INSERT INTO round_player_order (round_id, player_id, order_of_play)

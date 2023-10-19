@@ -120,15 +120,6 @@ CREATE TABLE friendships (
     PRIMARY KEY (requester_id, receiver_id)
 );
 
--- User Stats Table
-CREATE TABLE user_stats (
-    user_id UUID PRIMARY KEY REFERENCES profiles(id),
-    games_played INTEGER DEFAULT 0,
-    games_won INTEGER DEFAULT 0,
-    avg_place DECIMAL(3, 2),
-    most_started_letter CHAR(1)
-);
-
 -- Notifications Table
 CREATE TABLE notifications (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),                                    -- Unique ID for the notification
@@ -187,14 +178,6 @@ WITH CHECK (true);
 -- friendships
 ALTER TABLE friendships ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable CRUD access for all authenticated users" ON friendships
-AS PERMISSIVE FOR ALL
-TO authenticated
-USING (true)
-WITH CHECK (true);
-
--- user_stats
-ALTER TABLE user_stats ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Enable CRUD access for all authenticated users" ON user_stats
 AS PERMISSIVE FOR ALL
 TO authenticated
 USING (true)

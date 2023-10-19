@@ -345,37 +345,6 @@ export interface Database {
           },
         ];
       };
-      user_stats: {
-        Row: {
-          avg_place: number | null;
-          games_played: number | null;
-          games_won: number | null;
-          most_started_letter: string | null;
-          user_id: string;
-        };
-        Insert: {
-          avg_place?: number | null;
-          games_played?: number | null;
-          games_won?: number | null;
-          most_started_letter?: string | null;
-          user_id: string;
-        };
-        Update: {
-          avg_place?: number | null;
-          games_played?: number | null;
-          games_won?: number | null;
-          most_started_letter?: string | null;
-          user_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'user_stats_user_id_fkey';
-            columns: ['user_id'];
-            referencedRelation: 'profiles';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
     };
     Views: {
       [_ in never]: never;
