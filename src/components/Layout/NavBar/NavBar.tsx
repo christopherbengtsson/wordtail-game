@@ -21,9 +21,7 @@ export function NavBar() {
   const { authStore } = useMainStore();
   const { pathname } = useLocation();
   const theme = useTheme();
-  const [time, setTime] = useState(
-    `${new Date().getHours()}:${new Date().getMinutes()}`,
-  );
+  const [time, setTime] = useState(getTime());
 
   useEffect(() => {
     const interval = setInterval(() => {
