@@ -1,5 +1,5 @@
 export default {
-  'nav.header.games': 'Spel',
+  'nav.header.games': 'Hem',
   'nav.header.profil': 'Profil',
   'auth.avatar.alt': 'Användaravatar',
   'auth.email.label': 'Email',

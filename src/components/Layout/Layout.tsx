@@ -1,57 +1,62 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { useMainStore } from '../../stores';
 import { AppModals } from '../../modals';
-import { HEADER_HEIGHT, ScrollView, useTranslation } from '..';
+import { BodyBold, HEADER_HEIGHT, ScrollView } from '..';
 import { MainContentContainer, MainWrapper } from './LayoutStyles';
 import { createBorderStyles } from '../shared/common';
 import { CommonThemeProps } from 'react95/dist/types';
-import { isDev } from '../../Constants';
+import { Button } from 'react95';
+import { NavBar } from './NavBar';
 
 export function Layout() {
-  const t = useTranslation();
-  const { authStore } = useMainStore();
-  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
-    <RelativeContainer>
-      <StyledHeader
-        style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1,
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <StyledNav>
-          <Anchor isActive={pathname === '/'} to="/">
-            {t('nav.header.games')}
-          </Anchor>
-          <Anchor
-            isActive={pathname.includes('/profiles')}
-            to={`/profiles/:${authStore.userId}`}
-          >
-            {t('nav.header.profil')}
-          </Anchor>
-          {isDev && (
-            <Anchor isActive={pathname === '/dev'} to="/dev">
-              Dev
-            </Anchor>
-          )}
-        </StyledNav>
-      </StyledHeader>
+    <>
+      <RelativeContainer>
+        <StyledHeader>
+          <div>
+            <BodyBold color="materialTextInvert">wordtail.exe</BodyBold>
+          </div>
+          <div>
+            <Button
+              size="sm"
+              aria-label="Gå bakåt"
+              square
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              <span role="img" aria-label="arrow-back">
+                ←
+              </span>
+            </Button>
+            <Button
+              size="sm"
+              aria-label="Gå framåt"
+              square
+              onClick={() => {
+                navigate(1);
+              }}
+            >
+              <span role="img" aria-label="arrow-forward">
+                →
+              </span>
+            </Button>
+          </div>
+        </StyledHeader>
 
-      <MainWrapper>
-        <ScrollView>
-          <MainContentContainer>
-            <Outlet />
-            <AppModals />
-          </MainContentContainer>
-        </ScrollView>
-      </MainWrapper>
-    </RelativeContainer>
+        <MainWrapper>
+          <ScrollView>
+            <MainContentContainer>
+              <Outlet />
+              <AppModals />
+            </MainContentContainer>
+          </ScrollView>
+        </MainWrapper>
+        {<NavBar />}
+      </RelativeContainer>
+    </>
   );
 }
 
@@ -67,21 +72,14 @@ const RelativeContainer = styled.div<CommonThemeProps>`
 `;
 
 const StyledHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: ${(p) => p.theme.headerBackground};
   padding: ${(p) => p.theme.spacing.m};
+  margin: ${(p) => p.theme.spacing.xs};
   height: ${HEADER_HEIGHT}px;
-  position: relative;
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-`;
-
-const StyledNav = styled.nav`
-  display: flex;
-  gap: ${(p) => p.theme.spacing.s};
-`;
-
-const Anchor = styled(Link)<{ isActive: boolean }>`
-  color: ${(p) => p.theme.headerText};
-  text-decoration: ${(p) => (p.isActive ? 'underline' : 'none')};
 `;

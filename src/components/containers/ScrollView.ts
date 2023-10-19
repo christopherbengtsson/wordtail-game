@@ -10,7 +10,7 @@ export const ScrollView = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
 
-  // ${(p) => p.theme.screens.large} {
+  ${(p) => p.theme.screens.large} {
     ${StyledScrollBar}
-  // }
+  }
 `;
