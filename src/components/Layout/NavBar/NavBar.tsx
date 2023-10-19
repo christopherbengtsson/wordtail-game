@@ -7,6 +7,15 @@ import { isDev } from '../../../Constants';
 import { AgentIcon, JoystickIcon } from '../../assets/img';
 import { Fragment, useEffect, useState } from 'react';
 
+const getTime = () => {
+  const date = new Date();
+  let h: string | number = date.getHours();
+  let min: string | number = date.getMinutes();
+  if (h < 10) h = `0${h}`;
+  if (min < 10) min = `0${min}`;
+
+  return `${h}:${min}`;
+};
 export function NavBar() {
   const t = useTranslation();
   const { authStore } = useMainStore();
@@ -18,8 +27,7 @@ export function NavBar() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const date = new Date();
-      setTime(`${date.getHours()}:${date.getMinutes()}`);
+      setTime(getTime());
     }, 1000);
 
     return () => clearInterval(interval);
