@@ -23,6 +23,7 @@ CREATE OR REPLACE FUNCTION get_base_game_stats_by_id(p_game_id UUID, p_user_id U
 RETURNS TABLE(
   "currentPlayerId" UUID,
   "currentPlayerUsername" TEXT,
+  "gameStatus" game_status,
   "standings" JSONB[]
 ) AS $$
 BEGIN
@@ -30,9 +31,11 @@ BEGIN
     WITH game_details AS (
         SELECT
             gr.current_player_id AS "currentPlayerId",
-            p.username AS "currentPlayerUsername"
+            COALESCE(p.username, 'N/A') AS "currentPlayerUsername",
+            g.status AS "gameStatus"
         FROM game_rounds gr
-        JOIN profiles p ON gr.current_player_id = p.id
+        LEFT JOIN profiles p ON gr.current_player_id = p.id
+        JOIN games g ON gr.game_id = g.id
         WHERE gr.game_id = p_game_id
         LIMIT 1
     ),
@@ -52,6 +55,7 @@ BEGIN
     SELECT
         gd."currentPlayerId",
         gd."currentPlayerUsername",
+        gd."gameStatus",
         ps."standingsData" AS "standings"
     FROM game_details gd 
     CROSS JOIN player_standings ps;

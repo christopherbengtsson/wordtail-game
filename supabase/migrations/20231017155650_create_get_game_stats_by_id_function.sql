@@ -24,6 +24,7 @@ CREATE OR REPLACE FUNCTION get_game_stats_by_id(p_game_id UUID, p_user_id UUID)
 RETURNS TABLE(
   "currentPlayerId" UUID,
   "currentPlayerUsername" TEXT,
+  "gameStatus" game_status,
   "moveType" move_type,
   "letter" CHAR(1),
   "word" TEXT,
@@ -71,6 +72,7 @@ BEGIN
     SELECT
         bi."currentPlayerId",
         bi."currentPlayerUsername",
+        bi."gameStatus",
         md."moveType",
         md.letter,
         md.word,
