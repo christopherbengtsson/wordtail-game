@@ -1,7 +1,7 @@
 import { useMainStore } from '../../stores';
 import { observer } from 'mobx-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { TGameListItem } from '../../services';
+import type { GameListItem } from '../../services';
 import {
   Button,
   GameListItem,
@@ -65,7 +65,7 @@ export const Landing = observer(function Landing() {
     modalStore.setCreateGameModalVisible(true);
   };
 
-  const handleGoToGame = (game: TGameListItem) => {
+  const handleGoToGame = (game: GameListItem) => {
     const gameIsActive = game.status === 'active';
     const isUsersTurn = game.currentTurnProfileId === authStore.userId;
 
@@ -118,7 +118,7 @@ export const Landing = observer(function Landing() {
             <List
               emptyText={t('games.list.active.empty')}
               items={activeGames}
-              render={(game: TGameListItem) => (
+              render={(game: GameListItem) => (
                 <GameListItem
                   key={game.id}
                   game={game}
@@ -132,7 +132,7 @@ export const Landing = observer(function Landing() {
             <List
               emptyText={t('games.list.pending.empty')}
               items={pendingGames}
-              render={(game: TGameListItem) => (
+              render={(game: GameListItem) => (
                 <GameListItem
                   key={game.id}
                   game={game}
@@ -146,7 +146,7 @@ export const Landing = observer(function Landing() {
             <List
               emptyText={t('games.list.finished.empty')}
               items={finishedGames}
-              render={(game: TGameListItem) => (
+              render={(game: GameListItem) => (
                 <GameListItem
                   key={game.id}
                   game={game}

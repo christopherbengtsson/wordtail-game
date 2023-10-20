@@ -1,10 +1,10 @@
 import { styled } from 'styled-components';
 import { Button, Subtitle } from '..';
 import { getCardSubtitle } from './utils';
-import { TGameListItem } from '../../services';
+import { GameListItem } from '../../services';
 
 export interface InviteActionsProps {
-  game: TGameListItem;
+  game: GameListItem;
   userId: string;
   handleInvite: (accept: boolean) => void;
 }

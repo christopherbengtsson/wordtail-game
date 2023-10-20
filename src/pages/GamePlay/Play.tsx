@@ -11,7 +11,7 @@ import {
   Input,
   useTranslation,
 } from '../../components';
-import { TActiveGame, TMoveType } from '../../services';
+import { ActiveGame, MoveType } from '../../services';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
 import { quadraticDuration } from '../../utils';
 import { useNavigateParams } from '../../hooks';
@@ -19,12 +19,12 @@ import { useNavigateParams } from '../../hooks';
 const ANIMATION_DURATION = 1000;
 export interface SubmitLetterParams {
   gameId: string;
-  gameMove: TMoveType;
+  gameMove: MoveType;
   letter?: string;
 }
 export interface PlayProps {
   gameId: string;
-  game: TActiveGame;
+  game: ActiveGame;
 }
 
 export const Play = observer(function Play({ gameId, game }: PlayProps) {

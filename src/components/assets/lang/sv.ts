@@ -25,9 +25,10 @@ export default {
   'game.presentation.cta': 'Jag är redo',
   'game.presentation.body.first.round': 'Du är först ut!',
   'game.presentation.body.letter': 'En bokstav är lagd än så länge',
-  'game.presentation.body.letters': '{{numberOfLetters}} bokstäver har lagts hittills',
+  'game.presentation.body.letters':
+    '{{numberOfLetters}} bokstäver har lagts hittills',
   'game.presentation.body.bluff':
-    '{{previousPlayerUsername}} misstänker att du bluffar! Nu är det upp till dig',
+    '{{previousPlayerUsername}} misstänker att du bluffar!',
   'game.presentation.loading': 'Laddar spelet...',
   'game.play.letter.cta': 'Lägg bokstav',
   'game.play.call.bluff': 'Syna',

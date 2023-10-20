@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import type { TGameListItem, TGameStatus } from '../../services';
+import type { GameListItem, GameStatus } from '../../services';
 import { UseMutationResult } from '@tanstack/react-query';
 import { PostgrestSingleResponse } from '@supabase/supabase-js';
 import { SecondaryTitle } from '..';
@@ -14,11 +14,11 @@ import { InviteActions } from './InviteActions';
 import { CardFooter } from './CardFooter';
 
 export interface GameListItemProps {
-  game: TGameListItem;
+  game: GameListItem;
   userId: string;
-  handleOnClick?: (game: TGameListItem) => void;
+  handleOnClick?: (game: GameListItem) => void;
   handleGameInvitation?: UseMutationResult<
-    PostgrestSingleResponse<TGameStatus>,
+    PostgrestSingleResponse<GameStatus>,
     unknown,
     {
       gameId: string;
@@ -34,7 +34,7 @@ export function GameListItem({
   handleOnClick,
   handleGameInvitation,
 }: GameListItemProps) {
-  const onKeyDown = (event: React.KeyboardEvent, game: TGameListItem) => {
+  const onKeyDown = (event: React.KeyboardEvent, game: GameListItem) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       onClick(game);
@@ -47,7 +47,7 @@ export function GameListItem({
     }
   };
 
-  const onClick = (game: TGameListItem) => {
+  const onClick = (game: GameListItem) => {
     if (handleOnClick) {
       handleOnClick(game);
     }
@@ -80,7 +80,7 @@ export function GameListItem({
 }
 
 const StyledListDiv = styled.div<
-  CommonThemeProps & { status: TGameStatus; clickable: boolean }
+  CommonThemeProps & { status: GameStatus; clickable: boolean }
 >`
   position: relative;
   width: 100%;

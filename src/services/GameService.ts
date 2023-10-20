@@ -2,22 +2,22 @@ import type { AuthStore } from '../stores';
 import { supabaseClientInstance } from '.';
 import { Database } from './IDatabase';
 
-export type TGameList =
+export type GameList =
   Database['public']['Functions']['get_user_games']['Returns'];
-export type TGameListItem = TGameList[0];
+export type GameListItem = GameList[0];
 
-export type TActiveGame =
+export type ActiveGame =
   Database['public']['Functions']['get_active_game_by_id']['Returns'][0];
 
-export type GameExtendedStats =
+export type ExtendedGameStats =
   Database['public']['Functions']['get_game_stats_by_id']['Returns'][0];
-export type GameBaseStats =
+export type BaseGameStats =
   Database['public']['Functions']['get_base_game_stats_by_id']['Returns'][0];
 
-export type TGameStatus = Database['public']['Enums']['game_status'];
-export type TPlayerStatus = Database['public']['Enums']['player_status'];
+export type GameStatus = Database['public']['Enums']['game_status'];
+export type PlayerStatus = Database['public']['Enums']['player_status'];
 
-export type TMoveType = Database['public']['Enums']['move_type'];
+export type MoveType = Database['public']['Enums']['move_type'];
 export class GameService {
   private authStore: AuthStore;
 

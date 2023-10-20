@@ -1,5 +1,5 @@
 import { compareDesc } from 'date-fns';
-import { TGameListItem } from '../services';
+import { GameListItem } from '../services';
 
 /**
  * Used to sort on some condition + date desc
@@ -10,9 +10,9 @@ export const multiSort = ({
   b,
   condition,
 }: {
-  a: TGameListItem;
-  b: TGameListItem;
-  condition: (item: TGameListItem) => boolean;
+  a: GameListItem;
+  b: GameListItem;
+  condition: (item: GameListItem) => boolean;
 }) => {
   // Check if a or b is waiting for logged in user turn
   const aWaiting = condition(a);

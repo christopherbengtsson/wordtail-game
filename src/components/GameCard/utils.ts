@@ -1,6 +1,6 @@
-import { TGameListItem } from '../../services';
+import { GameListItem } from '../../services';
 
-export const getCardTitle = (game: TGameListItem, userId: string) => {
+export const getCardTitle = (game: GameListItem, userId: string) => {
   if (game.status === 'pending' && game.waitingForUsers.includes(userId)) {
     return 'New invitation!';
   }
@@ -8,7 +8,7 @@ export const getCardTitle = (game: TGameListItem, userId: string) => {
   return game.name;
 };
 
-export const getCardSubtitle = (game: TGameListItem, userId: string) => {
+export const getCardSubtitle = (game: GameListItem, userId: string) => {
   if (game.status === 'active') {
     if (game.currentTurnProfileId === userId) {
       return 'Your turn!';

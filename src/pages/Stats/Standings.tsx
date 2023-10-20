@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { Avatar, Body, BodyBold, List } from '../../components';
 import { getUniqueUserAvatar } from '../../utils';
-import { GameBaseStats, GameExtendedStats } from '../../services';
+import { BaseGameStats, ExtendedGameStats } from '../../services';
 import { GroupBox } from 'react95';
 
 export interface Standing {
@@ -13,7 +13,7 @@ export interface Standing {
 export function Standings({
   game,
 }: {
-  game: GameBaseStats | GameExtendedStats;
+  game: BaseGameStats | ExtendedGameStats;
 }) {
   return (
     <FlexStartContainer>

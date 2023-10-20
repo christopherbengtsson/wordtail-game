@@ -2,7 +2,7 @@ import { supabaseClientInstance } from '.';
 import { AuthStore } from '../stores';
 import type { Database } from './IDatabase';
 
-export type TProfile = Database['public']['Tables']['profiles']['Row'];
+export type Profile = Database['public']['Tables']['profiles']['Row'];
 
 export class DatabaseService {
   private authStore: AuthStore;

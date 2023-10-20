@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx';
-import { GameService, TGameList, TGameListItem } from '../services';
+import { GameService, GameList, GameListItem } from '../services';
 import { AuthStore } from '.';
 import { multiSort } from '../utils';
-import { SAOL_BASE_URL } from '../Constants';
+import { SAOL_BASE_API_URL } from '../Constants';
 
 export type GameMoveParams =
   | {
@@ -74,7 +74,7 @@ export class GameStore {
       case 'claim_finished_word':
         return this.gameService.claimFinishedWordMove({
           gameId,
-          apiUrl: `${SAOL_BASE_URL}/sok?sok=`,
+          apiUrl: `${SAOL_BASE_API_URL}/sok?sok=`,
         });
 
       case 'call_bluff':
@@ -84,7 +84,7 @@ export class GameStore {
         return this.gameService.revealBluffMove({
           gameId,
           word: params.word,
-          saolBaseUrl: `${SAOL_BASE_URL}/sok?sok=`,
+          saolBaseUrl: `${SAOL_BASE_API_URL}/sok?sok=`,
         });
     }
   }
@@ -97,41 +97,41 @@ export class GameStore {
     return this.gameService.getGameStatsById(gameId);
   }
 
-  sortActiveGames(games: TGameList) {
+  sortActiveGames(games: GameList) {
     return games
       .filter((game) => game.status === 'active')
       .sort((a, b) =>
         multiSort({
           a,
           b,
-          condition: (item: TGameListItem) =>
+          condition: (item: GameListItem) =>
             item.currentTurnProfileId === this.authStore.userId,
         }),
       );
   }
-  sortPendingGames(games: TGameList) {
+  sortPendingGames(games: GameList) {
     return games
       .filter((game) => game.status === 'pending')
       .sort((a, b) =>
         multiSort({
           a,
           b,
-          condition: (item: TGameListItem) =>
+          condition: (item: GameListItem) =>
             item.waitingForUsers.includes(this.authStore.userId),
         }),
       );
   }
-  sortFinishedGames(games: TGameList) {
+  sortFinishedGames(games: GameList) {
     return games.filter(
       (game) => game.status === 'abandoned' || game.status === 'finished',
     );
   }
-  getNumberOfInvites(pendingGames: TGameList) {
+  getNumberOfInvites(pendingGames: GameList) {
     return pendingGames.filter(({ waitingForUsers }) =>
       waitingForUsers?.includes(this.authStore.userId),
     ).length;
   }
-  getNumberOfWaitingTurns(activeGames: TGameList) {
+  getNumberOfWaitingTurns(activeGames: GameList) {
     return activeGames.filter(
       ({ currentTurnProfileId }) =>
         currentTurnProfileId === this.authStore.userId,

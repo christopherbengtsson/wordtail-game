@@ -1,9 +1,9 @@
 import { Caption } from '..';
-import type { TGameListItem } from '../../services';
+import type { GameListItem } from '../../services';
 import { distanceToNow } from '../../utils';
 
 export interface CardFooterProps {
-  game: TGameListItem;
+  game: GameListItem;
 }
 
 export function CardFooter({ game }: CardFooterProps) {

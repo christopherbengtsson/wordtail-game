@@ -12,7 +12,7 @@ import {
 import { useDelayedVisible } from '../../hooks';
 import { CommonStatsProps } from '.';
 import { Standings } from './Standings';
-import { GameExtendedStats, TMoveType } from '../../services';
+import { ExtendedGameStats, MoveType } from '../../services';
 import { distanceToNow } from '../../utils';
 import { SAOL_WEBSITE_URL } from '../../Constants';
 
@@ -21,14 +21,14 @@ export interface GameRound {
   moves: {
     playerId: string;
     username: string;
-    moveType: TMoveType;
+    moveType: MoveType;
     createdAt: string;
     letter?: string;
     word?: string;
   }[];
 }
 
-const getStatsTitle = (stats: GameExtendedStats) => {
+const getStatsTitle = (stats: ExtendedGameStats) => {
   let title = '';
 
   switch (stats.moveType) {
@@ -56,7 +56,7 @@ const getStatsTitle = (stats: GameExtendedStats) => {
   return <PrimaryTitleWrapper>{title}</PrimaryTitleWrapper>;
 };
 
-const getStatsBody = (stats: GameExtendedStats) => {
+const getStatsBody = (stats: ExtendedGameStats) => {
   // TODO
   if (stats.gameStatus === 'active') {
     return (

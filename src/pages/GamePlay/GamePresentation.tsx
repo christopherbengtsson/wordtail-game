@@ -13,7 +13,7 @@ import {
   useTranslation,
 } from '../../components';
 import { useDelayedVisible } from '../../hooks';
-import { TActiveGame } from '../../services';
+import { ActiveGame } from '../../services';
 import { numberToWord } from '../../utils';
 import { RevealBluff } from './RevealBluff';
 
@@ -47,7 +47,7 @@ export const GamePresentation = observer(function GamePresentation() {
     }
   }, [gameId, navigate]);
 
-  const getReadyToPlayBody = (game: TActiveGame): string => {
+  const getReadyToPlayBody = (game: ActiveGame): string => {
     const lastMove = game.previousMoveType;
 
     // Starting player of a new round

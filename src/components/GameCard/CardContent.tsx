@@ -2,10 +2,10 @@ import { styled } from 'styled-components';
 import { Avatar, Body, BodyBold, Subtitle } from '..';
 import { getUniqueUserAvatar } from '../../utils';
 import { getCardSubtitle } from './utils';
-import { TGameListItem } from '../../services';
+import { GameListItem } from '../../services';
 
 export interface CardContentProps {
-  game: TGameListItem;
+  game: GameListItem;
   userId: string;
 }
 

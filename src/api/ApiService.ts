@@ -1,4 +1,4 @@
-import { SAOL_BASE_URL } from '../Constants';
+import { SAOL_BASE_API_URL } from '../Constants';
 
 export class ApiService {
   constructor() {}
@@ -8,7 +8,7 @@ export class ApiService {
       sok: searchTerm,
     });
 
-    const url = `${SAOL_BASE_URL}/sok?${searchParams}`;
+    const url = `${SAOL_BASE_API_URL}/sok?${searchParams}`;
     const res = await fetch(url);
     const data = await res.text();
 
