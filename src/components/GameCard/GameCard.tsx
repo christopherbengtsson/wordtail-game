@@ -13,7 +13,7 @@ import { CardContent } from './CardContent';
 import { InviteActions } from './InviteActions';
 import { CardFooter } from './CardFooter';
 
-export interface GameListItemProps {
+export interface GameCardPropd {
   game: GameListItem;
   userId: string;
   handleOnClick?: (game: GameListItem) => void;
@@ -28,12 +28,12 @@ export interface GameListItemProps {
   >;
 }
 
-export function GameListItem({
+export function GameCard({
   game,
   userId,
   handleOnClick,
   handleGameInvitation,
-}: GameListItemProps) {
+}: GameCardPropd) {
   const onKeyDown = (event: React.KeyboardEvent, game: GameListItem) => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();

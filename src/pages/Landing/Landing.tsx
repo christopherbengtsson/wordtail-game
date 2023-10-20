@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { GameListItem } from '../../services';
 import {
   Button,
-  GameListItem,
+  GameCard,
   List,
   PrimaryTitleWrapper,
   Tabs,
@@ -119,7 +119,7 @@ export const Landing = observer(function Landing() {
               emptyText={t('games.list.active.empty')}
               items={activeGames}
               render={(game: GameListItem) => (
-                <GameListItem
+                <GameCard
                   key={game.id}
                   game={game}
                   userId={authStore.userId}
@@ -133,7 +133,7 @@ export const Landing = observer(function Landing() {
               emptyText={t('games.list.pending.empty')}
               items={pendingGames}
               render={(game: GameListItem) => (
-                <GameListItem
+                <GameCard
                   key={game.id}
                   game={game}
                   userId={authStore.userId}
@@ -147,7 +147,7 @@ export const Landing = observer(function Landing() {
               emptyText={t('games.list.finished.empty')}
               items={finishedGames}
               render={(game: GameListItem) => (
-                <GameListItem
+                <GameCard
                   key={game.id}
                   game={game}
                   userId={authStore.userId}
