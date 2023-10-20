@@ -7,12 +7,14 @@ import {
   CenterContainer,
   PrimaryTitleWrapper,
   Tree,
+  TreeItem,
 } from '../../components';
 import { useDelayedVisible } from '../../hooks';
 import { CommonStatsProps } from '.';
 import { Standings } from './Standings';
-import { TMoveType } from '../../services';
+import { GameExtendedStats, TMoveType } from '../../services';
 import { distanceToNow } from '../../utils';
+import { SAOL_WEBSITE_URL } from '../../Constants';
 
 export interface GameRound {
   roundNumber: number;
@@ -25,6 +27,117 @@ export interface GameRound {
     word?: string;
   }[];
 }
+
+const getStatsTitle = (stats: GameExtendedStats) => {
+  let title = '';
+
+  switch (stats.moveType) {
+    case 'add_letter':
+      title = `Du la bokstaven "${stats.letter}"`;
+      break;
+
+    case 'give_up':
+      title = 'Du gav upp denn runda';
+      break;
+
+    case 'call_bluff':
+      title = 'Du synade bluff';
+      break;
+
+    case 'reveal_bluff':
+      title = 'Du besvarade synad bluff';
+      break;
+
+    case 'claim_finished_word':
+      title = 'Du synade färdigt ord';
+      break;
+  }
+
+  return <PrimaryTitleWrapper>{title}</PrimaryTitleWrapper>;
+};
+
+const getStatsBody = (stats: GameExtendedStats) => {
+  // TODO
+  if (stats.gameStatus === 'active') {
+    return (
+      <Body>
+        Nu är det
+        <BodyBold>{` ${stats.currentPlayerUsername}`}</BodyBold>
+        {`'s tur`}
+      </Body>
+    );
+  }
+
+  if (stats.gameStatus === 'finished') {
+    return <Body>Spelet avslutad</Body>;
+  }
+
+  if (stats.roundStatus === 'finished') {
+    return <Body>Runda avslutad</Body>;
+  }
+};
+
+const getMoveLabel = (move: GameRound['moves'][0]) => {
+  switch (move.moveType) {
+    case 'add_letter':
+      return (
+        <>
+          La bokstav <BodyBold>{move.letter}</BodyBold>
+        </>
+      );
+
+    case 'call_bluff':
+      return `Synade bluff`;
+
+    case 'claim_finished_word':
+      return `Synade färdigt ord`;
+
+    case 'give_up':
+      return `Gav upp`;
+
+    case 'reveal_bluff':
+      return `Besvarade bluff`;
+
+    default:
+      return '';
+  }
+};
+
+const getMoveDetails = (move: GameRound['moves'][0]) => {
+  const label = getMoveLabel(move);
+
+  const treeItem: TreeItem = {
+    id: `move-${move.createdAt}`,
+    label,
+  };
+
+  if (
+    move.moveType === 'claim_finished_word' ||
+    move.moveType === 'reveal_bluff'
+  ) {
+    treeItem.expandable = true;
+    treeItem.items = [
+      {
+        id: `word-${move.createdAt}`,
+        label: move.word,
+      },
+      {
+        id: `saol-link-${move.createdAt}`,
+        label: (
+          <a
+            href={`${SAOL_WEBSITE_URL}${move.word}`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            SAOL länk
+          </a>
+        ),
+      },
+    ];
+  }
+
+  return treeItem;
+};
 
 export function ExtendedStats({ gameId }: CommonStatsProps) {
   const { gameStore, authStore } = useMainStore();
@@ -64,17 +177,9 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
 
     return (
       <CenterContainer>
-        <PrimaryTitleWrapper>
-          {game.moveType === 'add_letter'
-            ? `Du la bokstaven "${game.letter}"`
-            : `TODO: ${game.moveType}`}
-        </PrimaryTitleWrapper>
+        {getStatsTitle(game)}
 
-        <Body>
-          Nu är det
-          <BodyBold>{` ${game.currentPlayerUsername}`}</BodyBold>
-          {`'s tur`}
-        </Body>
+        {getStatsBody(game)}
 
         <Standings game={game} />
 
@@ -101,20 +206,7 @@ export function ExtendedStats({ gameId }: CommonStatsProps) {
                 expandable: true,
                 items: [
                   {
-                    id: `move-${move.createdAt}`,
-                    label: `${
-                      move.moveType === 'add_letter'
-                        ? `La bokstav ${move.letter}`
-                        : move.moveType === 'call_bluff'
-                        ? 'Synade bluff'
-                        : move.moveType === 'claim_finished_word'
-                        ? 'Synade färdigt ord'
-                        : move.moveType === 'give_up'
-                        ? 'Gav upp'
-                        : move.moveType === 'reveal_bluff'
-                        ? 'Besvarade bluff'
-                        : ''
-                    }`,
+                    ...getMoveDetails(move),
                   },
                 ],
               })),

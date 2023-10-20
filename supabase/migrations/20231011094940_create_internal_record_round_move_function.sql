@@ -19,7 +19,7 @@
 CREATE OR REPLACE FUNCTION internal_record_round_move(p_game_round_id UUID, p_user_id UUID, p_move_type move_type, p_value TEXT DEFAULT NULL) 
 RETURNS VOID AS $$
 BEGIN
-    IF p_move_type = 'reveal_bluff' THEN
+    IF p_move_type = 'reveal_bluff' OR p_move_type = 'claim_finished_word' THEN
         INSERT INTO round_moves (game_round_id, user_id, type, word)
         VALUES (p_game_round_id, p_user_id, p_move_type, p_value);
 

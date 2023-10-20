@@ -424,6 +424,8 @@ export interface Database {
         Returns: {
           currentPlayerId: string;
           currentPlayerUsername: string;
+          gameStatus: Database['public']['Enums']['game_status'];
+          roundStatus: Database['public']['Enums']['game_status'];
           standings: Json[];
         }[];
       };
@@ -435,6 +437,8 @@ export interface Database {
         Returns: {
           currentPlayerId: string;
           currentPlayerUsername: string;
+          gameStatus: Database['public']['Enums']['game_status'];
+          roundStatus: Database['public']['Enums']['game_status'];
           moveType: Database['public']['Enums']['move_type'];
           letter: string;
           word: string;

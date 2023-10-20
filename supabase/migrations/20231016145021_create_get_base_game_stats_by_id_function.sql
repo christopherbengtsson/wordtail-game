@@ -24,6 +24,7 @@ RETURNS TABLE(
   "currentPlayerId" UUID,
   "currentPlayerUsername" TEXT,
   "gameStatus" game_status,
+  "roundStatus" game_status,
   "standings" JSONB[]
 ) AS $$
 BEGIN
@@ -32,7 +33,8 @@ BEGIN
         SELECT
             gr.current_player_id AS "currentPlayerId",
             COALESCE(p.username, 'N/A') AS "currentPlayerUsername",
-            g.status AS "gameStatus"
+            g.status AS "gameStatus",
+            gr.status AS "roundStatus"
         FROM game_rounds gr
         LEFT JOIN profiles p ON gr.current_player_id = p.id
         JOIN games g ON gr.game_id = g.id
@@ -56,6 +58,7 @@ BEGIN
         gd."currentPlayerId",
         gd."currentPlayerUsername",
         gd."gameStatus",
+        gd."roundStatus",
         ps."standingsData" AS "standings"
     FROM game_details gd 
     CROSS JOIN player_standings ps;

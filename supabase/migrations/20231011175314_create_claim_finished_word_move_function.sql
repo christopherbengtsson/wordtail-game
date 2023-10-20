@@ -46,7 +46,7 @@ BEGIN
     round_letters := internal_get_round_letters(current_round_id);
 
     -- Record 'claim_finished_word' move
-    PERFORM internal_record_round_move(current_round_id, p_user_id, 'claim_finished_word');
+    PERFORM internal_record_round_move(current_round_id, p_user_id, 'claim_finished_word', round_letters);
 
     IF internal_validate_word_with_saol(p_saol_base_url, round_letters) THEN
         -- Valid word ✅
