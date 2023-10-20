@@ -4,6 +4,7 @@ import {
   BodyAsTitle,
   BodyAsTitleWrapper,
   BodyBold,
+  Button,
   Caption,
   Headline,
   PrimaryTitleWrapper,
@@ -19,6 +20,16 @@ export default function DevComponent() {
 
   return (
     <>
+      <Button>Regular</Button>
+      <br />
+      <Button size="lg" colorVariant="info">Info</Button>
+      <br />
+      <Button colorVariant="success">Success</Button>
+      <br />
+      <Button colorVariant="warning">Warning</Button>
+      <br />
+      <Button colorVariant="error">Error</Button>
+      <br />
       <Headline>Headline</Headline>
       <br />
       <PrimaryTitleWrapper>PrimaryTitleWrapper</PrimaryTitleWrapper>

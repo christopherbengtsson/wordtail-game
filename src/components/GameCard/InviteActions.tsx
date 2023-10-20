@@ -17,10 +17,12 @@ export function InviteActions({
     <SpaceAroundContainer>
       {game.waitingForUsers.includes(userId) ? (
         <>
-          <Button primary onClick={() => handleInvite(true)}>
+          <Button colorVariant="success" onClick={() => handleInvite(true)}>
             Accept
           </Button>
-          <Button onClick={() => handleInvite(false)}>Decline</Button>
+          <Button colorVariant="error" onClick={() => handleInvite(false)}>
+            Decline
+          </Button>
         </>
       ) : (
         <Subtitle>{getCardSubtitle(game, userId)}</Subtitle>

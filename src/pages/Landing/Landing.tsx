@@ -98,7 +98,7 @@ export const Landing = observer(function Landing() {
         {t('games.header')}
       </PrimaryTitleWrapper>
 
-      <Button primary size="lg" onClick={handleCreateNewGame}>
+      <Button colorVariant="info" size="lg" onClick={handleCreateNewGame}>
         {t('games.cta.create')}
       </Button>
 

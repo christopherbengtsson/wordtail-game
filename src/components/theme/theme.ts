@@ -10,7 +10,12 @@ import original from 'react95/dist/themes/millenium';
 export const colors = {
   ...original,
   materialTextPlaceholder: '#757575',
-  error: '#B00000',
+
+  info: '#1E90FF',
+  success: '#00bf9a',
+  warning: '#f5b759',
+  error: '#FA5252',
+
   white: '#fff',
   black: '#000',
 };
