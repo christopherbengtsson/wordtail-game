@@ -96,7 +96,7 @@ export const StyledModalContent = styled.div<{ size: ModalSize }>`
 export const StyledModalInnerContent = styled.div`
   width: 100%;
   padding: ${(p) => p.theme.spacing.s};
-  max-width: 476px;
+  // max-width: 476px;
 
   ${(p) => p.theme.screens.large} {
     max-height: 576px;
