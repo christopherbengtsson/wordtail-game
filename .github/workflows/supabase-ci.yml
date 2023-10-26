@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
 
     env:
@@ -27,8 +27,8 @@ jobs:
 
       - name: Verify generated types are checked in
         run: |
-          supabase gen types typescript --local > types.gen.ts
-          if ! git diff --ignore-space-at-eol --exit-code --quiet types.gen.ts; then
+          supabase gen types typescript --local > src/services/IDatabase.ts
+          if ! git diff --ignore-space-at-eol --exit-code --quiet src/services/IDatabase.ts; then
             echo "Detected uncommitted changes after build. See status below:"
             git diff
             exit 1
