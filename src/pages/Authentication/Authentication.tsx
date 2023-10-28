@@ -190,7 +190,7 @@ const StyledFrame = styled(Frame)`
   }
 `;
 
-const FormContainer = styled.main`
+export const FormContainer = styled.main`
   flex: 1 1 auto;
   position: relative;
   display: flex;
