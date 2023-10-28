@@ -1,4 +1,5 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/350b7ff2-7d18-43fb-a5d7-039af7a05232/deploy-status)](https://app.netlify.com/sites/glittery-kleicha-cdbf63/deploys)
+[Staging](https://glittery-kleicha-cdbf63.netlify.app/login)
 
 # React + TypeScript + Vite
 
