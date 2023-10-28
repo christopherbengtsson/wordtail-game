@@ -51,10 +51,10 @@ export const Routes = observer(function Routes() {
       <Route
         key="unauthenticated"
         element={
-          !authStore.isLoggedIn ? (
-            <Outlet />
-          ) : authStore.confirmEmail ? (
+          !authStore.isLoggedIn && authStore.confirmEmail ? (
             <Navigate to="/confirm" />
+          ) : !authStore.isLoggedIn ? (
+            <Outlet />
           ) : (
             <Navigate to="/" />
           )
