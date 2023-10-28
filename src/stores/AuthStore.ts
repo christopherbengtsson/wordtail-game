@@ -59,13 +59,6 @@ export class AuthStore {
       throw res.error;
     }
 
-    if (!res.data.session && res.data.user) {
-      // User needs to confirm email
-      runInAction(() => {
-        this.confirmEmail = true;
-      });
-    }
-
     return res;
   }
   async signUp(creds: SignUpWithPasswordCredentials) {
@@ -74,7 +67,12 @@ export class AuthStore {
       throw res.error;
     }
 
-    console.log('signup', res.data);
+    if (!res.data.session && res.data.user) {
+      // User needs to confirm email
+      runInAction(() => {
+        this.confirmEmail = true;
+      });
+    }
 
     return res;
   }
