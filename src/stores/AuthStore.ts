@@ -20,24 +20,19 @@ export class AuthStore {
   }
 
   private async init() {
-    const { data, error } = await this.authService.getSession();
-
-    console.log('auth store init', data);
+    const { error } = await this.authService.getSession();
 
     if (error) {
       console.error(error);
     }
 
-    runInAction(() => {
-      this.session = data.session;
-      this.confirmEmail = !!data?.session;
-    });
-
     this.authService.onAuthStateChange((session) => {
-      console.log('onAuthStateChange', session);
       runInAction(() => {
         this.session = session;
-        this.confirmEmail = !!session;
+
+        if (this.confirmEmail) {
+          this.confirmEmail = false;
+        }
       });
     });
   }

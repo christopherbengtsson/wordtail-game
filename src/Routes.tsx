@@ -8,7 +8,14 @@ import {
 } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { useMainStore } from './stores';
-import { Authentication, GamePresentation, Stats, Landing, Profile } from './pages';
+import {
+  Authentication,
+  GamePresentation,
+  Stats,
+  Landing,
+  Profile,
+  ConfirmEmail,
+} from './pages';
 import { Layout } from './components';
 import { LazyExoticComponent, Suspense, lazy } from 'react';
 import { isDev } from './Constants';
@@ -43,9 +50,18 @@ export const Routes = observer(function Routes() {
 
       <Route
         key="unauthenticated"
-        element={!authStore.isLoggedIn ? <Outlet /> : <Navigate to="/" />}
+        element={
+          !authStore.isLoggedIn ? (
+            <Outlet />
+          ) : authStore.confirmEmail ? (
+            <Navigate to="/confirm" />
+          ) : (
+            <Navigate to="/" />
+          )
+        }
       >
         <Route element={<Authentication />} path="/login" />
+        <Route element={<ConfirmEmail />} path="/confirm" />
       </Route>,
 
       <Route key="404" path="*" element={<div>TODO, 404</div>} />,
