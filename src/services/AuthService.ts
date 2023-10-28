@@ -18,7 +18,13 @@ export class AuthService {
   }
 
   async signUp(creds: SignInWithPasswordCredentials) {
-    return supabaseClientInstance.auth.signUp(creds);
+    return supabaseClientInstance.auth.signUp({
+      ...creds,
+      options: {
+        emailRedirectTo: `https://${window.location.host}`,
+        captchaToken: undefined,
+      },
+    });
   }
 
   async signIn(creds: SignInWithPasswordCredentials) {

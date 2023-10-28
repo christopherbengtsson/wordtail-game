@@ -3,13 +3,15 @@ import { Session, SignUpWithPasswordCredentials } from '@supabase/supabase-js';
 import { AuthService } from '../services';
 
 export class AuthStore {
-  session: Session | null = null;
-
   private authService: AuthService;
+
+  session: Session | null = null;
+  confirmEmail = false;
 
   constructor(authService: AuthService) {
     makeAutoObservable(this, {
       session: observable,
+      confirmEmail: observable,
     });
 
     this.authService = authService;
@@ -20,19 +22,22 @@ export class AuthStore {
   private async init() {
     const { data, error } = await this.authService.getSession();
 
+    console.log('auth store init', data);
+
     if (error) {
       console.error(error);
     }
 
-    if (data?.session) {
-      runInAction(() => {
-        this.session = data.session;
-      });
-    }
+    runInAction(() => {
+      this.session = data.session;
+      this.confirmEmail = !!data?.session;
+    });
 
     this.authService.onAuthStateChange((session) => {
+      console.log('onAuthStateChange', session);
       runInAction(() => {
         this.session = session;
+        this.confirmEmail = !!session;
       });
     });
   }
@@ -59,6 +64,13 @@ export class AuthStore {
       throw res.error;
     }
 
+    if (!res.data.session && res.data.user) {
+      // User needs to confirm email
+      runInAction(() => {
+        this.confirmEmail = true;
+      });
+    }
+
     return res;
   }
   async signUp(creds: SignUpWithPasswordCredentials) {
@@ -66,6 +78,8 @@ export class AuthStore {
     if (res.error) {
       throw res.error;
     }
+
+    console.log('signup', res.data);
 
     return res;
   }
