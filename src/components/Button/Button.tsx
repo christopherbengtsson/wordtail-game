@@ -3,7 +3,7 @@ import {
   ButtonProps as ReactButtonProps,
 } from 'react95';
 import { css, styled } from 'styled-components';
-import { IColors } from '..';
+import { BodyBold, IColors } from '..';
 import { forwardRef } from 'react';
 
 type ExtendedButtonProps = {
@@ -13,10 +13,10 @@ type ExtendedButtonProps = {
 export type ButtonProps = ReactButtonProps & ExtendedButtonProps;
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  function Button({ children, ...props }, ref) {
+  function Button({ children, primary, ...props }, ref) {
     return (
-      <StyledButton {...props} ref={ref}>
-        {children}
+      <StyledButton {...props} ref={ref} primary={primary}>
+        {primary ? <BodyBold>{children}</BodyBold> : children}
       </StyledButton>
     );
   },

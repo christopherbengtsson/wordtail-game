@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { AppModals } from '../../modals';
-import { BodyBold, HEADER_HEIGHT, ScrollView } from '..';
+import { BodyAsTitle, HEADER_HEIGHT, ScrollView } from '..';
 import { MainContentContainer, MainWrapper } from './LayoutStyles';
 import { createBorderStyles } from '../shared/common';
 import { CommonThemeProps } from 'react95/dist/types';
@@ -16,7 +16,7 @@ export function Layout() {
       <RelativeContainer>
         <StyledHeader>
           <div>
-            <BodyBold color="materialTextInvert">wordtail.exe</BodyBold>
+            <BodyAsTitle color="materialTextInvert">wordtail.exe</BodyAsTitle>
           </div>
           <div>
             <Button
