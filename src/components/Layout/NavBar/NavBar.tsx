@@ -55,7 +55,7 @@ export function NavBar() {
               <Anchor to={path}>
                 <Button tabIndex={-1} active={isActive}>
                   <div style={{ display: 'flex', gap: 8 }}>
-                    <img width={20} src={icon} />
+                    <img width={20} src={icon} alt={`${label}-icon`} />
                     {label}
                   </div>
                 </Button>
