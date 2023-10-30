@@ -11,10 +11,10 @@ export const colors = {
   ...original,
   materialTextPlaceholder: '#757575',
 
-  info: '#1E90FF',
-  success: '#00bf9a',
-  warning: '#f5b759',
-  error: '#FA5252',
+  info: '#0b7285',
+  success: '#396f3a',
+  warning: '#b24d04',
+  error: '#c92a2a',
 
   white: '#fff',
   black: '#000',
