@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from '../..';
 import { useMainStore } from '../../../stores';
-import { AppBar, Button, Frame, Toolbar } from 'react95';
-import { styled, useTheme } from 'styled-components';
+import { Button, Frame, Toolbar } from 'react95';
+import { css, styled, useTheme } from 'styled-components';
 import { isDev } from '../../../Constants';
 import { AgentIcon, JoystickIcon } from '../../assets/img';
 import { Fragment, useEffect, useState } from 'react';
@@ -47,9 +47,9 @@ export function NavBar() {
   ];
 
   return (
-    <StyledAppBar>
+    <StyledAppBar role="navigation">
       <StyledToolbar>
-        <StyledNav role="navigation">
+        <StyledNav>
           {routes.map(({ label, path, isActive, icon }) => (
             <Fragment key={path}>
               <Anchor to={path}>
@@ -86,9 +86,26 @@ export function NavBar() {
   );
 }
 
-const StyledAppBar = styled(AppBar)`
-  top: unset;
+const StyledAppBar = styled.footer`
+  position: fixed;
   bottom: 0;
+  right: 0px;
+  left: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  ${({ theme }) => css`
+    border-style: solid;
+    border-width: 2px;
+    border-color: ${theme.borderLightest} ${theme.black} ${theme.black}
+      ${theme.borderLightest};
+    box-shadow: ${theme.borderLight} 1px 1px 0px 1px inset,
+      ${theme.borderDark} -1px -1px 0px 1px inset;
+    box-sizing: border-box;
+    background: ${theme.material};
+    color: ${theme.materialText};
+  `}
 
   ${(p) => p.theme.screens.small} {
     flex-shrink: 0;
