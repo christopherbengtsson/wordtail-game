@@ -47,9 +47,9 @@ export function NavBar() {
   ];
 
   return (
-    <StyledAppBar role="navigation">
+    <StyledAppBar>
       <StyledToolbar>
-        <StyledNav>
+        <StyledNav role="navigation">
           {routes.map(({ label, path, isActive, icon }) => (
             <Fragment key={path}>
               <Anchor to={path}>
