@@ -14,10 +14,9 @@ export function Layout() {
   return (
     <>
       <RelativeContainer>
-        <StyledHeader>
-          <div>
-            <BodyAsTitle color="materialTextInvert">wordtail.exe</BodyAsTitle>
-          </div>
+        <StyledHeader role="banner">
+          <BodyAsTitle color="materialTextInvert">wordtail.exe</BodyAsTitle>
+
           <div>
             <Button
               size="sm"
