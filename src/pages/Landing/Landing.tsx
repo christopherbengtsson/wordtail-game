@@ -99,7 +99,7 @@ export const Landing = observer(function Landing() {
       </PrimaryTitleWrapper>
 
       <Button
-        colorVariant="info"
+        colorVariant="success"
         size="lg"
         primary
         onClick={handleCreateNewGame}

@@ -3,7 +3,7 @@ import {
   ButtonProps as ReactButtonProps,
 } from 'react95';
 import { css, styled } from 'styled-components';
-import { BodyAsTitleWrapper, IColors } from '..';
+import { BodyBold, IColors } from '..';
 import { forwardRef } from 'react';
 
 type ExtendedButtonProps = {
@@ -16,11 +16,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   function Button({ children, primary, ...props }, ref) {
     return (
       <StyledButton {...props} ref={ref} primary={primary}>
-        {primary ? (
-          <BodyAsTitleWrapper>{children}</BodyAsTitleWrapper>
-        ) : (
-          children
-        )}
+        {primary ? <BodyBold>{children}</BodyBold> : children}
       </StyledButton>
     );
   },
