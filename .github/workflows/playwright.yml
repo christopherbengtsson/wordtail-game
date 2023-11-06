@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright E2E Staging
 on:
   workflow_dispatch:
 
@@ -11,6 +11,19 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+      - name: Create .env
+        run: |
+          touch .env.e2e
+          echo E2E_1_EMAIL=$E2E_1_EMAIL >> .env.e2e
+          echo E2E_2_EMAIL=$E2E_2_EMAIL >> .env.e2e
+          echo E2E_1_PWD=$E2E_1_PWD >> .env.e2e
+          echo E2E_2_PWD=$E2E_2_PWD >> .env.e2e
+        env:
+          E2E_1_EMAIL: ${{ secrets.E2E_1_EMAIL }}
+          E2E_2_EMAIL: ${{ secrets.E2E_2_EMAIL }}
+          E2E_1_PWD: ${{ secrets.E2E_1_PWD }}
+          E2E_2_PWD: ${{ secrets.E2E_2_PWD }}
+
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright Browsers
