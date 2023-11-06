@@ -1,5 +1,7 @@
 name: Playwright E2E Staging
 on:
+  schedule:
+    - cron: '0 12 * * 0' # 12:00 CET Sundays
   workflow_dispatch:
 
 jobs:
