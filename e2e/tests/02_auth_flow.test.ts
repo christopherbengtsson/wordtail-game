@@ -1,46 +1,55 @@
 import { test, expect } from '@playwright/test';
-import { authLoginButton, setup } from './utils';
-import { EMAIL, PASSWORD } from './utils/constants';
+import {
+  authEmailInput,
+  authLogoutButton,
+  authPasswordConfirmInput,
+  authPasswordInput,
+  authRegisterButton,
+  authToggleLogin,
+  navButtonProfile,
+  setup,
+} from './utils';
+import { EMAIL, PASSWORD, STRINGS } from './utils/constants';
 
 test('Auth form validations and errors', async ({ page }) => {
   await setup({ page });
 
+  // Go to profile and sign out
+  await navButtonProfile(page).click();
+  await authLogoutButton(page).click();
+
+  // Toggle to register
+  await authToggleLogin(page).click();
   // Try submit
-  await authLoginButton(page).click();
+  await authRegisterButton(page).click();
 
   // Expect error descriptions
-  expect(page.getByText('Email is required')).toBeTruthy();
-  expect(page.getByText('Password is required')).toBeTruthy();
-  expect(page.getByText('Confirmation password is required')).toBeTruthy();
+  expect(page.getByText(STRINGS.generalInputError)).toBeTruthy();
+  expect(page.getByText(STRINGS.generalInputError)).toBeTruthy();
+  expect(page.getByText(STRINGS.generalInputError)).toBeTruthy();
 
   // Fill in email
-  await page.getByPlaceholder('Email').fill(EMAIL);
+  await authEmailInput(page).fill(EMAIL);
 
   const passwordPartOne = PASSWORD.substring(0, 4);
 
   // Fill in too short password
-  await page
-    .getByPlaceholder('Password', { exact: true })
-    .fill(passwordPartOne);
+  await authPasswordInput(page).fill(passwordPartOne);
   // Fill in different password
-  await page
-    .getByPlaceholder('Confirm password', { exact: true })
-    .fill(passwordPartOne + 1);
+  await authPasswordConfirmInput(page).fill(passwordPartOne + 1);
 
   // Try submit
-  await authLoginButton(page).click();
-  expect(
-    page.getByText('Password must to be at least 6 characters'),
-  ).toBeTruthy();
-  expect(page.getByText("Passwords don't match")).toBeTruthy();
+  await authRegisterButton(page).click();
+  expect(page.getByText(STRINGS.authEmailError)).toBeTruthy();
+  expect(page.getByText(STRINGS.authPasswordConfirmError)).toBeTruthy();
 
-  await authLoginButton(page).click();
+  await authRegisterButton(page).click();
 
   // Fill in rest of password
-  await page.getByPlaceholder('Password', { exact: true }).fill(PASSWORD);
-  await page.getByPlaceholder('Confirm password').fill(PASSWORD);
+  await authPasswordInput(page).fill(PASSWORD);
+  await authPasswordConfirmInput(page).fill(PASSWORD);
 
   // Submit
-  await authLoginButton(page).click();
+  await authRegisterButton(page).click();
   expect(page.getByText('User already registered')).toBeTruthy();
 });

@@ -12,13 +12,18 @@ export const URL = {
 };
 
 export const STRINGS = {
+  generalInputError: translate('general.input.required'),
   authLoginCta: translate('auth.cta.login'),
   authRegisterCta: translate('auth.cta.register'),
+  authLogoutCta: translate('auth.cta.logout'),
   authToggleToLogin: translate('auth.toggle.login'),
   authToggleToRegister: translate('auth.toggle.register'),
   authEmailInput: translate('auth.email.label'),
+  authEmailError: translate('auth.email.invalid'),
   authPasswordInput: translate('auth.password.label'),
+  authPasswordError: translate('auth.password.invalid'),
   authPasswordConfirmInput: translate('auth.password.confirm.label'),
+  authPasswordConfirmError: translate('auth.password.confirm.invalid'),
   createGameModalCta: translate('games.cta.create'),
   createGameModalCloseBtn: 'Close',
   createGameModalNameInput: translate('modal.create.game.name.label'),

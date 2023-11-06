@@ -29,12 +29,6 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     { name: 'authSetup', testMatch: 'auth.setup.ts' },
-    /* Desktop */
-    // {
-    //   name: 'Desktop Chrome',
-    //   use: { ...devices['Desktop Chrome'] },
-    //   testMatch: '**/*flow_*.test.ts',
-    // },
     /* Accessability test */
     {
       name: 'Desktop Chrome',
@@ -43,6 +37,16 @@ export default defineConfig({
         storageState: 'e2e/.auth/E2E_1.json',
       },
       testMatch: '**/*a11y.test.ts',
+      dependencies: ['authSetup'],
+    },
+    /* Desktop */
+    {
+      name: 'Desktop Chrome',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'e2e/.auth/E2E_1.json',
+      },
+      testMatch: '**/*auth_flow.test.ts',
       dependencies: ['authSetup'],
     },
     // {

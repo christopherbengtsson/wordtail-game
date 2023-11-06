@@ -17,10 +17,13 @@ export const authPasswordConfirmInput = (locator: Page) =>
   locator.getByPlaceholder(STRINGS.authPasswordConfirmInput, { exact: true });
 
 export const authLoginButton = (locator: Page) =>
-  locator.getByRole('button', { name: STRINGS.authLoginCta, exact: true });
+  locator.getByRole('button', { name: STRINGS.authLoginCta });
 
 export const authRegisterButton = (locator: Page) =>
   locator.getByRole('button', { name: STRINGS.authRegisterCta, exact: true });
+
+export const authLogoutButton = (locator: Page) =>
+  locator.getByRole('button', { name: STRINGS.authLogoutCta });
 
 export const navButtonGames = (locator: Page) =>
   locator.getByRole('link', { name: STRINGS.gamesAnchorLink });
