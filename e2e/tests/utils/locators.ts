@@ -17,7 +17,7 @@ export const authPasswordConfirmInput = (locator: Page) =>
   locator.getByPlaceholder(STRINGS.authPasswordConfirmInput, { exact: true });
 
 export const authLoginButton = (locator: Page) =>
-  locator.getByRole('button', { name: STRINGS.authLoginCta });
+  locator.getByRole('button', { name: STRINGS.authLoginCta, exact: true });
 
 export const authRegisterButton = (locator: Page) =>
   locator.getByRole('button', { name: STRINGS.authRegisterCta, exact: true });
