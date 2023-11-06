@@ -1,10 +1,8 @@
-import { isDev } from '../../Constants';
 import DEFAULT_SV_STRINGS from '../assets/lang/sv';
 
 export const LanguageContainer = {
   map: DEFAULT_SV_STRINGS,
   loaded: false,
-  muteErrors: false,
 };
 export type SwedishTranslations = typeof DEFAULT_SV_STRINGS;
 
@@ -18,13 +16,6 @@ export function translate<T extends TranslationKey>(
 
   if (translated) return translated;
 
-  if (isDev) {
-    if (!LanguageContainer.muteErrors) {
-      console.log('Translation key missing:', key);
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return key as any;
-  }
   // Default to Swedish, and then default to the literal key
   return DEFAULT_SV_STRINGS[key] ?? key;
 }

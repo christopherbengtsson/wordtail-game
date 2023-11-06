@@ -1,34 +1,27 @@
 import { test } from '@playwright/test';
 import {
   assertCTAView,
-  authSubmitButton,
-  authToggleRegister,
   createGameButton,
   createGameModalCloseBtn,
+  createGameModalMarksInput,
+  createGameModalNameInput,
+  createGameModalPlayersSelect,
   navButtonProfile,
   setup,
   setupAxe,
 } from './utils';
-import { EMAIL, PASSWORD } from './utils/constants';
 
-test('Application accessibility', async ({ page }) => {
+test('Application happy game flow + accessibility', async ({ page }) => {
   await setup({ page });
   await setupAxe(page);
-
-  // Toggle to login
-  await authToggleRegister(page).click();
-
-  // Fill in form
-  await page.getByPlaceholder('Email').fill(EMAIL);
-  await page.getByPlaceholder('Password').fill(PASSWORD);
-
-  // Login
-  await assertCTAView({ page, locator: authSubmitButton(page) });
 
   // Landing page
   await assertCTAView({ page, locator: createGameButton(page) });
 
   // Create game modal
+  await createGameModalNameInput(page).fill('Test game 1');
+  await createGameModalMarksInput(page).fill('1');
+  await createGameModalPlayersSelect(page).fill('E2E_2');
   await assertCTAView({ page, locator: createGameModalCloseBtn(page) });
 
   // Go to profile

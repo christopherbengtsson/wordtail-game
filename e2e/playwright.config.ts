@@ -1,8 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { getRandomEmail } from './tests/utils/constants';
-import { env } from 'node:process';
-
-env.PLAYWRIGHT_EMAIL = getRandomEmail();
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -11,9 +7,9 @@ export default defineConfig({
   testDir: './tests',
   outputDir: './test-results',
   /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
+  forbidOnly: !!process.env.E2E_CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.E2E_CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -24,17 +20,22 @@ export default defineConfig({
   },
   /* Configure projects for major browsers */
   projects: [
+    { name: 'authSetup', testMatch: 'auth.setup.ts' },
     /* Desktop */
-    {
-      name: 'Desktop Chrome',
-      use: { ...devices['Desktop Chrome'] },
-      testMatch: '**/*flow_*.test.ts',
-    },
+    // {
+    //   name: 'Desktop Chrome',
+    //   use: { ...devices['Desktop Chrome'] },
+    //   testMatch: '**/*flow_*.test.ts',
+    // },
     /* Accessability test */
     {
       name: 'Desktop Chrome',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'e2e/.auth/E2E_1.json',
+      },
       testMatch: '**/*a11y.test.ts',
+      dependencies: ['authSetup'],
     },
     // {
     //   name: 'Desktop Firefox',
@@ -82,8 +83,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run start',
+    command: 'npm run dev',
     url: 'http://127.0.0.1:3000',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: !process.env.E2E_CI,
   },
 });
