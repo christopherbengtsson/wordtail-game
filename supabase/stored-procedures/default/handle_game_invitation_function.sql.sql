@@ -75,6 +75,12 @@ BEGIN
     SET status = game_state, updated_at = (now() at time zone 'utc'::text)
     WHERE id = p_game_id;
 
+    -- Notify players
+    FOR player_id IN SELECT user_id FROM game_players WHERE game_id = p_game_id AND invitation_status = 'accepted'
+    LOOP
+        PERFORM internal_add_notification(player_id, 'game_move_turn', round_id);
+    END LOOP;
+
     RETURN game_state;
 END;
 $$ LANGUAGE plpgsql;
@@ -154,8 +160,11 @@ BEGIN
     SET status = game_state, updated_at = (now() at time zone 'utc'::text)
     WHERE id = p_game_id;
 
-    -- Add notification for starting player
-    PERFORM internal_add_notification(game_creator_id, 'game_move_turn', round_id);
+    -- Notify players
+    FOR player_id IN SELECT user_id FROM game_players WHERE game_id = p_game_id AND invitation_status = 'accepted'
+    LOOP
+        PERFORM internal_add_notification(player_id, 'game_move_turn', round_id);
+    END LOOP;
 
     RETURN game_state;
 END;
