@@ -1,3 +1,7 @@
+# Game idea
+
+See [Game rules](https://github.com/christopherbengtsson/wordtail-game/blob/main/gameRules.md)
+
 # Design thoughts:
 
 `Page/Component -> Store (Application Logic + State Management) -> Service (External Interactions)`
@@ -16,6 +20,10 @@
 - `npm run db:reset`
 
 ## Client
+
+```
+nvm use
+```
 
 ```
 npm i

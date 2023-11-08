@@ -1,3 +1,7 @@
+Critical:
+
+- Fick ingen notis på datorn när Emelie accepterat eller lagt sitt drag
+
 - Handle errors from react query
 - Refactor local storage handling for returning users, to dynamically show register/login as default
 - Notifications
