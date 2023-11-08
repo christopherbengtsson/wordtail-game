@@ -16,6 +16,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { styled } from 'styled-components';
 import { PostgrestError, PostgrestSingleResponse } from '@supabase/supabase-js';
+import { E2E_GAME_NAME } from '../Constants';
 
 export interface CreateGameValues {
   gameName: string;
@@ -120,7 +121,19 @@ export const CreateGameModal = observer(function CreateGameModal() {
   };
 
   const ValidationSchema = Yup.object().shape({
-    gameName: Yup.string().required(t('general.input.required')),
+    gameName: Yup.string()
+      .required(t('general.input.required'))
+      .test(
+        'is-valid-game-name',
+        t('modal.create.game.invalidName'),
+        function (value) {
+          if (authStore.isE2e) {
+            return true;
+          } else {
+            return value.trim() !== E2E_GAME_NAME;
+          }
+        },
+      ),
     maxNumberOfMarks: Yup.number()
       .min(1, t('modal.create.game.min.marks'))
       .max(5, t('modal.create.game.max.marks'))

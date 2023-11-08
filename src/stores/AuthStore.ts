@@ -7,11 +7,13 @@ export class AuthStore {
 
   session: Session | null = null;
   confirmEmail = false;
+  isE2e = false;
 
   constructor(authService: AuthService) {
     makeAutoObservable(this, {
       session: observable,
       confirmEmail: observable,
+      isE2e: observable,
     });
 
     this.authService = authService;
@@ -32,6 +34,15 @@ export class AuthStore {
 
         if (this.confirmEmail) {
           this.confirmEmail = false;
+        }
+
+        if (
+          session?.user.email === 'e2e1@wordtail.test' ||
+          session?.user.email === 'e2e2@wordtail.test'
+        ) {
+          this.isE2e = true;
+        } else {
+          this.isE2e = false;
         }
       });
     });

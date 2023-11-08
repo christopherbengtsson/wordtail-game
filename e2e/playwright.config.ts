@@ -39,7 +39,7 @@ export default defineConfig({
       testMatch: '**/*a11y.test.ts',
       dependencies: ['authSetup'],
     },
-    /* Desktop */
+    /* Login/Register test */
     {
       name: 'Desktop Chrome',
       use: {
@@ -47,6 +47,14 @@ export default defineConfig({
         storageState: 'e2e/.auth/E2E_1.json',
       },
       testMatch: '**/*auth_flow.test.ts',
+      dependencies: ['authSetup'],
+    },
+    {
+      name: 'Desktop Chrome',
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      testMatch: '**/*create_game.test.ts',
       dependencies: ['authSetup'],
     },
     // {

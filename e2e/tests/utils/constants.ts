@@ -1,8 +1,8 @@
 import ip from 'ip';
 import { translate } from '../../../src/components/Language/translate';
 
-export const EMAIL = 'dummy1@test.com';
-export const EMAIL2 = 'dummy2@test.com';
+export const EMAIL = 'e2e1@wordtail.test';
+export const EMAIL2 = 'e2e2@wordtail.test';
 export const PASSWORD = '123456789';
 export const HOST = ip.address();
 
@@ -25,10 +25,14 @@ export const STRINGS = {
   authPasswordConfirmInput: translate('auth.password.confirm.label'),
   authPasswordConfirmError: translate('auth.password.confirm.invalid'),
   createGameModalCta: translate('games.cta.create'),
+  gamesTabActive: translate('games.tabs.active'),
+  gamesTabPending: translate('games.tabs.pending'),
+  gamesTabFinished: translate('games.tabs.finished'),
   createGameModalCloseBtn: 'Close',
   createGameModalNameInput: translate('modal.create.game.name.label'),
   createGameModalMarksInput: translate('modal.create.game.marks.label'),
   createGameModalPlayersSelect: translate('modal.create.game.players.label'),
+  createGameModalCreateButton: translate('modal.create.game.cta'),
   gamesAnchorLink: translate('nav.header.games'),
   profileAnchorLink: translate('nav.header.profil'),
 };

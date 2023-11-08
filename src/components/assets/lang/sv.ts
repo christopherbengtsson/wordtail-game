@@ -48,6 +48,7 @@ export default {
   'modal.create.game.search.loading': 'Söker användare...',
   'modal.create.game.search.empty':
     'Ingen användare med användarnamn {{username}}',
+  'modal.create.game.invalidName': 'Otillåtet spelnamn',
   'modal.create.game.min.marks': 'Minst 1 prick',
   'modal.create.game.max.marks': 'Max 5 prickar',
   'modal.create.game.min.players': 'Bjud in minst 1 spelare',

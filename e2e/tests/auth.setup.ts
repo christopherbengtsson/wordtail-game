@@ -27,6 +27,7 @@ setupAuth('authenticate test user 1', async ({ page }) => {
 
   await setup({ page });
 
+  // Register new E2E user if local
   if (!IS_LOCAL) {
     await authToggleRegister(page).click();
   }

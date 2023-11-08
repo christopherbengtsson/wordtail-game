@@ -19,6 +19,7 @@ export function Select<
       closeMenuOnSelect={!props.isMulti}
       onInputChange={props.onInputChange}
       styles={styles}
+      inputId="select-player-input"
     />
   );
 }

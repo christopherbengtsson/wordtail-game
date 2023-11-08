@@ -17,6 +17,10 @@ export function getCreds() {
     const password = process.env.E2E_1_PWD;
     const email2 = process.env.E2E_2_EMAIL;
     const password2 = process.env.E2E_2_PWD;
+
+    if (!email || !email2) {
+      throw new Error('No E2E emails found');
+    }
     return { email, password, email2, password2 };
   }
 

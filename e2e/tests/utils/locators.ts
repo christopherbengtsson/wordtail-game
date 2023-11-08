@@ -34,6 +34,15 @@ export const navButtonProfile = (locator: Page) =>
 export const createGameButton = (locator: Page) =>
   locator.getByRole('button', { name: STRINGS.createGameModalCta });
 
+export const gamesTabActive = (locator: Page) =>
+  locator.getByRole('tab', { name: STRINGS.gamesTabActive });
+
+export const gamesTabPending = (locator: Page) =>
+  locator.getByRole('tab', { name: STRINGS.gamesTabPending });
+
+export const gamesTabFinished = (locator: Page) =>
+  locator.getByRole('tab', { name: STRINGS.gamesTabFinished });
+
 export const createGameModalCloseBtn = (locator: Page) =>
   locator.getByRole('button', { name: STRINGS.createGameModalCloseBtn });
 
@@ -44,7 +53,13 @@ export const createGameModalMarksInput = (locator: Page) =>
   locator.getByPlaceholder(STRINGS.createGameModalMarksInput);
 
 export const createGameModalPlayersSelect = (locator: Page) =>
-  locator.getByLabel(STRINGS.createGameModalPlayersSelect);
+  locator.locator('input[id="select-player-input"]');
+
+export const createGameModalCta = (locator: Page) =>
+  locator.getByRole('button', { name: STRINGS.createGameModalCreateButton });
+
+export const acceptInviteButton = (locator: Page) =>
+  locator.getByRole('button', { name: 'Accept', exact: true });
 
 /** Promises/events */
 export const waitForPageUrl = (locator: Page) => {
