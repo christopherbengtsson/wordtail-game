@@ -12,6 +12,7 @@ import {
   FormInput,
   Body,
   useTranslation,
+  TranslationMap,
 } from '../../components';
 import { Frame } from 'react95';
 import { getIsRecurringUser, setIsRecurringUser } from '../../utils';
@@ -23,6 +24,20 @@ import {
 } from '@supabase/supabase-js';
 import { isDev } from '../../Constants';
 
+const STRINGS = {
+  requiredInput: 'general.input.required',
+  invalidEmail: 'auth.email.invalid',
+  invalidPassword: 'auth.password.invalid',
+  invalidConfirmPassword: 'auth.password.confirm.invalid',
+  emailLabel: 'auth.email.label',
+  passwordLabel: 'auth.password.label',
+  confirmPasswordLabel: 'auth.password.confirm.label',
+  register: 'auth.cta.register',
+  login: 'auth.cta.login',
+  toggleToLogin: 'auth.toggle.register',
+  toggleToRegister: 'auth.toggle.login',
+} satisfies TranslationMap;
+
 export function Authentication() {
   const t = useTranslation();
   const { authStore } = useMainStore();
@@ -30,14 +45,14 @@ export function Authentication() {
   const [doRegister, setDoRegister] = useState(!getIsRecurringUser());
 
   const yupEmailValidator = Yup.string()
-    .email(t('auth.email.invalid'))
-    .required(t('general.input.required'));
+    .email(t(STRINGS.invalidEmail))
+    .required(t(STRINGS.requiredInput));
   const yupPasswordValidator = Yup.string()
-    .min(6, t('auth.password.invalid'))
-    .required(t('general.input.required'));
+    .min(6, t(STRINGS.invalidPassword))
+    .required(t(STRINGS.requiredInput));
   const yupConfirmPasswordValidator = Yup.string()
-    .oneOf([Yup.ref('password')], t('auth.password.confirm.invalid'))
-    .required(t('general.input.required'));
+    .oneOf([Yup.ref('password')], t(STRINGS.invalidConfirmPassword))
+    .required(t(STRINGS.requiredInput));
 
   const ValidationSchema = doRegister
     ? Yup.object().shape({
@@ -114,8 +129,8 @@ export function Authentication() {
               id="email"
               name="email"
               type="email"
-              placeholder={t('auth.email.label')}
-              aria-label={t('auth.email.label')}
+              placeholder={t(STRINGS.emailLabel)}
+              aria-label={t(STRINGS.emailLabel)}
               component={FormInput}
             />
 
@@ -123,8 +138,8 @@ export function Authentication() {
               id="password"
               name="password"
               type="password"
-              placeholder={t('auth.password.label')}
-              aria-label={t('auth.password.label')}
+              placeholder={t(STRINGS.passwordLabel)}
+              aria-label={t(STRINGS.passwordLabel)}
               component={FormInput}
             />
 
@@ -133,8 +148,8 @@ export function Authentication() {
                 id="confirmPassword"
                 name="confirmPassword"
                 type="password"
-                placeholder={t('auth.password.confirm.label')}
-                aria-label={t('auth.password.confirm.label')}
+                placeholder={t(STRINGS.confirmPasswordLabel)}
+                aria-label={t(STRINGS.confirmPasswordLabel)}
                 component={FormInput}
               />
             )}
@@ -142,11 +157,9 @@ export function Authentication() {
             <Button
               type="submit"
               size="lg"
-              aria-label={
-                doRegister ? t('auth.cta.register') : t('auth.cta.login')
-              }
+              aria-label={doRegister ? t(STRINGS.register) : t(STRINGS.login)}
             >
-              {doRegister ? t('auth.cta.register') : t('auth.cta.login')}
+              {doRegister ? t(STRINGS.register) : t(STRINGS.login)}
             </Button>
 
             {isDev && (
@@ -165,11 +178,11 @@ export function Authentication() {
 
         <TextButton
           aria-label={
-            doRegister ? t('auth.toggle.register') : t('auth.toggle.login')
+            doRegister ? t(STRINGS.toggleToLogin) : t(STRINGS.toggleToRegister)
           }
           onClick={() => setDoRegister(!doRegister)}
         >
-          {!doRegister ? t('auth.toggle.register') : t('auth.toggle.login')}
+          {!doRegister ? t(STRINGS.toggleToLogin) : t(STRINGS.toggleToRegister)}
         </TextButton>
       </StyledFrame>
     </FormContainer>

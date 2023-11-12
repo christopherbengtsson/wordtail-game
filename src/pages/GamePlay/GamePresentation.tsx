@@ -10,12 +10,23 @@ import {
   CenterContainer,
   PrimaryTitleWrapper,
   Subtitle,
+  TranslationMap,
   useTranslation,
 } from '../../components';
 import { useDelayedVisible } from '../../hooks';
 import { ActiveGame } from '../../services';
 import { numberToWord } from '../../utils';
 import { RevealBluff } from './RevealBluff';
+
+const STRINGS = {
+  firstRound: 'game.presentation.body.first.round',
+  multiLettersPlaced: 'game.presentation.body.letters',
+  oneLetterPlaced: 'game.presentation.body.letter',
+  calledBluff: 'game.presentation.body.bluff',
+  loading: 'game.presentation.loading',
+  error: 'general.error',
+  readyToPlay: 'game.presentation.cta',
+} satisfies TranslationMap;
 
 export const GamePresentation = observer(function GamePresentation() {
   // unstable_usePrompt({
@@ -52,23 +63,23 @@ export const GamePresentation = observer(function GamePresentation() {
 
     // Starting player of a new round
     if (!game.previousPlayerId) {
-      return t('game.presentation.body.first.round');
+      return t(STRINGS.firstRound);
     }
 
     if (game.previousMoveType === 'add_letter') {
       const numberOfLetters = game.lettersSoFar.length;
 
       if (numberOfLetters > 1) {
-        return t('game.presentation.body.letters', {
+        return t(STRINGS.multiLettersPlaced, {
           values: [numberToWord(numberOfLetters)],
         });
       }
 
-      return t('game.presentation.body.letter');
+      return t(STRINGS.oneLetterPlaced);
     }
 
     if (lastMove === 'call_bluff') {
-      return t('game.presentation.body.bluff', {
+      return t(STRINGS.calledBluff, {
         values: [game.previousPlayerUsername],
       });
     }
@@ -83,9 +94,7 @@ export const GamePresentation = observer(function GamePresentation() {
   if (shouldShowLoading) {
     return (
       <CenterContainer>
-        <PrimaryTitleWrapper>
-          {t('game.presentation.loading')}
-        </PrimaryTitleWrapper>
+        <PrimaryTitleWrapper>{t(STRINGS.loading)}</PrimaryTitleWrapper>
       </CenterContainer>
     );
   }
@@ -93,9 +102,7 @@ export const GamePresentation = observer(function GamePresentation() {
   if (isError) {
     <CenterContainer>
       <PrimaryTitleWrapper>Something went wrong</PrimaryTitleWrapper>
-      <Body color="error">
-        {response?.error?.message ?? t('general.error')}
-      </Body>
+      <Body color="error">{response?.error?.message ?? t(STRINGS.error)}</Body>
     </CenterContainer>;
   }
 
@@ -112,7 +119,7 @@ export const GamePresentation = observer(function GamePresentation() {
           disabled={isLoading}
           onClick={() => setStart(true)}
         >
-          {t('game.presentation.cta')}
+          {t(STRINGS.readyToPlay)}
         </Button>
       </CenterContainer>
     );

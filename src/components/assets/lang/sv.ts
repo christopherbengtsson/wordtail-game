@@ -13,6 +13,9 @@ export default {
   'auth.cta.logout': 'Logga ut',
   'auth.toggle.register': 'Registrera ett nytt konto',
   'auth.toggle.login': 'Logga in med befintligt konto',
+  'confirm.email.header': 'Inväntar bekräftelse',
+  'confirm.email.body':
+    'Bekräfta din email genom att klicka på länken i mejlet du ska ha fått.',
   'games.header': 'Dina spel',
   'games.cta.create': 'SKAPA ETT NYTT SPEL',
   'games.tabs.active': 'Aktiva',
