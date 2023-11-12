@@ -36,10 +36,7 @@ export class AuthStore {
           this.confirmEmail = false;
         }
 
-        if (
-          session?.user.email === 'e2e1@wordtail.test' ||
-          session?.user.email === 'e2e2@wordtail.test'
-        ) {
+        if (import.meta.env.MODE === 'e2e') {
           this.isE2e = true;
         } else {
           this.isE2e = false;

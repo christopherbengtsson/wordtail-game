@@ -1,9 +1,6 @@
 import ip from 'ip';
 import { translate } from '../../../src/components/Language/translate';
 
-export const EMAIL = 'e2e1@wordtail.test';
-export const EMAIL2 = 'e2e2@wordtail.test';
-export const PASSWORD = '123456789';
 export const HOST = ip.address();
 
 export const URL = {
